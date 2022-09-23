@@ -1,0 +1,10 @@
+.vs/
+[Bb]in/
+[Dd]ebug/
+[Oo]bj/
+[Rr]elease/
+x64/
+x86/
+*.depend
+*.layout
+*.user
