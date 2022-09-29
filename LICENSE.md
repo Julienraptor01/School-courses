@@ -37,7 +37,7 @@ By exercising the Licensed Rights (defined below), You accept and agree to be bo
 
 <ol type="a">
     <li><strong>License grant</strong>.</li>
-        <ol>
+        <ol type="1">
             <li>Subject to the terms and conditions of this Public License, the Licensor hereby grants You a worldwide, royalty-free, non-sublicensable, non-exclusive, irrevocable license to exercise the Licensed Rights in the Licensed Material to:</li>
         -   A. reproduce and Share the Licensed Material, in whole or in part, for NonCommercial purposes only; and
         -   B. produce, reproduce, and Share Adapted Material for NonCommercial purposes only.
