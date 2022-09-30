@@ -8,24 +8,21 @@ int main()
 		mov i, 143
 	}
 	printf("\n1.\ni = %d\nj = %d\n", i, j);
-	i = -36;
-	j = 25;
+	i = -36, j = 25;
 	_asm
 	{
 		mov eax, j
 		mov i, eax
 	}
 	printf("\n2.\ni = %d\nj = %d\n", i, j);
-	i = -36;
-	j = 25;
+	i = -36, j = 25;
 	_asm
 	{
 		mov eax, j
 		add i, eax
 	}
 	printf("\n3.\ni = %d\nj = %d\n", i, j);
-	i = -36;
-	j = 25;
+	i = -36, j = 25;
 	_asm
 	{
 		mov eax, j
@@ -33,8 +30,7 @@ int main()
 		sub i, 8
 	}
 	printf("\n4.\ni = %d\nj = %d\n", i, j);
-	i = -36;
-	j = 25;
+	i = -36, j = 25;
 	_asm
 	{
 		mov eax, j
@@ -42,8 +38,7 @@ int main()
 		add i, 8
 	}
 	printf("\n5.\ni = %d\nj = %d\n", i, j);
-	i = -36;
-	j = 25;
+	i = -36, j = 25;
 	_asm
 	{
 		mov eax, j
@@ -51,8 +46,7 @@ int main()
 		add i, eax
 	}
 	printf("\n6.\ni = %d\nj = %d\n", i, j);
-	i = -36;
-	j = 25;
+	i = -36, j = 25;
 	_asm
 	{
 		mov eax, j
@@ -62,8 +56,7 @@ int main()
 		add i, 8
 	}
 	printf("\n7.\ni = %d\nj = %d\n", i, j);
-	i = -36;
-	j = 25;
+	i = -36, j = 25;
 	_asm
 	{
 		mov eax, j
@@ -76,8 +69,7 @@ int main()
 		add i, 8
 	}
 	printf("\n8.\ni = %d\nj = %d\n", i, j);
-	i = -36;
-	j = 25;
+	i = -36, j = 25;
 	_asm
 	{
 		mov eax, j
@@ -91,8 +83,7 @@ int main()
 		add i, 9
 	}
 	printf("\n9.\ni = %d\nj = %d\n", i, j);
-	i = -36;
-	j = 25;
+	i = -36, j = 25;
 	_asm
 	{
 		mov eax, j
@@ -105,8 +96,7 @@ int main()
 		add j, ecx
 	}
 	printf("\n10.\ni = %d\nj = %d\n", i, j);
-	i = -36;
-	j = 25;
+	i = -36, j = 25;
 	_asm
 	{
 		mov eax, j
@@ -120,8 +110,7 @@ int main()
 		sub j, ebx
 	}
 	printf("\n11.\ni = %d\nj = %d\n", i, j);
-	i = -36;
-	j = 25;
+	i = -36, j = 25;
 	_asm
 	{
 		mov eax, j
@@ -136,8 +125,7 @@ int main()
 		sub i, 8
 	}
 	printf("\n12.\ni = %d\nj = %d\n", i, j);
-	i = -36;
-	j = 25;
+	i = -36, j = 25;
 	_asm
 	{
 		mov eax, j
