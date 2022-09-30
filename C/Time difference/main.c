@@ -20,7 +20,7 @@ int main()
 	printf("Il y a %d jours de difference\n", timeDifference);
 	yearDifference = timeDifference / 360;
 	monthDifference = timeDifference % 360 / 30;
-	dayDifference = timeDifference % 360 % 30;
+	dayDifference = timeDifference % 30;
 	printf("Il y a %d ans, %d mois et %d jours de difference\n", yearDifference, monthDifference, dayDifference);
 	return 0;
 }
