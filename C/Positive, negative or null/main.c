@@ -16,7 +16,7 @@ int main()
 	}
 	else
 	{
-		printf("Le nombre est nul\n");
+		printf("Le nombre est zero\n");
 	}
 	return 0;
 }
