@@ -4,8 +4,8 @@
 
 int main()
 {
-	int a, b, c;
-	float delta, x1, x2;
+	int a, b, c, delta;
+	double x1, x2;
 	printf("Entrez a\n");
 	scanf("%d", &a);
 	printf("Entrez b\n");
@@ -27,7 +27,7 @@ int main()
 		}
 		else
 		{
-			x1 = -c / b;
+			x1 = -c / (double)b;
 			printf("L'equation a pour solution %g\n", x1);
 		}
 	}
@@ -40,7 +40,7 @@ int main()
 		}
 		else if (delta == 0)
 		{
-			x1 = -b / (2 * a);
+			x1 = -b / (2 * (double)a);
 			printf("L'equation a pour solution %g\n", x1);
 		}
 		else
