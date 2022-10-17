@@ -8,7 +8,7 @@ int main()
 	scanf("%d", &number);
 	if (1 <= number && number <= 100)
 	{
-		if ((number % 2 != 0 && number % 3 == 0) && ((number < 30 || number>80) || (40 <= number && number <= 75)))
+		if ((number % 2 != 0 && number % 3 == 0) && ((number < 30 || number > 80) || (40 <= number && number <= 75)))
 		{
 			printf("VRAI\n");
 		}
