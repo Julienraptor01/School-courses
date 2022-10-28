@@ -8,7 +8,7 @@ int main()
 	scanf("%d", &startNumber);
 	printf("Entrez le nombre limite : ");
 	scanf("%d", &limitNumber);
-	if (startNumber > limitNumber / 2.0 - 0.5)
+	if (startNumber * 2 + 1 > limitNumber)
 	{
 	printf("Pas d'addition de nombres consecutifs possible\n");
 	}
