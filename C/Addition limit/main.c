@@ -3,26 +3,26 @@
 
 int main()
 {
-	int startNumber, startNumberIncreased, limitNumber;
+	int startNumber, limitNumber, counter;
 	printf("Entrez le nombre de depart : ");
 	scanf("%d", &startNumber);
 	printf("Entrez le nombre limite : ");
 	scanf("%d", &limitNumber);
-	if (startNumber > limitNumber / 2)
+	if (startNumber > limitNumber / 2.0 - 0.5)
 	{
 	printf("Pas d'addition de nombres consecutifs possible\n");
 	}
 	else
 	{
 		startNumberIncreased = startNumber;
+		counter = 1;
 		do
 		{
-			startNumberIncreased += startNumber + 1;
-			startNumber++;
+			startNumberIncreased += startNumber + counter;
+			counter++;
 		}
-		while (startNumberIncreased < limitNumber);
-		startNumberIncreased -= startNumber;
-		printf("La somme des nombres consecutifs est : %d\n", startNumberIncreased);
+		while (startNumberIncreased + startNumber + 1 <= limitNumber);
+		printf("Le nombre de nombres consecutifs additionnes en demarrant a %d avec un nombre limite de %d est de %d\n", startNumber, limitNumber, counter);
 	}
 	return 0;
 }
