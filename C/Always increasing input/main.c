@@ -33,7 +33,7 @@ int main()
 			previousScan = scan;
 			printf("Entrez un entier plus grand que %d : ", previousScan);
 			scanf("%d", &scan);
-			if (scan < previousScan)
+			if (scan <= previousScan)
 			{
 				previousScan = scan;
 				printf("Entrez un entier plus grand que %d : ", previousScan);
