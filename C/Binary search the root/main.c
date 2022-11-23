@@ -74,7 +74,7 @@ void ex1()
 	float fb = pow(b, 4) - 3 * b + 1;
 	float x, fx;
 	int i = 0;
-	if (fa * fb > 0)
+	if (fa * fb >= 0)
 	{
 		if (fa == 0 && fb == 0)
 		{
@@ -128,7 +128,7 @@ void ex2()
 	float fb = 2 * pow(b, 2) + b - 1;
 	float x, fx;
 	int i = 0;
-	if (fa * fb > 0)
+	if (fa * fb >= 0)
 	{
 		if (fa == 0 && fb == 0)
 		{
@@ -182,7 +182,7 @@ void ex3()
 	float fb = 2 * pow(b, 2) + b - 1;
 	float x, fx;
 	int i = 0;
-	if (fa * fb > 0)
+	if (fa * fb >= 0)
 	{
 		if (fa == 0 && fb == 0)
 		{
@@ -236,7 +236,7 @@ void ex4()
 	float fb = pow(b, 3) - 3 * pow(b, 2) - 3 * b + 5;
 	float x, fx;
 	int i = 0;
-	if (fa * fb > 0)
+	if (fa * fb >= 0)
 	{
 		if (fa == 0 && fb == 0)
 		{
@@ -290,7 +290,7 @@ void ex5()
 	float fb = pow(b, 3) - 3 * pow(b, 2) - 3 * b + 5;
 	float x, fx;
 	int i = 0;
-	if (fa * fb > 0)
+	if (fa * fb >= 0)
 	{
 		if (fa == 0 && fb == 0)
 		{
