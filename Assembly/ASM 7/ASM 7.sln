@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33110.190
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ASM 5", "ASM 5\ASM 5.vcxproj", "{E15F4F70-A333-4C96-BB76-876A08D97FA7}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ASM 7", "ASM 7\ASM 7.vcxproj", "{E9BD46E1-57C4-426E-A9FF-73C60793CBE9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{E15F4F70-A333-4C96-BB76-876A08D97FA7}.Debug|x86.ActiveCfg = Debug|Win32
-		{E15F4F70-A333-4C96-BB76-876A08D97FA7}.Debug|x86.Build.0 = Debug|Win32
-		{E15F4F70-A333-4C96-BB76-876A08D97FA7}.Release|x86.ActiveCfg = Release|Win32
-		{E15F4F70-A333-4C96-BB76-876A08D97FA7}.Release|x86.Build.0 = Release|Win32
+		{E9BD46E1-57C4-426E-A9FF-73C60793CBE9}.Debug|x86.ActiveCfg = Debug|Win32
+		{E9BD46E1-57C4-426E-A9FF-73C60793CBE9}.Debug|x86.Build.0 = Debug|Win32
+		{E9BD46E1-57C4-426E-A9FF-73C60793CBE9}.Release|x86.ActiveCfg = Release|Win32
+		{E9BD46E1-57C4-426E-A9FF-73C60793CBE9}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {147FEB61-9D47-4A92-BB40-80199AFD3F87}
+		SolutionGuid = {A3EEC507-7AD1-4551-8491-0851B5B925EC}
 	EndGlobalSection
 EndGlobal

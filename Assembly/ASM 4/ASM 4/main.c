@@ -1,13 +1,13 @@
 #include <stdio.h>
 
 int main()
-
 {
 	char b = 40;
 	int i = 20;
 	int j = -125;
 	float f = 2.7;
-	const float cf281 = 2.81, cf35 = 3.5, cfneg = -1;
+	const float cf281 = 2.81, cf35 = 3.5;
+	const float cfneg = -1;
 	_asm
 	{
 		movss xmm0, f
