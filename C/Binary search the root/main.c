@@ -14,7 +14,7 @@ int main()
 	int exercise;
 	do
 	{
-			printf("\nWhich exercise do you want to run ? (1-5)\nYou can use 6 to run them all\nYou can also enter -1 to exit\n");
+		printf("\nWhich exercise do you want to run ? (1-5)\nYou can use 6 to run them all\nYou can also enter -1 to exit\n");
 		scanf("%d", &exercise);
 		//simple case here
 		switch (exercise)

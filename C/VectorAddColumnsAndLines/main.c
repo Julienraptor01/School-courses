@@ -53,11 +53,6 @@ int main()
 				}
 			}
 		}
-		/*for (j = 0; j < numberOfUsedColumns; j++)
-		{
-			vectorAddedLines[i] += vectorMatrix[i][j];
-			vectorAddedColumns[j] += vectorMatrix[i][j];
-		}*/
 	}
 	//print the 2 vectors
 	printf("The vector of the added lines is : \n");
