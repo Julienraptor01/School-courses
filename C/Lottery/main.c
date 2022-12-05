@@ -14,11 +14,15 @@ int main()
 	for (i = 0; i < numberOfBalls ; i++)
 	{
 		//generate a ball with randomNumber and verify it doesn't already exist with sentinelLinearSearch
+		/*
 		if (sentinelLinearSearch(lottery, i, randomNumber(smallestBallNumber, biggestBallNumber)) == 0)
 		{
 			//we go back one step in the loop which will get us back to this step again if the number is not unique
 			i--;
 		}
+		*/
+		//this does try to generate and verify a number until it is unique
+		while (sentinelLinearSearch(lottery, i, randomNumber(smallestBallNumber, biggestBallNumber)) == 0);
 	}
 	//print the lottery numbers
 	for (i = 0; i < numberOfBalls ; i++)
@@ -34,7 +38,7 @@ int sentinelLinearSearch(int *lottery, int actualBall, int generatedBall)
 	lottery[actualBall] = generatedBall;
 	int i;
 	//this is a for whitout a body because we only want to check if the generatedBall is already in the lottery array
-	for (i = 0; generatedBall != lottery[i]; i++) {}
+	for (i = 0; generatedBall != lottery[i]; i++);
 	//try to use a while instead of the for
 	/*
 	while (generatedBall != lottery[i])
