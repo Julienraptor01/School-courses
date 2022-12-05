@@ -38,7 +38,7 @@ int sentinelLinearSearch(int *lottery, int actualBall, int generatedBall)
 	lottery[actualBall] = generatedBall;
 	int i;
 	//this is a for whitout a body because we only want to check if the generatedBall is already in the lottery array
-	for (i = 0; generatedBall != lottery[i]; i++);
+	for (i = 0; lottery[actualBall] != lottery[i]; i++);
 	//try to use a while instead of the for
 	/*
 	while (generatedBall != lottery[i])
