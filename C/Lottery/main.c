@@ -40,6 +40,7 @@ int sentinelLinearSearch(int *lottery, int actualBall, int generatedBall)
 	int i;
 	//this is a for whitout a body because we only want to check if the generatedBall is already in the lottery array
 	for (i = 0; generatedBall != lottery[i]; i++) {}
+	/*
 	if (i == actualBall + 1)
 	{
 		//good case
@@ -50,11 +51,18 @@ int sentinelLinearSearch(int *lottery, int actualBall, int generatedBall)
 		//bad case were generatedBall is already in the lottery array
 		return 0;
 	}
+	*/
+	//this code here is a more optimized version which return 0 or 1 with the result of the comparison
+	return (i == actualBall + 1);
 }
 
 int randomNumber(int minRandom, int maxRandom)
 {
 	//simple random number generator with a min and a max
+	/*
 	int generatedNumber = rand() % (maxRandom - minRandom + 1) + minRandom;
 	return generatedNumber;
+	*/
+	//directly return the value whitout using a var
+	return (rand() % (maxRandom - minRandom + 1) + minRandom);
 }
