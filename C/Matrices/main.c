@@ -6,11 +6,11 @@
 void ex1();
 void ex2();
 void ex3();
-//void ex4();
+void ex4();
 
 void addTwo2DimensionalVectors(int *, int *, int *, int, int);
-//void subtractTwo2DimensionalVectors(int *, int *, int *, int, int);
-//void multiplyA2DimensionalVectorByAScalar(int *, int, int *, int, int);
+void substractTwo2DimensionalVectors(int *, int *, int *, int, int);
+void multiplyA2DimensionalVectorByAScalar(int *, int, int *, int, int);
 
 int lenghtOfTheLongestNumberOfA2DimensionalVector(int *, int, int);
 int lengthOfAScalar(int);
@@ -41,7 +41,7 @@ int main()
 			printf("\nExercise 3:\n");
 			ex3();
 			break;
-		/*case 4:
+		case 4:
 			printf("\nExercise 4:\n");
 			ex4();
 			break;
@@ -54,7 +54,7 @@ int main()
 			ex3();
 			printf("\nExercise 4:\n");
 			ex4();
-			break;*/
+			break;
 		case -1:
 			printf("Exiting the program...\n");
 			return 0;
@@ -174,13 +174,7 @@ void ex2()
 	}
 	NEXTLINE;
 	//Substract the values of the matrices and put the result in the third matrix
-	for (i = 0; i < numberOfLines; i++)
-	{
-		for (j = 0; j < numberOfColumns; j++)
-		{
-			matrixC[i][j] = matrixA[i][j] - matrixB[i][j];
-		}
-	}
+	substractTwo2DimensionalVectors(matrixA, matrixB, matrixC, numberOfLines, numberOfColumns);
 	//i have to align all numbers in terms of columns otherwise it's not pretty
 	//i need to find the length of the longest number and force all numbers to print at this length
 	//i need to find the length of the longest numbers out of all the matrices
@@ -230,9 +224,7 @@ void ex3()
 	scanf("%d", &numberOfColumns);
 	NEXTLINE;
 	//Create the matrix
-	//int matrixA[numberOfLines][numberOfColumns], matrixB[numberOfLines][numberOfColumns];
-	// hardcode length to 3
-	int matrixA[3][3], matrixB[3][3];
+	int matrixA[numberOfLines][numberOfColumns], matrixB[numberOfLines][numberOfColumns];
 	//Read the values of the matrix with a for and indicate the position of the value
 	for (i = 0; i < numberOfLines; i++)
 	{
@@ -248,13 +240,7 @@ void ex3()
 	scanf("%d", &scalar);
 	NEXTLINE;
 	//Multiply the values of the matrix by the scalar and put the result in the second matrix
-	for (i = 0; i < numberOfLines; i++)
-	{
-		for (j = 0; j < numberOfColumns; j++)
-		{
-			matrixB[i][j] = matrixA[i][j] * scalar;
-		}
-	}
+	multiplyA2DimensionalVectorByAScalar(matrixA, scalar, matrixB, numberOfLines, numberOfColumns);
 	//i have to align all numbers in terms of columns otherwise it's not pretty
 	//i need to find the length of the longest number and force all numbers to print at this length
 	//i need to find the length of the longest numbers out of all the matrices
@@ -281,7 +267,7 @@ void ex3()
 		{
 			for (k = 0; k <= lengthOfAScalar(scalar); k++)
 			{
-				printf("  ");
+				printf(" ");
 			}
 		}
 		if (i == numberOfLines / 2)
@@ -300,6 +286,181 @@ void ex3()
 	}
 }
 
+void ex4()
+{
+	//composition of multiple operations
+	int numberOfColumns, numberOfLines, i, j, k, scalarA, scalarB, scalarC;
+	//Read the number of lines and columns
+	printf("Number of lines of the matrices : ");
+	scanf("%d", &numberOfLines);
+	printf("Number of columns of the matrices : ");
+	scanf("%d", &numberOfColumns);
+	NEXTLINE;
+	//Create the matrices
+	int matrixA[numberOfLines][numberOfColumns], matrixB[numberOfLines][numberOfColumns], matrixC[numberOfLines][numberOfColumns], matrixD[numberOfLines][numberOfColumns], tempMatrix1[numberOfLines][numberOfColumns], tempMatrix2[numberOfLines][numberOfColumns];
+	//Read the values of the first matrix with a for and indicate the position of the value
+	for (i = 0; i < numberOfLines; i++)
+	{
+		for (j = 0; j < numberOfColumns; j++)
+		{
+			printf("Value of the matrix A at position %d %d : ", i, j);
+			scanf("%d", &matrixA[i][j]);
+		}
+	}
+	NEXTLINE;
+	//Read the values of the second matrix with a for and indicate the position of the value
+	for (i = 0; i < numberOfLines; i++)
+	{
+		for (j = 0; j < numberOfColumns; j++)
+		{
+			printf("Value of the matrix B at position %d %d : ", i, j);
+			scanf("%d", &matrixB[i][j]);
+		}
+	}
+	NEXTLINE;
+	//Read the values of the third matrix with a for and indicate the position of the value
+	for (i = 0; i < numberOfLines; i++)
+	{
+		for (j = 0; j < numberOfColumns; j++)
+		{
+			printf("Value of the matrix C at position %d %d : ", i, j);
+			scanf("%d", &matrixC[i][j]);
+		}
+	}
+	NEXTLINE;
+	//Read the first scalar
+	printf("Scalar a : ");
+	scanf("%d", &scalarA);
+	NEXTLINE;
+	//Read the second scalar
+	printf("Scalar b : ");
+	scanf("%d", &scalarB);
+	NEXTLINE;
+	//Read the third scalar
+	printf("Scalar c : ");
+	scanf("%d", &scalarC);
+	NEXTLINE;
+	//do the composition and put everything in the fourth matrix at the end
+	//lowercase is scalar and uppercase is matrix
+	//a.A+b.B-c.C
+	//a.A
+	multiplyA2DimensionalVectorByAScalar(matrixA, scalarA, tempMatrix1, numberOfLines, numberOfColumns);
+	//b.B
+	multiplyA2DimensionalVectorByAScalar(matrixB, scalarB, tempMatrix2, numberOfLines, numberOfColumns);
+	//a.A+b.B
+	addTwo2DimensionalVectors(tempMatrix1, tempMatrix2, tempMatrix1, numberOfLines, numberOfColumns);
+	//c.C
+	multiplyA2DimensionalVectorByAScalar(matrixC, scalarC, tempMatrix2, numberOfLines, numberOfColumns);
+	//a.A+b.B-c.C
+	substractTwo2DimensionalVectors(tempMatrix1, tempMatrix2, matrixD, numberOfLines, numberOfColumns);
+	//i have to align all numbers in terms of columns otherwise it's not pretty
+	//i need to find the length of the longest number and force all numbers to print at this length
+	//i need to find the length of the longest numbers out of all the matrices
+	//i need to print the matrices with the correct spacing
+	//i'll do the whole composition in one go
+	for (i = 0; i < numberOfLines; i++)
+	{
+		for (j = 0; j < numberOfColumns; j++)
+		{
+			printf("%*d ", lenghtOfTheLongestNumberOfA2DimensionalVector(matrixA, numberOfLines, numberOfColumns), matrixA[i][j]);
+		}
+		if (i == numberOfLines / 2)
+		{
+			printf("* ");
+		}
+		else
+		{
+			printf("  ");
+		}
+		if (i == numberOfLines / 2)
+		{
+			printf("%*d ", lengthOfAScalar(scalarA), scalarA);
+		}
+		else
+		{
+			for (k = 0; k <= lengthOfAScalar(scalarA); k++)
+			{
+				printf(" ");
+			}
+		}
+		if (i == numberOfLines / 2)
+		{
+			printf("+ ");
+		}
+		else
+		{
+			printf("  ");
+		}
+		for (j = 0; j < numberOfColumns; j++)
+		{
+			printf("%*d ", lenghtOfTheLongestNumberOfA2DimensionalVector(matrixB, numberOfLines, numberOfColumns), matrixB[i][j]);
+		}
+		if (i == numberOfLines / 2)
+		{
+			printf("* ");
+		}
+		else
+		{
+			printf("  ");
+		}
+		if (i == numberOfLines / 2)
+		{
+			printf("%*d ", lengthOfAScalar(scalarB), scalarB);
+		}
+		else
+		{
+			for (k = 0; k <= lengthOfAScalar(scalarB); k++)
+			{
+				printf(" ");
+			}
+		}
+		if (i == numberOfLines / 2)
+		{
+			printf("- ");
+		}
+		else
+		{
+			printf("  ");
+		}
+		for (j = 0; j < numberOfColumns; j++)
+		{
+			printf("%*d ", lenghtOfTheLongestNumberOfA2DimensionalVector(matrixC, numberOfLines, numberOfColumns), matrixC[i][j]);
+		}
+		if (i == numberOfLines / 2)
+		{
+			printf("* ");
+		}
+		else
+		{
+			printf("  ");
+		}
+		if (i == numberOfLines / 2)
+		{
+			printf("%*d ", lengthOfAScalar(scalarC), scalarC);
+		}
+		else
+		{
+			for (k = 0; k <= lengthOfAScalar(scalarC); k++)
+			{
+				printf(" ");
+			}
+		}
+		if (i == numberOfLines / 2)
+		{
+			printf("= ");
+		}
+		else
+		{
+			printf("  ");
+		}
+		for (j = 0; j < numberOfColumns; j++)
+		{
+			printf("%*d ", lenghtOfTheLongestNumberOfA2DimensionalVector(matrixD, numberOfLines, numberOfColumns), matrixD[i][j]);
+		}
+		NEXTLINE;
+	}
+}
+	
 void addTwo2DimensionalVectors(int *vectorA, int *vectorB, int *vectorC, int positionInColumn, int positionInLine)
 {
 	for (int i = 0; i < positionInColumn; i++)
@@ -307,6 +468,28 @@ void addTwo2DimensionalVectors(int *vectorA, int *vectorB, int *vectorC, int pos
 		for (int j = 0; j < positionInLine; j++)
 		{
 			vectorC[i * positionInLine + j] = vectorA[i * positionInLine + j] + vectorB[i * positionInLine + j];
+		}
+	}
+}
+
+void substractTwo2DimensionalVectors(int* vectorA, int* vectorB, int* vectorC, int positionInColumn, int positionInLine)
+{
+	for (int i = 0; i < positionInColumn; i++)
+	{
+		for (int j = 0; j < positionInLine; j++)
+		{
+			vectorC[i * positionInLine + j] = vectorA[i * positionInLine + j] - vectorB[i * positionInLine + j];
+		}
+	}
+}
+
+void multiplyA2DimensionalVectorByAScalar(int* vectorA, int scalar, int* vectorB, int positionInColumn, int positionInLine)
+{
+	for (int i = 0; i < positionInColumn; i++)
+	{
+		for (int j = 0; j < positionInLine; j++)
+		{
+			vectorB[i * positionInLine + j] = vectorA[i * positionInLine + j] * scalar;
 		}
 	}
 }
@@ -349,6 +532,7 @@ int lengthOfAScalar(int scalar)
 		lengthOfTheScalar++;
 	}
 	while (tempScalar != 0);
+	return lengthOfTheScalar;
 }
 
 int negativeNumberFix(int number)
