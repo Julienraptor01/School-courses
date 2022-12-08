@@ -78,9 +78,7 @@ void ex1()
 	scanf("%d", &numberOfColumns);
 	NEXTLINE;
 	//Create the matrices
-	//int matrixA[numberOfLines][numberOfColumns], matrixB[numberOfLines][numberOfColumns], matrixC[numberOfLines][numberOfColumns];
-	//hardcode the sizes to 3
-	int matrixA[3][3], matrixB[3][3], matrixC[3][3];
+	int matrixA[numberOfLines][numberOfColumns], matrixB[numberOfLines][numberOfColumns], matrixC[numberOfLines][numberOfColumns];
 	//Read the values of the first matrix with a for and indicate the position of the value
 	for (i = 0; i < numberOfLines; i++)
 	{
