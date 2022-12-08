@@ -12,7 +12,8 @@ int main()
 {
 	//ask the user which exercise they want to run
 	int exercise;
-	do
+	//this is an infinite loop since EVERY case is handled in my program
+	for (;;)
 	{
 		printf("\nWhich exercise do you want to run ? (1-5)\nYou can use 6 to run them all\nYou can also enter -1 to exit\n");
 		scanf("%d", &exercise);
@@ -59,7 +60,8 @@ int main()
 			break;
 		}
 	}
-	while (exercise != -1);
+	//if i get this value i know smth f up because it shouldn't show up
+	return -1;
 }
 
 void ex1()
