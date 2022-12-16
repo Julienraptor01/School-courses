@@ -1023,7 +1023,7 @@ int main()
 	double d = 975.24, *pd = &d;
 	•*pd = abs(b); // d = 15.0
 	• f = *pi * (float)sqrt(d); // f = 127444.867
-	•*pd = log(f) / log(2); // d = 8.460734346... 
+	•*pd = log(f) / log(2); // d = 8.460734346...
 	• f = sqrt(d) + pow(b, 2) * exp(4); // f = 12315.8125
 	•*pi = -((float)*pi / 2) * (f - 5.2 * sqrt(-*pb)); // i = -677810
 	• f = pow(*pd, 3) / (*pb * 15 - sqrt(36)); // f = -4015342.00
@@ -1036,6 +1036,8 @@ int main()
 	int i = 0xff1, *pi = &i;
 	float f = 352.318, *pf = &f;
 	double d = 975.24, *pd = &d;
+	double dtmp1, dtmp2;
+	const double cd2 = 2, cd4 = 4;
 	_asm
 	{
 		mov eax, pb
@@ -1047,7 +1049,77 @@ int main()
 		mov eax, pd
 		movsd qword ptr[eax], xmm0
 	}
-	printf("1.\nb = %hhd | i = %d | f = %f | d = %lf\n", b, i, f, d);
+	printf("\n1.\nb = %hhd | i = %d | f = %f | d = %lf\n", b, i, f, d);
+	b = -15, i = 0xff1, f = 352.318, d = 975.24;
+	_asm
+	{
+		mov eax, pi
+		mov eax, dword ptr[eax]
+		cvtsi2ss xmm0, eax
+		push dword ptr d + 4
+		push dword ptr d
+		call dword ptr sqrt
+		add esp, 8
+		fstp dtmp1
+		movsd xmm1, dtmp1
+		cvtsd2ss xmm1, xmm1
+		mulss xmm0, xmm1
+		movss f, xmm0
+	}
+	printf("\n2.\nb = %hhd | i = %d | f = %f | d = %lf\n", b, i, f, d);
+	b = -15, i = 0xff1, f = 352.318, d = 975.24;
+	_asm
+	{
+		movss xmm0, f
+		cvtss2sd xmm0, xmm0
+		sub esp, 8
+		movsd qword ptr[esp], xmm0
+		call dword ptr log
+		add esp, 8
+		fstp dtmp1
+		push dword ptr cd2 + 4
+		push dword ptr cd2
+		call dword ptr log
+		add esp, 8
+		movsd xmm0, dtmp1
+		fstp dtmp1
+		movsd xmm1, dtmp1
+		divsd xmm0, xmm1
+		mov eax, pd
+		movsd qword ptr[eax], xmm0
+	}
+	printf("\n3.\nb = %hhd | i = %d | f = %f | d = %lf\n", b, i, f, d);
+	b = -15, i = 0xff1, f = 352.318, d = 975.24;
+	_asm
+	{
+		push dword ptr d + 4
+		push dword ptr d
+		call dword ptr sqrt
+		add esp, 8
+		fstp dtmp1
+		push dword ptr cd2 + 4
+		push dword ptr cd2
+		movsx eax, b
+		cvtsi2sd xmm0, eax
+		sub esp, 8
+		movsd qword ptr[esp], xmm0
+		call dword ptr pow
+		add esp, 16
+		fstp dtmp2
+		push dword ptr cd4 + 4
+		push dword ptr cd4
+		call dword ptr exp
+		add esp, 8
+		movsd xmm0, dtmp1
+		movsd xmm1, dtmp2
+		fstp dtmp1
+		movsd xmm2, dtmp1
+		mulsd xmm1, xmm2
+		addsd xmm0, xmm1
+		cvtsd2ss xmm0, xmm0
+		movss f, xmm0
+	}
+	printf("\n4.\nb = %hhd | i = %d | f = %f | d = %lf\n", b, i, f, d);
 	b = -15, i = 0xff1, f = 352.318, d = 975.24;
 	return 0;
 }

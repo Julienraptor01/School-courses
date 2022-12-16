@@ -19,7 +19,7 @@ int main()
 		addsd xmm0, xmm1
 		movsd d, xmm0
 	}
-	printf("1.\nb = %hhd | i = %d | f = %f | d = %lf\n", b, i, f, d);
+	printf("\n1.\nb = %hhd | i = %d | f = %f | d = %lf\n", b, i, f, d);
 	b = 40, i = 20, f = 52.5, d = 3.14;
 	_asm
 	{
@@ -30,7 +30,7 @@ int main()
 		mulss xmm0, xmm1
 		movss f, xmm0
 	}
-	printf("2.\nb = %hhd | i = %d | f = %f | d = %lf\n", b, i, f, d);
+	printf("\n2.\nb = %hhd | i = %d | f = %f | d = %lf\n", b, i, f, d);
 	b = 40, i = 20, f = 52.5, d = 3.14;
 	_asm
 	{
@@ -49,7 +49,7 @@ int main()
 		cvttss2si eax, xmm0
 		mov i, eax
 	}
-	printf("3.\nb = %hhd | i = %d | f = %f | d = %lf\n", b, i, f, d);
+	printf("\n3.\nb = %hhd | i = %d | f = %f | d = %lf\n", b, i, f, d);
 	b = 40, i = 20, f = 52.5, d = 3.14;
 	_asm
 	{
@@ -62,7 +62,7 @@ int main()
 		cvtsi2ss xmm0, eax
 		movss f, xmm0
 	}
-	printf("4.\nb = %hhd | i = %d | f = %f | d = %lf\n", b, i, f, d);
+	printf("\n4.\nb = %hhd | i = %d | f = %f | d = %lf\n", b, i, f, d);
 	b = 40, i = 20, f = 52.5, d = 3.14;
 	_asm
 	{
@@ -81,7 +81,7 @@ int main()
 		cvttss2si eax, xmm0
 		mov i, eax
 	}
-	printf("5.\nb = %hhd | i = %d | f = %f | d = %lf\n", b, i, f, d);
+	printf("\n5.\nb = %hhd | i = %d | f = %f | d = %lf\n", b, i, f, d);
 	b = 40, i = 20, f = 52.5, d = 3.14;
 	_asm
 	{
@@ -97,7 +97,7 @@ int main()
 		cvtss2sd xmm1, xmm1
 		movsd d, xmm1
 	}
-	printf("6.\nb = %hhd | i = %d | f = %f | d = %lf\n", b, i, f, d);
+	printf("\n6.\nb = %hhd | i = %d | f = %f | d = %lf\n", b, i, f, d);
 	b = 40, i = 20, f = 52.5, d = 3.14;
 	_asm
 	{
@@ -117,7 +117,7 @@ int main()
 		divsd xmm0, xmm1
 		movsd d, xmm0
 	}
-	printf("7.\nb = %hhd | i = %d | f = %f | d = %lf\n", b, i, f, d);
+	printf("\n7.\nb = %hhd | i = %d | f = %f | d = %lf\n", b, i, f, d);
 	b = 40, i = 20, f = 52.5, d = 3.14;
 	_asm
 	{
@@ -144,7 +144,7 @@ int main()
 		idiv ebx
 		mov i, eax
 	}
-	printf("8.\nb = %hhd | i = %d | f = %f | d = %lf\n", b, i, f, d);
+	printf("\n8.\nb = %hhd | i = %d | f = %f | d = %lf\n", b, i, f, d);
 	b = 40, i = 20, f = 52.5, d = 3.14;
 	_asm
 	{
@@ -167,7 +167,7 @@ int main()
 		addsd xmm1, xmm0
 		movsd d, xmm1
 	}
-	printf("9.\nb = %hhd | i = %d | f = %f | d = %lf\n", b, i, f, d);
+	printf("\n9.\nb = %hhd | i = %d | f = %f | d = %lf\n", b, i, f, d);
 	b = 40, i = 20, f = 52.5, d = 3.14;
 	_asm
 	{
@@ -185,7 +185,7 @@ int main()
 		cvttss2si eax, xmm1
 		mov b, al
 	}
-	printf("10.\nb = %hhd | i = %d | f = %f | d = %lf\n", b, i, f, d);
+	printf("\n10.\nb = %hhd | i = %d | f = %f | d = %lf\n", b, i, f, d);
 	b = 40, i = 20, f = 52.5, d = 3.14;
 	_asm
 	{
@@ -208,7 +208,7 @@ int main()
 		cvtsd2ss xmm0, xmm0
 		movss f, xmm0
 	}
-	printf("11.\nb = %hhd | i = %d | f = %f | d = %lf\n", b, i, f, d);
+	printf("\n11.\nb = %hhd | i = %d | f = %f | d = %lf\n", b, i, f, d);
 	b = 40, i = 20, f = 52.5, d = 3.14;
 	_asm
 	{
@@ -224,6 +224,6 @@ int main()
 		cvtsd2ss xmm0, xmm0
 		movss f, xmm0
 	}
-	printf("12.\nb = %hhd | i = %d | f = %f | d = %lf\n", b, i, f, d);
+	printf("\n12.\nb = %hhd | i = %d | f = %f | d = %lf\n", b, i, f, d);
 	return 0;
 }

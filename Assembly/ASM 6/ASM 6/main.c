@@ -1052,7 +1052,7 @@ int main()
 		add eax, ebx
 		mov i, eax
 	}
-	printf("1.\nb = %hhd | s = %hd | i = %d | j = %d | f = %f | d = %lf\n", b, s, i, j, f, d);
+	printf("\n1.\nb = %hhd | s = %hd | i = %d | j = %d | f = %f | d = %lf\n", b, s, i, j, f, d);
 	b = -25, s = 40, i = -110, j = -125, f = 212.9, d = 6.48;
 	_asm
 	{
@@ -1064,6 +1064,6 @@ int main()
 		inc s
 		inc s
 	}
-	printf("2.\nb = %hhd | s = %hd | i = %d | j = %d | f = %f | d = %lf\n", b, s, i, j, f, d);
+	printf("\n2.\nb = %hhd | s = %hd | i = %d | j = %d | f = %f | d = %lf\n", b, s, i, j, f, d);
 	return 0;
 }
