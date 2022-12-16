@@ -1032,12 +1032,15 @@ int main()
 	• f = cos(-i) * 100 - exp(b / 5 + 6) + *pf * d; // f = 343474.781
 	• d = ceil(*pd * 3 + -i) / (cos(2.9) * 6); // d = 198.25776939662740
 	*/
-	char b = -15, *pb = &b;
-	int i = 0xff1, *pi = &i;
-	float f = 352.318, *pf = &f;
-	double d = 975.24, *pd = &d;
+	char b = -15, * pb = &b;
+	int i = 0xff1, * pi = &i;
+	float f = 352.318, * pf = &f;
+	double d = 975.24, * pd = &d;
 	double dtmp1, dtmp2;
-	const double cd2 = 2, cd4 = 4;
+	const double cd2 = 2, cd4 = 4, cd52 = 5.2, cd3 = 3, cd36 = 36;
+	float ftmp1, ftmp2;
+	const float cf2 = 2, cfneg = -1;
+	const int ci15 = 15;
 	_asm
 	{
 		mov eax, pb
@@ -1121,5 +1124,69 @@ int main()
 	}
 	printf("\n4.\nb = %hhd | i = %d | f = %f | d = %lf\n", b, i, f, d);
 	b = -15, i = 0xff1, f = 352.318, d = 975.24;
+	_asm
+	{
+		mov eax, pi
+		mov eax, dword ptr[eax]
+		cvtsi2ss xmm0, eax
+		divss xmm0, cf2
+		movss ftmp1, xmm0
+		mov eax, pb
+		movsx eax, byte ptr[eax]
+		neg eax
+		cvtsi2sd xmm0, eax
+		sub esp, 8
+		movsd qword ptr[esp], xmm0
+		call dword ptr sqrt
+		add esp, 8
+		movss xmm0, ftmp1
+		fstp dtmp1
+		movsd xmm1, dtmp1
+		mulsd xmm1, cd52
+		movss xmm2, f
+		cvtss2sd xmm2, xmm2
+		subsd xmm2, xmm1
+		mulss xmm0, cfneg
+		cvtss2sd xmm0, xmm0
+		mulsd xmm0, xmm2
+		cvtsd2si eax, xmm0
+		mov ebx, pi
+		mov dword ptr[ebx], eax
+	}
+	printf("\n5.\nb = %hhd | i = %d | f = %f | d = %lf\n", b, i, f, d);
+	b = -15, i = 0xff1, f = 352.318, d = 975.24;
+	_asm
+	{
+		push dword ptr cd3 + 4
+		push dword ptr cd3
+		mov eax, pd
+		movsd xmm0, qword ptr[eax]
+		sub esp, 8
+		movsd qword ptr[esp], xmm0
+		call dword ptr pow
+		add esp, 16
+		fstp dtmp1
+		push dword ptr cd36 + 4
+		push dword ptr cd36
+		call dword ptr sqrt
+		add esp, 8
+		movsd xmm0, dtmp1
+		fstp dtmp1
+		movsd xmm1, dtmp1
+		mov eax, pb
+		movsx eax, byte ptr[eax]
+		imul eax, ci15
+		cvtsi2sd xmm2, eax
+		subsd xmm2, xmm1
+		divsd xmm0, xmm2
+		cvtsd2ss xmm0, xmm0
+		movss f, xmm0
+	}
+	printf("\n6.\nb = %hhd | i = %d | f = %f | d = %lf\n", b, i, f, d);
+	b = -15, i = 0xff1, f = 352.318, d = 975.24;
+	_asm
+	{
+	}
+	printf("\n7.\nb = %hhd | i = %d | f = %f | d = %lf\n", b, i, f, d);
 	return 0;
 }
