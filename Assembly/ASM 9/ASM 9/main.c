@@ -1043,8 +1043,7 @@ int main()
 	const int ci15 = 15;
 	_asm
 	{
-		mov eax, pb
-		movsx eax, byte ptr[eax]
+		movsx eax, b
 		push eax
 		call dword ptr abs
 		add esp, 4
@@ -1056,18 +1055,18 @@ int main()
 	b = -15, i = 0xff1, f = 352.318, d = 975.24;
 	_asm
 	{
-		mov eax, pi
-		mov eax, dword ptr[eax]
-		cvtsi2ss xmm0, eax
 		push dword ptr d + 4
 		push dword ptr d
 		call dword ptr sqrt
 		add esp, 8
 		fstp dtmp1
-		movsd xmm1, dtmp1
-		cvtsd2ss xmm1, xmm1
-		mulss xmm0, xmm1
-		movss f, xmm0
+		movsd xmm0, dtmp1
+		cvtsd2ss xmm0, xmm0
+		mov eax, pi
+		mov eax, dword ptr[eax]
+		cvtsi2ss xmm1, eax
+		mulss xmm1, xmm0
+		movss f, xmm1
 	}
 	printf("\n2.\nb = %hhd | i = %d | f = %f | d = %lf\n", b, i, f, d);
 	b = -15, i = 0xff1, f = 352.318, d = 975.24;
@@ -1186,6 +1185,7 @@ int main()
 	b = -15, i = 0xff1, f = 352.318, d = 975.24;
 	_asm
 	{
+		
 	}
 	printf("\n7.\nb = %hhd | i = %d | f = %f | d = %lf\n", b, i, f, d);
 	return 0;
