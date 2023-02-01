@@ -1036,11 +1036,11 @@ int main()
 	int i = 0xff1, * pi = &i;
 	float f = 352.318, * pf = &f;
 	double d = 975.24, * pd = &d;
-	double dtmp1, dtmp2;
+	double dtmp, dtmp1, dtmp2;
 	const double cd2 = 2, cd4 = 4, cd52 = 5.2, cd3 = 3, cd36 = 36;
 	float ftmp1, ftmp2;
 	const float cf2 = 2, cfneg = -1;
-	const int ci15 = 15;
+	//const int ci15 = 15;
 	_asm
 	{
 		movsx eax, b
@@ -1156,6 +1156,17 @@ int main()
 	b = -15, i = 0xff1, f = 352.318, d = 975.24;
 	_asm
 	{
+		mov eax, pb
+		movsx eax, byte ptr[eax]
+		imul eax, 15
+		push dword ptr cd36 + 4
+		push dword ptr cd36
+		call dword ptr sqrt
+		add esp, 8
+		fstp dtmp
+		movsd xmm0, dtmp
+		cvtsi2sd xmm1, eax
+		subsd xmm1, xmm0
 		push dword ptr cd3 + 4
 		push dword ptr cd3
 		mov eax, pd
@@ -1164,20 +1175,9 @@ int main()
 		movsd qword ptr[esp], xmm0
 		call dword ptr pow
 		add esp, 16
-		fstp dtmp1
-		push dword ptr cd36 + 4
-		push dword ptr cd36
-		call dword ptr sqrt
-		add esp, 8
-		movsd xmm0, dtmp1
-		fstp dtmp1
-		movsd xmm1, dtmp1
-		mov eax, pb
-		movsx eax, byte ptr[eax]
-		imul eax, ci15
-		cvtsi2sd xmm2, eax
-		subsd xmm2, xmm1
-		divsd xmm0, xmm2
+		fstp dtmp
+		movsd xmm0, dtmp
+		divsd xmm0, xmm1
 		cvtsd2ss xmm0, xmm0
 		movss f, xmm0
 	}
