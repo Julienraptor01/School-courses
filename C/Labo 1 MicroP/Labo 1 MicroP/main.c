@@ -24,18 +24,20 @@ int main(void)
 	// copier la valeur de PC1 vers PD2 sans changer les autres bits
 	ClearBit(DDRC, DDC1);
 	SetBit(DDRD, DDD2);
-	if (PINC & (1 << PINC1))
+	/*if (PINC & (1 << PINC1))
 	{
 		SetBit(PORTD, PORTD2);
 	}
 	else
 	{
 		ClearBit(PORTD, PORTD2);
-	}
+	}*/
+	// rewrite in one line
+	PORTD = (PORTD & ~(1 << PORTD2)) | ((PINC & (1 << PINC1)) << (PORTD2 - PINC1));
 	// copier la valeur de PC0 vers PD1 et la valeur de PC1 vers PD2 sans changer les autres bits
 	DDRC &= ~((1 << DDC0) | (1 << DDC1));
 	DDRD |= (1 << DDD1) | (1 << DDD2);
-	switch (PINC & 0x03)
+	/*switch (PINC & ((1 << PINC0) | (1 << PINC1)))
 	{
 	case 0:
 		PORTD &= ~((1 << PORTD1) | (1 << PORTD2));
@@ -51,32 +53,36 @@ int main(void)
 	case 3:
 		PORTD |= (1 << PORTD1) | (1 << PORTD2);
 		break;
-	}
+	}*/
+	// rewrite in one line
+	PORTD = (PORTD & ~((1 << PORTD1) | (1 << PORTD2))) | ((PINC & ((1 << PINC0) | (1 << PINC1))) << (PORTD1 - PINC0));
 	// copier la valeur de PB2 vers PC0 et la valeur de PB0 vers PC4 sans changer les autres bits
 	DDRB &= ~((1 << DDB0) | (1 << DDB2));
 	DDRC |= (1 << DDC0) | (1 << DDC4);
-	switch (PINB & 0x05)
+	/*switch (PINB & ((1 << PINB0) | (1 << PINB2)))
 	{
 	case 0:
 		PORTC &= ~((1 << PORTC0) | (1 << PORTC4));
 		break;
 	case 1:
-		SetBit(PORTC, PORTC0);
-		ClearBit(PORTC, PORTC4);
-		break;
-	case 4:
 		ClearBit(PORTC, PORTC0);
 		SetBit(PORTC, PORTC4);
+		break;
+	case 4:
+		SetBit(PORTC, PORTC0);
+		ClearBit(PORTC, PORTC4);
 		break;
 	case 5:
 		PORTC |= (1 << PORTC0) | (1 << PORTC4);
 		break;
-	}
+	}*/
+	// rewrite in one line
+	PORTC = (PORTC & ~((1 << PORTC0) | (1 << PORTC4))) | ((PINB & (1 << PINB0)) << (PORTC4 - PINB0)) | ((PINB & (1 << PINB2)) << (PORTC0 - PINB2));
 	// copier la valeur de PC1 vers PD2 sans changer les autres bits uniquement quand PB2 = 1
 	DDRB &= ~(1 << DDB2);
 	DDRC &= ~(1 << DDC1);
 	DDRD |= (1 << DDD2);
-	if (PINB & (1 << PINB2))
+	/*if (PINB & (1 << PINB2))
 	{
 		if (PINC & (1 << PINC1))
 		{
@@ -86,5 +92,7 @@ int main(void)
 		{
 			ClearBit(PORTD, PORTD2);
 		}
-	}
+	}*/
+	// rewrite in one line
+	PORTD = (PORTD & ~(1 << PORTD2)) | ((PINB & (1 << PINB2)) && ((PINC & (1 << PINC1)) << (PINB2 - PINC1)));
 }
