@@ -3,7 +3,7 @@
 #define SetBit(x,y) (x |= (1<<y))
 #define ClearBit(x,y) (x &= ~(1<<y))
 
-#define EXERCICE 1
+#define EXERCICE 7
 
 /* useless here
 void delay_500ms(void)
@@ -87,7 +87,7 @@ int main(void)
 		break;
 	}*/
 	// rewrite in one line
-	PORTC = (PORTC & ~((1 << PORTC0) | (1 << PORTC4))) | ((PINB & (1 << PINB0)) << (PORTC4 - PINB0)) | ((PINB & (1 << PINB2)) << (PORTC0 - PINB2));
+	PORTC = (PORTC & ~((1 << PORTC0) | (1 << PORTC4))) | ((PINB & (1 << PINB0)) << (PORTC4 - PINB0)) | ((PINB & (1 << PINB2)) >> (PINB2 - PORTC0));
 #elif EXERCICE == 7
 	// copier la valeur de PC1 vers PD2 sans changer les autres bits uniquement quand PB2 = 1
 	DDRB &= ~(1 << DDB2);
@@ -105,6 +105,8 @@ int main(void)
 		}
 	}*/
 	// rewrite in one line
-	PORTD = (PORTD & ~(1 << PORTD2)) | ((PINB & (1 << PINB2)) && ((PINC & (1 << PINC1)) << (PINB2 - PINC1)));
+	PORTD = (PORTD & ~(1 << PORTD2)) | (((PINB & (1 << PINB2)) && (PINC & (1 << PINC1))) << PORTD2);
+	// alternative with & instead of &&
+	// PORTD = (PORTD & ~(1 << PORTD2)) | (PINB & (1 << PINB2)) & (((PINC & (1 << PINC1))) << (PINB2 - PINC1));
 #endif
 }
