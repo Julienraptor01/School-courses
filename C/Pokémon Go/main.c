@@ -21,7 +21,7 @@ typedef struct pokemon
 {
 	long idPokemon; // IDENTIFIANT NOT NULL autoincrement autorise
 	char nom[50]; // NOT NULL, par defaut le nom de l'espece
-	char genre; // {M,F}
+	char genre; // {X,M,F}
 	unsigned int PV; // NOT NULL, >=0
 	unsigned int PC; // NOT NULL, >0, ne varie pas
 	char lieuCapture[50]; // {a-zA-Z_-. '}
@@ -43,8 +43,7 @@ int main()
 {
 // L'heure et la date de maintenant
 	time_t t0 = time(0); // sous la forme d'un timestamp
-	struct tm *tm0 = localtime(&t0); // sous la forme d'une représentation calendaire à l'heure locale
-
+	struct tm* tm0 = localtime(&t0); // sous la forme d'une représentation calendaire à l'heure locale
 	printf("time_t renvoie %ld\n\n",t0);
 // Pour afficher la structure tm sous la forme d'une chaîne lisible
 	printf("%s",asctime(tm0));
