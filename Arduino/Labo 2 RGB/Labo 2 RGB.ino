@@ -13,7 +13,8 @@ typedef struct {
 //default colors (RGB)
 Color red = { 255, 0, 0 }, green = { 0, 255, 0 }, blue = { 0, 0, 255 }, magenta = { 255, 0, 255 }, yellow = { 255, 255, 0 }, cyan = { 0, 255, 255 }, white = { 255, 255, 255 }, black = { 0, 0, 0 };
 //init vars
-int intensity = 0, duration = 2000;
+//the colorIntensity is in %
+int colorIntensity = 100, duration = 2000;
 
 void setup() {
 	//pin setup
@@ -23,13 +24,13 @@ void setup() {
 }
 void loop() {
 	//main part which cycle through all colors
-	setColor(red, intensity, duration);
-	setColor(green, intensity, duration);
-	setColor(blue, intensity, duration);
-	setColor(white, intensity, duration);
-	setColor(magenta, intensity, duration);
-	setColor(yellow, intensity, duration);
-	setColor(cyan, intensity, duration);
+	setColor(red, colorIntensity, duration);
+	setColor(green, colorIntensity, duration);
+	setColor(blue, colorIntensity, duration);
+	setColor(white, colorIntensity, duration);
+	setColor(magenta, colorIntensity, duration);
+	setColor(yellow, colorIntensity, duration);
+	setColor(cyan, colorIntensity, duration);
 }
 
 //function to set the non-diluted color
@@ -40,17 +41,17 @@ void setPureColor(Color color) {
 }
 
 //function which dilute the color by toggling the color on and off over very short time
-void setColor(Color color, int intensity, int duration) {
+void setColor(Color color, int colorIntensity, int duration) {
 	//loop for duration
 	while (duration > 0) {
 		//set pure color
 		setPureColor(color);
 		//wait a bit
-		delayMicroseconds(intensity*10);
+		delayMicroseconds(colorIntensity*10);
 		//now dilute it by setting it off
 		setPureColor(black);
 		//wait the rest of the time
-		delayMicroseconds((100 - intensity)*10);
+		delayMicroseconds((100 - colorIntensity)*10);
 		//decrease time passed
 		duration--;
 	}
