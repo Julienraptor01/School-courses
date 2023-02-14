@@ -8,10 +8,10 @@ typedef struct {
 	int red;
 	int green;
 	int blue;
-} Color;
+} color;
 
 //default colors (RGB)
-Color red = { 255, 0, 0 }, green = { 0, 255, 0 }, blue = { 0, 0, 255 }, magenta = { 255, 0, 255 }, yellow = { 255, 255, 0 }, cyan = { 0, 255, 255 }, white = { 255, 255, 255 }, black = { 0, 0, 0 };
+const color red = { 255, 0, 0 }, green = { 0, 255, 0 }, blue = { 0, 0, 255 }, magenta = { 255, 0, 255 }, yellow = { 255, 255, 0 }, cyan = { 0, 255, 255 }, white = { 255, 255, 255 }, black = { 0, 0, 0 };
 //init vars
 //the colorIntensity is in %
 int colorIntensity = 100, duration = 2000;
@@ -34,14 +34,14 @@ void loop() {
 }
 
 //function to set the non-diluted color
-void setPureColor(Color color) {
+void setPureColor(color color) {
 	analogWrite(RED_PIN, color.red);
 	analogWrite(GREEN_PIN, color.green);
 	analogWrite(BLUE_PIN, color.blue);
 }
 
 //function which dilute the color by toggling the color on and off over very short time
-void setColor(Color color, int colorIntensity, int duration) {
+void setColor(color color, int colorIntensity, int duration) {
 	//loop for duration
 	while (duration > 0) {
 		//set pure color
