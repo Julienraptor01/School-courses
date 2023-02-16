@@ -1,7 +1,7 @@
 #include <avr/io.h>
 
-#define SetBit(x,y) (x |= (1<<y))
-#define ClearBit(x,y) (x &= ~(1<<y))
+#define SetBit(x,y) (x |= (1 << y))
+#define ClearBit(x,y) (x &= ~(1 << y))
 
 #define EXERCICE 7
 
