@@ -24,15 +24,18 @@ match input("Type the number of the exercise you want to run : "):
                 print(format(i * j, "4d"), end="")
             print()
     case "4":
-        # Afficher un triangle rempli d’étoiles s’étendant sur un nombre de lignes entré au clavier et se
-    # présentant comme dans cet exemple où 9 lignes ont été entrées:
-    #     **
-    #    ****
-    #   ******
-    #  ********
-    # **********
-    #     **
-    #     **
-    #     **
-    #     **
-    # code
+        # Afficher un sapin en étoiles ainsi :
+        #     **
+        #    ****
+        #   ******
+        #  ********
+        # **********
+        #     **
+        #     **
+        #     **
+        #     **
+        number = int(input("Enter the number of lines : "))
+        for i in range(1, number + 1):
+            print(" " * (number - i) + "*" * (2 * i))
+        for i in range(1, number - 1):
+            print(" " * (number - 1) + "*" * 2)
