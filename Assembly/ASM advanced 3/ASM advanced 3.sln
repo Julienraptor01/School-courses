@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33403.182
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ASM advanced 3", "ASM advanced 3\ASM advanced 3.vcxproj", "{177ACA5E-8204-43E7-BF69-EFA07F243F14}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{177ACA5E-8204-43E7-BF69-EFA07F243F14}.Debug|x86.ActiveCfg = Debug|Win32
+		{177ACA5E-8204-43E7-BF69-EFA07F243F14}.Debug|x86.Build.0 = Debug|Win32
+		{177ACA5E-8204-43E7-BF69-EFA07F243F14}.Release|x86.ActiveCfg = Release|Win32
+		{177ACA5E-8204-43E7-BF69-EFA07F243F14}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FF1BEE99-489A-4E46-AE65-C757A6BFB9A8}
+	EndGlobalSection
+EndGlobal
