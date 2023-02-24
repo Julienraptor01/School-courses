@@ -121,30 +121,9 @@ int encodeEspece(struct espece especes[], struct indEspece index[], int* nEspece
 
 int rechercheEspece(struct espece especes[], struct indEspece index[], int nEspece)
 {
-	//recherche dichotomique de especes[nEspece].nomEspece dans indEspeces
+	//recherche de especes[nEspece].nomEspece dans indEspeces
 	//retourne 1 si l'espece est trouvee
 	//retourne 0 si l'espece n'est pas trouvee
-	/*
-	int debut = 0, milieu, fin = nEspece - 1;
-	while (debut <= fin)
-	{
-		milieu = debut + (fin - debut) / 2;
-		if (strcmp(especes[nEspece].nomEspece, indEspece[milieu].nomEspece) == 0)
-		{
-			return 1;
-		}
-		else if (strcmp(especes[nEspece].nomEspece, indEspece[milieu].nomEspece) < 0)
-		{
-			fin = milieu - 1;
-		}
-		else
-		{
-			debut = milieu + 1;
-		}
-	}
-	return 0;
-	*/
-	//rewrite in sequential search starting from the end of the array
 	int i = nEspece - 1;
 	while (i >= 0 && strcmp(especes[nEspece].nomEspece, index[i].nomEspece) != 0)
 	{
