@@ -74,7 +74,7 @@ int main()
 int encodeEspece(struct espece especes[], struct indEspece index[], int* nEspece)
 {
 	int choixType = -1;
-	const char* types[18] = { "Acier", "Combat", "Dragon", "Eau", "Electrique", "Fee", "Feu", "Glace", "Insecte", "Normal", "Plante", "Poison", "Psy", "Roche", "Sol", "Spectre", "Tenebres", "Vol" };
+	const char* types[] = { "Acier", "Combat", "Dragon", "Eau", "Electrique", "Fee", "Feu", "Glace", "Insecte", "Normal", "Plante", "Poison", "Psy", "Roche", "Sol", "Spectre", "Tenebres", "Vol" };
 	printf("\nCreation d'une nouvelle espece\n");
 	//nom de l'espece et verification de l'unicite
 	do
