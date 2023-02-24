@@ -7,7 +7,7 @@
 int main()
 {
 #if EXERCISE == 1
-	double resistance, voltage, current;
+	double resistance, current;
 	const char askResistance[] = "Enter the resistance : ";
 	const char askCurrent[] = "Enter the current : ";
 	const char tellVoltage[] = "The voltage is : %lf";
@@ -56,7 +56,7 @@ int main()
 		add esp, 12
 	}
 #elif EXERCISE == 2
-	double radius, perimeter;
+	double radius;
 	const char askRadius[] = "Enter the radius : ";
 	const char tellPerimeter[] = "The perimeter is : %lf";
 	const char format[] = "%lf";
