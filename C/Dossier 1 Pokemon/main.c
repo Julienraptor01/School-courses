@@ -106,7 +106,7 @@ int encodeEspece(struct espece especes[], struct indEspece index[], int* nEspece
 		do
 		{
 			printf("Quel est le nombre de PV Max ?\n");
-			scanf("%d", &especes[*nEspece].pvMax);
+			scanf("%u", &especes[*nEspece].pvMax);
 		}
 		while (especes[*nEspece].pvMax < 1 || especes[*nEspece].pvMax >= UINT_MAX / 210);
 		//formule PC Max
