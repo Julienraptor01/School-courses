@@ -62,11 +62,11 @@ int main()
 			}
 			break;
 		case 3:
-			printf("\nVous avez choisi de quitter le programme\n");
+			rechercheTypeEspece(especes,index,nEspece);
 			break;
         case 4:
-            rechercheTypeEspece(especes,index,nEspece);
-
+            printf("\nVous avez choisi de quitter le programme\n");
+            break;
 		default:
 			printf("Vous devez choisir une valeur comprise entre 1 et 4\n");
 		}
