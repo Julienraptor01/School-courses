@@ -51,7 +51,7 @@ int main()
 		case 2:
 			i = 0;
 			strcpy(arreteAffiche, "");
-			printf("\nEntrez fin entre deux especes pour arreter l'affichage\nN'entrez rien pour continuer\n");
+			printf("\nEntrez n'importe caractere entre deux especes pour arreter l'affichage\nN'entrez rien pour continuer\n");
 			while (i < nEspece && strlen(arreteAffiche) == 0)
 			{
 				afficheEspece(especes, index[i].posI);
