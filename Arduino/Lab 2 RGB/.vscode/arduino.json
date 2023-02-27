@@ -1,6 +1,0 @@
-{
-    "board": "arduino:avr:uno",
-    "port": "COM5",
-    "sketch": "Lab 2 RGB.ino",
-    "programmer": "arduino:avrispmkii"
-}
