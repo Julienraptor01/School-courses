@@ -75,13 +75,17 @@ int encodeEspece(struct espece especes[], struct indEspece index[], int* nEspece
 {
 	int choixType = -1;
 	const char* types[] = { "Acier", "Combat", "Dragon", "Eau", "Electrique", "Fee", "Feu", "Glace", "Insecte", "Normal", "Plante", "Poison", "Psy", "Roche", "Sol", "Spectre", "Tenebres", "Vol" };
-	printf("\nCreation d'une nouvelle espece\n");
+	printf("\nCreation d'une nouvelle espece\nN'entrez rien pour revenir au menu principal\n");
 	//nom de l'espece et verification de l'unicite
 	do
 	{
 		printf("Quel est le nom de l'espece ?\n");
 		fflush(stdin);
 		gets(especes[*nEspece].nomEspece);
+		if (rechercheEspece(especes, index, *nEspece) == 1)
+		{
+			printf("Le pokemon est deja present\n");
+		}
 	}
 	while (rechercheEspece(especes, index, *nEspece) == 1);
 	//sortie si le nom est vide
