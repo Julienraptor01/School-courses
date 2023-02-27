@@ -1,6 +1,0 @@
-{
-    "board": "arduino:avr:uno",
-    "port": "COM6",
-    "programmer": "avrispmkii",
-    "sketch": "Lab 3 Gyroscope and Accelerometer.ino"
-}
