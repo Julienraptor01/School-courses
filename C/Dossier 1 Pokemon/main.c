@@ -29,6 +29,7 @@ int encodeEspece(struct espece[], struct indEspece[], int*);
 int rechercheEspece(struct espece[], struct indEspece[], int);
 void insertionInd(struct espece[], struct indEspece[], int);
 void afficheEspece(struct espece[], long);
+void rechercheTypeEspece(struct espece[],struct indEspece[],int);
 
 //main
 int main()
@@ -41,7 +42,7 @@ int main()
 	//create the menu loop
 	do
 	{
-		printf("\nQue voulez-vous faire :\n1) Ajouter une espece\n2) Afficher les especes\n3) Quitter\n");
+		printf("\nQue voulez-vous faire :\n1) Ajouter une espece\n2) Afficher les especes\n3) Rechercher les pokemons d'un meme type\n4) Quitter\n");
 		scanf("%d", &choixMenu);
 		switch (choixMenu)
 		{
@@ -63,11 +64,14 @@ int main()
 		case 3:
 			printf("\nVous avez choisi de quitter le programme\n");
 			break;
+        case 4:
+            rechercheTypeEspece(especes,index,nEspece);
+
 		default:
-			printf("Vous devez choisir une valeur comprise entre 1 et 3\n");
+			printf("Vous devez choisir une valeur comprise entre 1 et 4\n");
 		}
 	}
-	while (choixMenu != 3);
+	while (choixMenu != 4);
 	return 0;
 }
 
@@ -160,4 +164,28 @@ void afficheEspece(struct espece especes[], long posI)
 {
 	//affichage de l'espece
 	printf("Nom : %s\nType : %s\nNombre de bonbons : %u\nNombre de PV Max : %u\nNombre de PC Max : %u\n", especes[posI].nomEspece, especes[posI].type, especes[posI].bonbons, especes[posI].pvMax, especes[posI].pcMax);
+}
+
+void rechercheTypeEspece(struct espece especes[],struct indEspece index[],int nEspece)
+{
+    //La fonction doit trouver tous les pokemons d'un même type
+    int i,choixType;
+    long position[500];
+    struct espece typeEncode[1];
+    struct indEspece *pVec;
+    pVec=&index[0];
+    const char* types[] = { "Acier", "Combat", "Dragon", "Eau", "Electrique", "Fee", "Feu", "Glace", "Insecte", "Normal", "Plante", "Poison", "Psy", "Roche", "Sol", "Spectre", "Tenebres", "Vol" };
+    //demander le type
+    do
+    {
+        printf("Quel est le type du pokemon ?\n1) Acier\n2) Combat\n3) Dragon\n4) Eau\n5) Electrique\n6) Fee\n7) Feu\n8) Glace\n9) Insecte\n10) Normal\n11) Plante\n12) Poison\n13) Psy\n14) Roche\n15) Sol\n16) Spectre\n17) Tenebres\n18) Vol\n");
+        scanf("%d", &choixType);
+    }
+		while (choixType < 1 || choixType > 18);
+    strcpy(typeEncode[0].type, types[choixType - 1]);
+
+
+
+
+
 }
