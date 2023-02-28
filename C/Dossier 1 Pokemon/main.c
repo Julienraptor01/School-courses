@@ -4,6 +4,59 @@
 #include <limits.h>
 #include <time.h>
 
+//activate fun
+#define FUN 2
+
+#if FUN > 0
+#include <Windows.h>
+//add missing defines in GCC
+#ifndef ENABLE_VIRTUAL_TERMINAL_INPUT
+#define ENABLE_VIRTUAL_TERMINAL_INPUT 0x0200
+#endif
+#ifndef ENABLE_VIRTUAL_TERMINAL_PROCESSING
+#define ENABLE_VIRTUAL_TERMINAL_PROCESSING 0x0004
+#endif
+#ifndef DISABLE_NEWLINE_AUTO_RETURN
+#define DISABLE_NEWLINE_AUTO_RETURN 0x0008
+#endif
+#ifndef ENABLE_LVB_GRID_WORLDWIDE
+#define ENABLE_LVB_GRID_WORLDWIDE 0x0010
+#endif
+#define TEXT_RGB(r, g, b) "\x1b[38;2;"#r";"#g";"#b"m"
+#endif
+
+#if FUN == 1
+#define FG_DARK_BLUE FOREGROUND_BLUE
+#define FG_DARK_GREEN FOREGROUND_GREEN
+#define FG_DARK_CYAN FG_DARK_BLUE | FG_DARK_GREEN
+#define FG_DARK_RED FOREGROUND_RED
+#define FG_DARK_MAGENTA FG_DARK_BLUE | FG_DARK_RED
+#define FG_DARK_YELLOW FG_DARK_GREEN | FG_DARK_RED
+#define FG_GREY FG_DARK_BLUE | FG_DARK_GREEN | FG_DARK_RED
+#define FG_LIGHT_BLUE FOREGROUND_BLUE | FOREGROUND_INTENSITY
+#define FG_LIGHT_GREEN FOREGROUND_GREEN | FOREGROUND_INTENSITY
+#define FG_LIGHT_CYAN FG_LIGHT_BLUE | FG_LIGHT_GREEN
+#define FG_LIGHT_RED FOREGROUND_RED | FOREGROUND_INTENSITY
+#define FG_LIGHT_MAGENTA FG_LIGHT_BLUE | FG_LIGHT_RED
+#define FG_LIGHT_YELLOW FG_LIGHT_GREEN | FG_LIGHT_RED
+#define FG_WHITE FG_LIGHT_BLUE | FG_LIGHT_GREEN | FG_LIGHT_RED
+#define BG_DARK_BLUE BACKGROUND_BLUE
+#define BG_DARK_GREEN BACKGROUND_GREEN
+#define BG_DARK_CYAN BG_DARK_BLUE | BG_DARK_GREEN
+#define BG_DARK_RED BACKGROUND_RED
+#define BG_DARK_MAGENTA BG_DARK_BLUE | BG_DARK_RED
+#define BG_DARK_YELLOW BG_DARK_GREEN | BG_DARK_RED
+#define BG_GREY BG_DARK_BLUE | BG_DARK_GREEN | BG_DARK_RED
+#define BG_LIGHT_BLUE BACKGROUND_BLUE | BACKGROUND_INTENSITY
+#define BG_LIGHT_GREEN BACKGROUND_GREEN | BACKGROUND_INTENSITY
+#define BG_LIGHT_CYAN BG_LIGHT_BLUE | BG_LIGHT_GREEN
+#define BG_LIGHT_RED BACKGROUND_RED | BACKGROUND_INTENSITY
+#define BG_LIGHT_MAGENTA BG_LIGHT_BLUE | BG_LIGHT_RED
+#define BG_LIGHT_YELLOW BG_LIGHT_GREEN | BG_LIGHT_RED
+#define BG_WHITE BG_LIGHT_BLUE | BG_LIGHT_GREEN | BG_LIGHT_RED
+#elif FUN == 2
+#endif
+
 //defines
 #define MAX_POKEMON 1500
 
@@ -38,9 +91,27 @@ int main()
 	int nEspece = 0, choixMenu = -1, i;
 	char arreteAffiche[] = "";
 	srand(time(NULL));
-	//create the menu loop
+#if FUN > 0
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+#endif
+#if FUN == 1
+	CONSOLE_SCREEN_BUFFER_INFO consoleInfo;
+	WORD saved_attributes;
+	GetConsoleScreenBufferInfo(hConsole, &consoleInfo);
+	saved_attributes = consoleInfo.wAttributes;
+	SetConsoleTextAttribute(hConsole, FG_DARK_YELLOW);
 	printf("   ...                                                                      \n   ..'...'..                                                                \n    ....:kkdc,.                                                             \n     ...:kOOOOko:'.                                              .,:c'...   \n       .:kOOO0OOOkd:.                                       .':ldkOOx,..    \n        .d0OOOO0OOOOko,.                               ..;cokOOOOOOOo'..    \n         ,xOOOOOOOOOOOOx:.                         .':ldkOOOOOO0OO0Oc..     \n          .lk0OOOOOOOOO0Od:...',,;;;;;;;,,,,''..':oxkOOOOOOOOOOOOOOo'       \n            ;dk0OOOOOOOOOOOkkOOOOOOO00OOOOOOOOkkOOOOOOOOOOOOOOOOOOl.        \n             .:xO0OOOOOOOOO0OOOOOOOOOOOOOOOOOOO0OOOOOOOOOOOO0OOOx;.         \n               .ldldOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOkkOOOOOx:.           \n                 .lkOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOkxddoc,.             \n                .:kOOOOOOxddkOOOOOOOOOOOOOOOOOOOkddkOOOOOkd,                \n                :kOOOOOOoco;;oOOOOOOOOOOOOOOOOOoll;;dOOOOOOd,               \n               ,xOOOOO0k;:d;.:kOOOOOOOOOOOOOO0k::d;.;k0OO0OOd'              \n              .dOOOOOOOkl,'.,lOOOOO0OOOOOOOOOOOl,..'cOOO0OOOOl.             \n              cO0OOOOOOOOkddxOOO0OdlllokOOOOOOOOxooxkOOOOOOOOx,             \n             'd0OkxxxkOOOOOOOOOO0kocc:lxOOOOOOOO0OOOOOkxxxkOOOc             \n             :Okolcccldk00OOOOOOOOO0OOO0OOOOOOOOOOOOkocclccok0d'            \n            .lOxlcclccokOOOOOOOOOkxxxxxdddxO0OOOOOOOdccclcccdOO:            \n            .lOkxoooodkOOOOOOOOOkoodxxddxolxOOOOOOOOkdllllldkOOo.           \n             :OOOOkkOOO0OOOOOOOOkloxxxxdxdoxOOOOOOOOOOkkkkkOOOOk;           \n             .oOOOOOOOOOO0OOOOOOOxooodoododkOOOOOOOOOOOOOOOOOOOOl.          \n              .oO0OOOOOOOOOOOO0OO0OkdddxxkOOOOOOOOOOOOOOOOOOOOOOd'          \n               .lOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOk;          \n                'dOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO0Ol.         \n                'x0OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOd.         \n                .collllolllllooooooooooooooooooooooooooooooolllloc.         \n");
+	SetConsoleTextAttribute(hConsole, saved_attributes);
+#elif FUN == 2
+	DWORD dwMode;
+	GetConsoleMode(hConsole, &dwMode);
+	dwMode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
+	SetConsoleMode(hConsole, dwMode);
+	printf(TEXT_RGB(131, 163, 227)"Hello world !\nOui, c'est une couleur custom : R131 G163 B227\n\x1b[0m");
+#endif
+	//welcome the user
 	printf("Bienvenue dans le programme de gestion des especes de Pokemon\n");
+	//create the menu loop
 	do
 	{
 		printf("\nQue voulez-vous faire :\n1) Ajouter une espece\n2) Afficher les especes\n3) Quitter\n");
