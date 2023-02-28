@@ -170,7 +170,7 @@ void rechercheTypeEspece(struct espece especes[],struct indEspece index[],int nE
 {
     //La fonction doit trouver tous les pokemons d'un même type
     int i,choixType,max=0;
-    long position[500];
+    long position[500]={0};
     long *pVec;
     pVec=position;
     const char* types[] = { "Acier", "Combat", "Dragon", "Eau", "Electrique", "Fee", "Feu", "Glace", "Insecte", "Normal", "Plante", "Poison", "Psy", "Roche", "Sol", "Spectre", "Tenebres", "Vol" };
