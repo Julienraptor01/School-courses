@@ -20,6 +20,8 @@
 #define MAX_TAILLE_TYPE 10
 //nombre de types différents
 #define NOMBRE_TYPES 18
+//décommentez la ligne ci-dessous pour activer le mode DEBUG ce qui pré-entre des espèces
+//#define DEBUG
 
 //structures de données
 struct espece
@@ -53,7 +55,7 @@ int main()
 #ifdef DEBUG
 	printf("DEBUG MODE\n");
 	//predefined structs
-	struct espece especes[MAX_POKEMON] = { { "Roucarnage", "Normal", 0, 10, 200 }, { "Roucoups", "Normal", 0, 10, 200 }, { "Roucool", "Normal", 0, 10, 200 }, { "Piafabec", "Normal", 0, 10, 200 }, { "Rattatac", "Normal", 0, 10, 200 }, { "Rattata", "Normal", 0, 10, 200 }, { "Draco", "Dragon", 0, 10, 200 }, { "Carapuce", "Eau", 0, 10, 200 }, { "Pikachu", "Electrik", 0, 10, 200 }, { "Salameche", "Feu", 0, 10, 200 }, { "Bulbizarre", "Plante", 0, 10, 200 }, { "Onix", "Acier", 0, 10, 200 } };
+	struct espece especes[MAX_POKEMON] = { { "Roucarnage", "Normal", 0, 30, 630 }, { "Roucoups", "Normal", 0, 20, 400 }, { "Roucool", "Normal", 0, 10, 190 }, { "Piafabec", "Normal", 0, 12, 234 }, { "Rattatac", "Normal", 0, 25, 518 }, { "Rattata", "Normal", 0, 15, 290 }, { "Draco", "Dragon", 0, 100, 2100 }, { "Carapuce", "Eau", 0, 17, 354 }, { "Pikachu", "Electrik", 0, 17, 354 }, { "Salameche", "Feu", 0, 17, 354 }, { "Bulbizarre", "Plante", 0, 17, 354 }, { "Onix", "Acier", 0, 42, 878 } };
 	struct indEspece index[MAX_POKEMON] = { { "Acier", "Onix", 11 }, { "Dragon", "Draco", 6 }, { "Eau", "Carapuce", 7 }, { "Electrik", "Pikachu", 8 }, { "Feu", "Salameche", 9 }, { "Normal", "Piafabec", 3 }, { "Normal", "Rattata", 5 }, { "Normal", "Rattatac", 4 }, { "Normal", "Roucarnage", 0 }, { "Normal", "Roucoups", 1 }, { "Normal", "Roucool", 2 }, { "Plante", "Bulbizarre", 10 } };
 	int nEspece = 12;
 #else
