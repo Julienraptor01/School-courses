@@ -53,7 +53,7 @@ int main()
 #ifdef DEBUG
 	printf("DEBUG MODE\n");
 	//predefined structs
-	struct espece especes[MAX_POKEMON] = { { "Roucarnage", "Normal", 0, 10, 20 }, { "Roucoups", "Normal", 0, 10, 20 }, { "Roucool", "Normal", 0, 10, 20 }, { "Piafabec", "Normal", 0, 10, 20 }, { "Rattatac", "Normal", 0, 10, 20 }, { "Rattata", "Normal", 0, 10, 20 }, { "Draco", "Dragon", 0, 10, 20 }, { "Carapuce", "Eau", 0, 10, 20 }, { "Pikachu", "Electrik", 0, 10, 20 }, { "Salameche", "Feu", 0, 10, 20 }, { "Bulbizarre", "Plante", 0, 10, 20 }, { "Onix", "Acier", 0, 10, 20 } };
+	struct espece especes[MAX_POKEMON] = { { "Roucarnage", "Normal", 0, 10, 200 }, { "Roucoups", "Normal", 0, 10, 200 }, { "Roucool", "Normal", 0, 10, 200 }, { "Piafabec", "Normal", 0, 10, 200 }, { "Rattatac", "Normal", 0, 10, 200 }, { "Rattata", "Normal", 0, 10, 200 }, { "Draco", "Dragon", 0, 10, 200 }, { "Carapuce", "Eau", 0, 10, 200 }, { "Pikachu", "Electrik", 0, 10, 200 }, { "Salameche", "Feu", 0, 10, 200 }, { "Bulbizarre", "Plante", 0, 10, 200 }, { "Onix", "Acier", 0, 10, 200 } };
 	struct indEspece index[MAX_POKEMON] = { { "Acier", "Onix", 11 }, { "Dragon", "Draco", 6 }, { "Eau", "Carapuce", 7 }, { "Electrik", "Pikachu", 8 }, { "Feu", "Salameche", 9 }, { "Normal", "Piafabec", 3 }, { "Normal", "Rattata", 5 }, { "Normal", "Rattatac", 4 }, { "Normal", "Roucarnage", 0 }, { "Normal", "Roucoups", 1 }, { "Normal", "Roucool", 2 }, { "Plante", "Bulbizarre", 10 } };
 	int nEspece = 12;
 #else
@@ -135,7 +135,7 @@ int encodeEspece(struct espece especes[], struct indEspece index[], int* nEspece
 		//menu pour choisir le type
 		do
 		{
-			printf("Quel est le type du pokemon ?\n1) Acier\n2) Combat\n3) Dragon\n4) Eau\n5) Electrique\n6) Fee\n7) Feu\n8) Glace\n9) Insecte\n10) Normal\n11) Plante\n12) Poison\n13) Psy\n14) Roche\n15) Sol\n16) Spectre\n17) Tenebres\n18) Vol\n");
+			printf("Quel est le type du pokemon ?\n1) Acier\n2) Combat\n3) Dragon\n4) Eau\n5) Electrik\n6) Fee\n7) Feu\n8) Glace\n9) Insecte\n10) Normal\n11) Plante\n12) Poison\n13) Psy\n14) Roche\n15) Sol\n16) Spectre\n17) Tenebres\n18) Vol\n");
 			scanf("%d", &choixType);
 		}
 		while (choixType < 1 || choixType > NOMBRE_TYPES);
