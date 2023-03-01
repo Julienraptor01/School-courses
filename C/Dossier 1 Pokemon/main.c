@@ -170,14 +170,14 @@ int encodeEspece(struct espece especes[], struct indEspece index[], int* nEspece
 int rechercheEspece(struct espece especes[], struct indEspece index[], int nEspece)
 {
 	int i = nEspece - 1;
-	//je fais la recherche à partir de la fin de l'index et je remonte vers le début, mais j'aurais pu aussi faire l'inverse
-	//tel que je l'ai fait, la valeur de i est la position de l'espèce dans l'index si elle est trouvée, sinon i vaudra -1
+	//on fait la recherche à partir de la fin de l'index et on remonte vers le début, mais on aurait pu aussi faire l'inverse
+	//tel qu'on l'a fait, la valeur de i est la position de l'espèce dans l'index si elle est trouvée, sinon i vaudra -1
 	while (i >= 0 && strcmp(especes[nEspece].nomEspece, index[i].nomEspece) != 0)
 	{
 		i--;
 	}
 	return (i >= 0) ? 1 : 0;
-	//j'ai utilisé l'opérateur ternaire pour remplacer le code ci-dessous par soucis de lisibilité, simplicité et concision, même si on ne l'a pas vu en cours
+	//on a utilisé l'opérateur ternaire pour remplacer le code ci-dessous par soucis de lisibilité, simplicité et concision, même si on ne l'a pas vu en cours
 	/*
 	if (i >= 0)
 	{
