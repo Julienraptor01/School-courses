@@ -49,7 +49,6 @@ void afficheEspece(struct espece[], long);
 //variable globale
 const char types[NOMBRE_TYPES][MAX_TAILLE_TYPE] = { "Acier", "Combat", "Dragon", "Eau", "ElectriK", "Fee", "Feu", "Glace", "Insecte", "Normal", "Plante", "Poison", "Psy", "Roche", "Sol", "Spectre", "Tenebres", "Vol" };
 
-
 int main()
 {
 #ifdef DEBUG
