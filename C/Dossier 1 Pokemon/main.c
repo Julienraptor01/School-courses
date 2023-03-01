@@ -8,6 +8,7 @@
 #define MAX_POKEMON 1500
 #define MAX_TAILLE_TYPE 10
 #define MAX_TAILLE_NOM 50
+#define DEBUG
 
 //structs
 struct espece
@@ -42,14 +43,19 @@ int main()
 #ifdef DEBUG
 	printf("DEBUG MODE\n");
 	//predefined structs
-	struct espece especes[MAX_POKEMON];
-	struct indEspece index[MAX_POKEMON];
+	struct espece especes[MAX_POKEMON] = { { "Roucarnage", "Normal", 0, 10, 20 }, { "Roucoups", "Normal", 0, 10, 20 }, { "Roucool", "Normal", 0, 10, 20 }, { "Piafabec", "Combat", 0, 10, 20 }, { "Rattatac", "Combat", 0, 10, 20 }, { "Rattata", "Combat", 0, 10, 20 }, { "Draco", "Dragon", 0, 10, 20 }, { "Carapuce", "Eau", 0, 10, 20 }, { "Pikachu", "Electrik", 0, 10, 20 }, { "Salameche", "Feu", 0, 10, 20 }, { "Bulbizarre", "Plante", 0, 10, 20 }, { "Onix", "Acier", 0, 10, 20 } };
+	//don't forget to write the index in the right order, so ordered by type then by name
+	//struct indEspece index[MAX_POKEMON] = { { "Acier", "Onix", 0 }, { "Combat", "Rattata", 1 }, { "Combat", "Rattatac", 2 }, { "Combat", "Piafabec", 3 }, { "Dragon", "Draco", 4 }, { "Eau", "Carapuce", 5 }, { "Electrik", "Pikachu", 6 }, { "Feu", "Salameche", 7 }, { "Normal", "Roucarnage", 8 }, { "Normal", "Roucool", 9 }, { "Normal", "Roucoups", 10 }, { "Plante", "Bulbizarre", 11 } };
+	//my positions are wrong in the last struct so fix the positions but do not change the order
+	struct indEspece index[MAX_POKEMON] = { { "Acier", "Onix", 11 }, { "Combat", "Rattata", 5 }, { "Combat", "Rattatac", 4 }, { "Combat", "Piafabec", 3 }, { "Dragon", "Draco", 2 }, { "Eau", "Carapuce", 1 }, { "Electrik", "Pikachu", 6 }, { "Feu", "Salameche", 7 }, { "Normal", "Roucarnage", 0 }, { "Normal", "Roucool", 9 }, { "Normal", "Roucoups", 8 }, { "Plante", "Bulbizarre", 10 } };
+	int nEspece = 12;
 #else
 	struct espece especes[MAX_POKEMON];
 	struct indEspece index[MAX_POKEMON];
+	int nEspece = 0;
 #endif
 	long position[MAX_POKEMON], nEspeceType = 0;
-	int nEspece = 0, choixMenu = -1, i;
+	int choixMenu = -1, i;
 	char arreteAffiche[] = "";
 	srand(time(NULL));
 	//create the menu loop
