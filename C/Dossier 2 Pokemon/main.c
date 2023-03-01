@@ -6,12 +6,15 @@
 
 //defines
 #define MAX_POKEMON 1500
+#define MAX_TAILLE_TYPE 10
+#define MAX_TAILLE_NOM 50
+#define DEBUG
 
 //structs
 struct espece
 {
-	char nomEspece[50];
-	char type[10];
+	char nomEspece[MAX_TAILLE_NOM];
+	char type[MAX_TAILLE_TYPE];
 	unsigned int bonbons;
 	unsigned int pvMax;
 	unsigned int pcMax;
@@ -19,8 +22,8 @@ struct espece
 
 struct indEspece
 {
-	char type[10];
-	char nomEspece[50];
+	char type[MAX_TAILLE_TYPE];
+	char nomEspece[MAX_TAILLE_NOM];
 	long posI;
 };
 
@@ -29,19 +32,36 @@ int encodeEspece(struct espece[], struct indEspece[], int*);
 int rechercheEspece(struct espece[], struct indEspece[], int);
 void insertionInd(struct espece[], struct indEspece[], int);
 void afficheEspece(struct espece[], long);
+int rechercheTypeEspece(long[], struct indEspece[], int, long*);
+
+//const vars
+const char* types[] = { "Acier", "Combat", "Dragon", "Eau", "Electrik", "Fee", "Feu", "Glace", "Insecte", "Normal", "Plante", "Poison", "Psy", "Roche", "Sol", "Spectre", "Tenebres", "Vol" };
 
 //main
 int main()
 {
+#ifdef DEBUG
+	printf("DEBUG MODE\n");
+	//predefined structs
+	struct espece especes[MAX_POKEMON] = { { "Roucarnage", "Normal", 0, 10, 20 }, { "Roucoups", "Normal", 0, 10, 20 }, { "Roucool", "Normal", 0, 10, 20 }, { "Piafabec", "Combat", 0, 10, 20 }, { "Rattatac", "Combat", 0, 10, 20 }, { "Rattata", "Combat", 0, 10, 20 }, { "Draco", "Dragon", 0, 10, 20 }, { "Carapuce", "Eau", 0, 10, 20 }, { "Pikachu", "Electrik", 0, 10, 20 }, { "Salameche", "Feu", 0, 10, 20 }, { "Bulbizarre", "Plante", 0, 10, 20 }, { "Onix", "Acier", 0, 10, 20 } };
+	//don't forget to write the index in the right order, so ordered by type then by name
+	//struct indEspece index[MAX_POKEMON] = { { "Acier", "Onix", 0 }, { "Combat", "Rattata", 1 }, { "Combat", "Rattatac", 2 }, { "Combat", "Piafabec", 3 }, { "Dragon", "Draco", 4 }, { "Eau", "Carapuce", 5 }, { "Electrik", "Pikachu", 6 }, { "Feu", "Salameche", 7 }, { "Normal", "Roucarnage", 8 }, { "Normal", "Roucool", 9 }, { "Normal", "Roucoups", 10 }, { "Plante", "Bulbizarre", 11 } };
+	//my positions are wrong in the last struct so fix the positions but do not change the order
+	struct indEspece index[MAX_POKEMON] = { { "Acier", "Onix", 11 }, { "Combat", "Rattata", 5 }, { "Combat", "Rattatac", 4 }, { "Combat", "Piafabec", 3 }, { "Dragon", "Draco", 2 }, { "Eau", "Carapuce", 1 }, { "Electrik", "Pikachu", 6 }, { "Feu", "Salameche", 7 }, { "Normal", "Roucarnage", 0 }, { "Normal", "Roucool", 9 }, { "Normal", "Roucoups", 8 }, { "Plante", "Bulbizarre", 10 } };
+	int nEspece = 12;
+#else
 	struct espece especes[MAX_POKEMON];
 	struct indEspece index[MAX_POKEMON];
-	int nEspece = 0, choixMenu = -1, i;
+	int nEspece = 0;
+#endif
+	long position[MAX_POKEMON], nEspeceType = 0;
+	int choixMenu = -1, i;
 	char arreteAffiche[] = "";
 	srand(time(NULL));
 	//create the menu loop
 	do
 	{
-		printf("\nQue voulez-vous faire :\n1) Ajouter une espece\n2) Afficher les especes\n3) Quitter\n");
+		printf("\nQue voulez-vous faire :\n1) Ajouter une espece\n2) Afficher les especes\n3) Rechercher les pokemons d'un meme type\n4) Quitter\n");
 		scanf("%d", &choixMenu);
 		switch (choixMenu)
 		{
@@ -61,20 +81,38 @@ int main()
 			}
 			break;
 		case 3:
+			if (rechercheTypeEspece(position, index, nEspece, &nEspeceType) == 1)
+			{
+				i = 0;
+				strcpy(arreteAffiche, "");
+				printf("\nEntrez n'importe quel caractere entre deux especes pour arreter l'affichage\nN'entrez rien pour continuer\n");
+				while (i < nEspeceType && strlen(arreteAffiche) == 0)
+				{
+					afficheEspece(especes, position[i]);
+					i++;
+					fflush(stdin);
+					gets(arreteAffiche);
+				}
+			}
+			else
+			{
+				printf("Aucune espece de ce type n'a ete trouvee\n");
+			}
+			break;
+		case 4:
 			printf("\nVous avez choisi de quitter le programme\n");
 			break;
 		default:
-			printf("Vous devez choisir une valeur comprise entre 1 et 3\n");
+			printf("Vous devez choisir une valeur comprise entre 1 et 4\n");
 		}
 	}
-	while (choixMenu != 3);
+	while (choixMenu != 4);
 	return 0;
 }
 
 int encodeEspece(struct espece especes[], struct indEspece index[], int* nEspece)
 {
 	int choixType = -1;
-	const char* types[] = { "Acier", "Combat", "Dragon", "Eau", "Electrique", "Fee", "Feu", "Glace", "Insecte", "Normal", "Plante", "Poison", "Psy", "Roche", "Sol", "Spectre", "Tenebres", "Vol" };
 	printf("\nCreation d'une nouvelle espece\nN'entrez rien pour revenir au menu principal\n");
 	//nom de l'espece et verification de l'unicite
 	do
@@ -160,4 +198,34 @@ void afficheEspece(struct espece especes[], long posI)
 {
 	//affichage de l'espece
 	printf("Nom : %s\nType : %s\nNombre de bonbons : %u\nNombre de PV Max : %u\nNombre de PC Max : %u\n", especes[posI].nomEspece, especes[posI].type, especes[posI].bonbons, especes[posI].pvMax, especes[posI].pcMax);
+}
+
+int rechercheTypeEspece(long position[], struct indEspece index[], int nEspece, long* nEspeceType)
+{
+	//La fonction doit trouver tous les pokemons d'un même type
+	int i = 0, choixType = -1;
+	//demander le type
+	do
+	{
+		printf("\nQuel est le type recherche ?\n1) Acier\n2) Combat\n3) Dragon\n4) Eau\n5) Electrique\n6) Fee\n7) Feu\n8) Glace\n9) Insecte\n10) Normal\n11) Plante\n12) Poison\n13) Psy\n14) Roche\n15) Sol\n16) Spectre\n17) Tenebres\n18) Vol\n");
+		scanf("%d", &choixType);
+	}
+	while (choixType < 1 || choixType > 18);
+	while (i < nEspece && strcmp(index[i].type, types[choixType - 1]) != 0)
+	{
+		i++;
+	}
+	if (i == nEspece)
+	{
+		return 0;
+	}
+	*nEspeceType = 0;
+	do
+	{
+		position[*nEspeceType] = index[i].posI;
+		i++;
+		(*nEspeceType)++;
+	}
+	while (i < nEspece && strcmp(index[i].type, types[choixType - 1]) == 0);
+	return 1;
 }
