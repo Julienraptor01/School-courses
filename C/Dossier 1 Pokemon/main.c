@@ -71,6 +71,7 @@ int main()
 	do
 	{
 		printf("\nQue voulez-vous faire :\n1) Ajouter une espece\n2) Afficher les especes\n3) Quitter\n");
+		fflush(stdin);
 		scanf("%d", &choixMenu);
 		switch (choixMenu)
 		{
@@ -135,6 +136,7 @@ int encodeEspece(struct espece especes[], struct indEspece index[], int* nEspece
 	do
 	{
 		printf("Quel est le type du pokemon ?\n1) Acier\n2) Combat\n3) Dragon\n4) Eau\n5) Electrik\n6) Fee\n7) Feu\n8) Glace\n9) Insecte\n10) Normal\n11) Plante\n12) Poison\n13) Psy\n14) Roche\n15) Sol\n16) Spectre\n17) Tenebres\n18) Vol\n");
+		fflush(stdin);
 		scanf("%d", &choixType);
 	}
 	while (choixType < 1 || choixType > NOMBRE_TYPES);
@@ -146,6 +148,7 @@ int encodeEspece(struct espece especes[], struct indEspece index[], int* nEspece
 	do
 	{
 		printf("Quel est le nombre de PV Max ?\n");
+		fflush(stdin);
 		scanf("%u", &especes[*nEspece].pvMax);
 	}
 	//le nombre de PV Max doit être compris entre 1 et UINT_MAX/210 (pour éviter un dépassement de capacité lors du calcul du nombre de PC Max)
