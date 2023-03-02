@@ -244,25 +244,32 @@ void afficheEspece(struct espece especes[], long posI)
 	printf("Nom : %s\nType : %s\nNombre de bonbons : %u\nNombre de PV Max : %u\nNombre de PC Max : %u\n", especes[posI].nomEspece, especes[posI].type, especes[posI].bonbons, especes[posI].pvMax, especes[posI].pcMax);
 }
 
+/********************************************************************************************************************************************************************************************************************************/
+/* INPUT : un vecteur de long (les positions des espèces d'un même type), un tableau de structures de type indEspece (l'index), un entier (le nombre d'espèces), un pointeur sur un long (le nombre d'espèces d'un même type)	*/
+/* Process : recherche séquentielle sur le type d'une espèce dans l'index pour trouver toutes les espèces d'un même type et ajouter leur position respective dans un vecteur pour les afficher dans l'ordre alphabétique		*/
+/* OUTPUT : un entier (1 si le type est trouvé, 0 sinon)																																										*/
+/********************************************************************************************************************************************************************************************************************************/
 int rechercheTypeEspece(long position[], struct indEspece index[], int nEspece, long* nEspeceType)
 {
-	//La fonction doit trouver tous les pokemons d'un même type
 	int i = 0, choixType = -1;
-	//demander le type
+	//menu de choix du type
 	do
 	{
 		printf("\nQuel est le type recherche ?\n1) Acier\n2) Combat\n3) Dragon\n4) Eau\n5) Electrik\n6) Fee\n7) Feu\n8) Glace\n9) Insecte\n10) Normal\n11) Plante\n12) Poison\n13) Psy\n14) Roche\n15) Sol\n16) Spectre\n17) Tenebres\n18) Vol\n");
 		scanf("%d", &choixType);
 	}
 	while (choixType < 1 || choixType > 18);
+	//recherche du type dans l'index
 	while (i < nEspece && strcmp(index[i].type, types[choixType - 1]) != 0)
 	{
 		i++;
 	}
+	//si le type n'est pas trouvé, on retourne 0
 	if (i == nEspece)
 	{
 		return 0;
 	}
+	//sinon on ajoute les positions des espèces du même type dans le vecteur position
 	*nEspeceType = 0;
 	do
 	{
