@@ -1,5 +1,6 @@
 import random
 import math
+
 match input("Type the number of the exercise you want to run : "):
     case "1":
         print("La superficie du local", input("Numéro du local : "), "se trouvant dans l'immeuble", input("Nom de l'immeuble : "), "est de", float(input("Longueur du local : ")) * float(input("Largeur du local : ")), "m².")
