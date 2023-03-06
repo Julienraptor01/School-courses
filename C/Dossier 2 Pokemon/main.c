@@ -1,7 +1,7 @@
 /************************************************************************************/
 /* Auteurs : BOLLY Julien, SECCO Johan												*/
 /* Groupe : 2131																	*/
-/* Application : Dossier 1 Pokémon ; Encodage, recherche et affichage des espèces	*/
+/* Application : Dossier 2 Pokémon ; Encodage, recherche et affichage des espèces	*/
 /* Date de la dernière modification : 01/03/2023									*/
 /************************************************************************************/
 
