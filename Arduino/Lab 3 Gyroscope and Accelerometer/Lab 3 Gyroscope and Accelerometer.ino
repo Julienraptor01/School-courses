@@ -35,7 +35,7 @@ void setup() {
 	pinMode(Z_PIN, INPUT);
 
 	//serial setup
-	Serial.begin(9600);
+	Serial.begin(115200);
 }
 
 void loop() {
