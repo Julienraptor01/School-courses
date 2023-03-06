@@ -23,6 +23,29 @@
 //décommentez la ligne ci-dessous pour activer le mode DEBUG ce qui pré-entre des espèces
 //#define DEBUG
 
+//START THE FUN
+#define FUN
+
+//SETUP THE FUN
+#ifdef FUN
+#include <Windows.h>
+//add missing defines in GCC
+#ifndef ENABLE_VIRTUAL_TERMINAL_INPUT
+#define ENABLE_VIRTUAL_TERMINAL_INPUT 0x0200
+#endif
+#ifndef ENABLE_VIRTUAL_TERMINAL_PROCESSING
+#define ENABLE_VIRTUAL_TERMINAL_PROCESSING 0x0004
+#endif
+#ifndef DISABLE_NEWLINE_AUTO_RETURN
+#define DISABLE_NEWLINE_AUTO_RETURN 0x0008
+#endif
+#ifndef ENABLE_LVB_GRID_WORLDWIDE
+#define ENABLE_LVB_GRID_WORLDWIDE 0x0010
+#endif
+//RGB MACRO
+#define TEXT_RGB(r, g, b) "\x1b[38;2;"#r";"#g";"#b"m"
+#endif
+
 //structures de données
 struct espece
 {
@@ -65,6 +88,15 @@ int main()
 	int choixMenu = -1, i;
 	char arreteAffiche[] = "";
 	srand(time(NULL));
+	//FUN
+#ifdef FUN
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	GetConsoleMode(hConsole, &dwMode);
+	dwMode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
+	SetConsoleMode(hConsole, dwMode);
+	printf("   ...                                                                      \n   ..'...'..                                                                \n    ....:kkdc,.                                                             \n     ...:kOOOOko:'.                                              .,:c'...   \n       .:kOOO0OOOkd:.                                       .':ldkOOx,..    \n        .d0OOOO0OOOOko,.                               ..;cokOOOOOOOo'..    \n         ,xOOOOOOOOOOOOx:.                         .':ldkOOOOOO0OO0Oc..     \n          .lk0OOOOOOOOO0Od:...',,;;;;;;;,,,,''..':oxkOOOOOOOOOOOOOOo'       \n            ;dk0OOOOOOOOOOOkkOOOOOOO00OOOOOOOOkkOOOOOOOOOOOOOOOOOOl.        \n             .:xO0OOOOOOOOO0OOOOOOOOOOOOOOOOOOO0OOOOOOOOOOOO0OOOx;.         \n               .ldldOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOkkOOOOOx:.           \n                 .lkOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOkxddoc,.             \n                .:kOOOOOOxddkOOOOOOOOOOOOOOOOOOOkddkOOOOOkd,                \n                :kOOOOOOoco;;oOOOOOOOOOOOOOOOOOoll;;dOOOOOOd,               \n               ,xOOOOO0k;:d;.:kOOOOOOOOOOOOOO0k::d;.;k0OO0OOd'              \n              .dOOOOOOOkl,'.,lOOOOO0OOOOOOOOOOOl,..'cOOO0OOOOl.             \n              cO0OOOOOOOOkddxOOO0OdlllokOOOOOOOOxooxkOOOOOOOOx,             \n             'd0OkxxxkOOOOOOOOOO0kocc:lxOOOOOOOO0OOOOOkxxxkOOOc             \n             :Okolcccldk00OOOOOOOOO0OOO0OOOOOOOOOOOOkocclccok0d'            \n            .lOxlcclccokOOOOOOOOOkxxxxxdddxO0OOOOOOOdccclcccdOO:            \n            .lOkxoooodkOOOOOOOOOkoodxxddxolxOOOOOOOOkdllllldkOOo.           \n             :OOOOkkOOO0OOOOOOOOkloxxxxdxdoxOOOOOOOOOOkkkkkOOOOk;           \n             .oOOOOOOOOOO0OOOOOOOxooodoododkOOOOOOOOOOOOOOOOOOOOl.          \n              .oO0OOOOOOOOOOOO0OO0OkdddxxkOOOOOOOOOOOOOOOOOOOOOOd'          \n               .lOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOk;          \n                'dOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO0Ol.         \n                'x0OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOd.         \n                .collllolllllooooooooooooooooooooooooooooooolllloc.         \n");
+	printf(TEXT_RGB(131, 163, 227)"Hello world !\nOui, c'est une couleur custom : R131 G163 B227\n\x1b[0m");
+#endif
 	//accueil de l'utilisateur
 	printf("Bienvenue dans le programme de gestion des especes de Pokemon\n");
 	//boucle de menu
