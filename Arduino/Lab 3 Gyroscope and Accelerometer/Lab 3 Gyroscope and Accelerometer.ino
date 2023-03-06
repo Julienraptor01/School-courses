@@ -13,9 +13,9 @@
 
 //create color type
 typedef struct {
-  int red;
-  int green;
-  int blue;
+	int red;
+	int green;
+	int blue;
 } color;
 
 //default colors (RGB)
@@ -26,24 +26,24 @@ const color red = {255, 0, 0}, green = {0, 255, 0}, blue = {0, 0, 255}, magenta 
 int colorIntensity = 100, duration = 200;
 
 void setup() {
-  //pin setup
-  pinMode(RED_PIN, OUTPUT);
-  pinMode(GREEN_PIN, OUTPUT);
-  pinMode(BLUE_PIN, OUTPUT);
-  pinMode(X_PIN, INPUT);
-  pinMode(Y_PIN, INPUT);
-  pinMode(Z_PIN, INPUT);
+	//pin setup
+	pinMode(RED_PIN, OUTPUT);
+	pinMode(GREEN_PIN, OUTPUT);
+	pinMode(BLUE_PIN, OUTPUT);
+	pinMode(X_PIN, INPUT);
+	pinMode(Y_PIN, INPUT);
+	pinMode(Z_PIN, INPUT);
 
-  //serial setup
-  Serial.begin(115200);
+	//serial setup
+	Serial.begin(9600);
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-  //read values
-  int x = analogRead(X_PIN);
-  int y = analogRead(Y_PIN);
-  int z = analogRead(Z_PIN);
+	// put your main code here, to run repeatedly:
+	//read values
+	int x = analogRead(X_PIN);
+	int y = analogRead(Y_PIN);
+	int z = analogRead(Z_PIN);
 
 #if MODE == 0
 //set the color of the led depending on the axis output
@@ -59,25 +59,25 @@ setColor({int(map(x, 266, 398, 0, 255)), int(map(y, 266, 398, 0, 255)), int(map(
 //set the color to green if the y axis is the most different from the center which is 332
 //set the color to blue if the z axis is the most different from the center which is 332
 if (abs(x - 332) > abs(y - 332) && abs(x - 332) > abs(z - 332)) {
-  setColor(red, colorIntensity, duration);
+	setColor(red, colorIntensity, duration);
 } else if (abs(y - 332) > abs(x - 332) && abs(y - 332) > abs(z - 332)) {
-  setColor(green, colorIntensity, duration);
+	setColor(green, colorIntensity, duration);
 } else if (abs(z - 332) > abs(x - 332) && abs(z - 332) > abs(y - 332)) {
-  setColor(blue, colorIntensity, duration);
+	setColor(blue, colorIntensity, duration);
 } else {
-  setColor(black, colorIntensity, duration);
+	setColor(black, colorIntensity, duration);
 }
 #elif MODE == 2
 //same as mode 1 but with 2D so only x and y, if both are different enough from the center then the color is blue
 //the treshold should be like 33%/2 of the range so 11
 if (abs(x - 332) > 22 && abs(y - 332) > 22 ) {
-  setColor(blue, colorIntensity, duration);
+	setColor(blue, colorIntensity, duration);
 } else if (abs(x - 332) > abs (y - 332) && abs(x - 332) > 66) {
-  setColor(red, colorIntensity, duration);
+	setColor(red, colorIntensity, duration);
 } else if (abs(y - 332) > abs (x - 332) && abs(y - 332) > 66) {
-  setColor(green, colorIntensity, duration);
+	setColor(green, colorIntensity, duration);
 } else {
-  setColor(black, colorIntensity, duration);
+	setColor(black, colorIntensity, duration);
 }
 #endif
 
