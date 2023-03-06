@@ -41,11 +41,11 @@ struct indEspece
 };
 
 //prototypes de fonctions
-int encodeEspece(struct espece[], struct indEspece[], int*);
-int rechercheEspece(struct espece[], struct indEspece[], int);
-void insertionInd(struct espece[], struct indEspece[], int);
+int encodeEspece(struct espece[], struct indEspece[], long*);
+int rechercheEspece(struct espece[], struct indEspece[], long);
+void insertionInd(struct espece[], struct indEspece[], long);
 void afficheEspece(struct espece[], long);
-int rechercheTypeEspece(long[], struct indEspece[], int, long*);
+int rechercheTypeEspece(long[], struct indEspece[], long, long*);
 
 //variable globale
 const char types[NOMBRE_TYPES][MAX_TAILLE_TYPE] = { "Acier", "Combat", "Dragon", "Eau", "Electrik", "Fee", "Feu", "Glace", "Insecte", "Normal", "Plante", "Poison", "Psy", "Roche", "Sol", "Spectre", "Tenebres", "Vol" };
@@ -57,11 +57,11 @@ int main()
 	//structures prédéfinies pour debug
 	struct espece especes[MAX_POKEMON] = { { "Roucarnage", "Normal", 0, 30, 630 }, { "Roucoups", "Normal", 0, 20, 400 }, { "Roucool", "Normal", 0, 10, 190 }, { "Piafabec", "Normal", 0, 12, 234 }, { "Rattatac", "Normal", 0, 25, 518 }, { "Rattata", "Normal", 0, 15, 290 }, { "Draco", "Dragon", 0, 100, 2100 }, { "Carapuce", "Eau", 0, 17, 354 }, { "Pikachu", "Electrik", 0, 17, 354 }, { "Salameche", "Feu", 0, 17, 354 }, { "Bulbizarre", "Plante", 0, 17, 354 }, { "Onix", "Acier", 0, 42, 878 } };
 	struct indEspece index[MAX_POKEMON] = { { "Acier", "Onix", 11 }, { "Dragon", "Draco", 6 }, { "Eau", "Carapuce", 7 }, { "Electrik", "Pikachu", 8 }, { "Feu", "Salameche", 9 }, { "Normal", "Piafabec", 3 }, { "Normal", "Rattata", 5 }, { "Normal", "Rattatac", 4 }, { "Normal", "Roucarnage", 0 }, { "Normal", "Roucool", 2 }, { "Normal", "Roucoups", 1 }, { "Plante", "Bulbizarre", 10 } };
-	int nEspece = 12;
+	long nEspece = 12;
 #else
 	struct espece especes[MAX_POKEMON];
 	struct indEspece index[MAX_POKEMON];
-	int nEspece = 0;
+	long nEspece = 0;
 #endif
 	long position[MAX_POKEMON], nEspeceType = 0;
 	int choixMenu = -1, i;
@@ -131,7 +131,7 @@ int main()
 /* Process : récupère les informations sur une nouvelle espèce, vérifie l'unicité de l'espèce, l'ajoute à la liste, appelle l'ajout à l'index et incrémente le nombre d'espèces	*/
 /* OUTPUT : un entier (1 si une nouvelle espèce a été ajoutée, 0 sinon)																											*/
 /********************************************************************************************************************************************************************************/
-int encodeEspece(struct espece especes[], struct indEspece index[], int* nEspece)
+int encodeEspece(struct espece especes[], struct indEspece index[], long* nEspece)
 {
 	int choixType = -1;
 	printf("\nCreation d'une nouvelle espece\nN'entrez rien pour revenir au menu principal\n");
@@ -188,9 +188,9 @@ int encodeEspece(struct espece especes[], struct indEspece index[], int* nEspece
 /* Process : recherche séquentielle sur le nom de l'espèce dans l'index																					*/
 /* OUTPUT : un entier (1 si l'espèce est trouvée, 0 sinon)																								*/
 /********************************************************************************************************************************************************/
-int rechercheEspece(struct espece especes[], struct indEspece index[], int nEspece)
+int rechercheEspece(struct espece especes[], struct indEspece index[], long nEspece)
 {
-	int i = nEspece - 1;
+	long i = nEspece - 1;
 	//on fait la recherche à partir de la fin de l'index et on remonte vers le début, mais on aurait pu aussi faire l'inverse
 	//tel qu'on l'a fait, la valeur de i est la position de l'espèce dans l'index si elle est trouvée, sinon i vaudra -1
 	while (i >= 0 && strcmp(especes[nEspece].nomEspece, index[i].nomEspece) != 0)
@@ -216,9 +216,9 @@ int rechercheEspece(struct espece especes[], struct indEspece index[], int nEspe
 /* Process : recherche séquentielle sur le type puis sur le nom pour trouver la position d'insertion et insertion dans l'index							*/
 /* OUTPUT : rien																																		*/
 /********************************************************************************************************************************************************/
-void insertionInd(struct espece especes[], struct indEspece index[], int nEspece)
+void insertionInd(struct espece especes[], struct indEspece index[], long nEspece)
 {
-	int i = nEspece - 1;
+	long i = nEspece - 1;
 	//boucle de recherche sur le type
 	while (i >= 0 && strcmp(especes[nEspece].type, index[i].type) < 0)
 	{
@@ -252,9 +252,10 @@ void afficheEspece(struct espece especes[], long posI)
 /* Process : recherche séquentielle sur le type d'une espèce dans l'index pour trouver toutes les espèces d'un même type et ajouter leur position respective dans un vecteur pour les afficher dans l'ordre alphabétique		*/
 /* OUTPUT : un entier (1 si le type est trouvé, 0 sinon)																																										*/
 /********************************************************************************************************************************************************************************************************************************/
-int rechercheTypeEspece(long position[], struct indEspece index[], int nEspece, long* nEspeceType)
+int rechercheTypeEspece(long position[], struct indEspece index[], long nEspece, long* nEspeceType)
 {
-	int i = 0, choixType = -1;
+	long i = 0;
+	int choixType = -1;
 	//menu de choix du type
 	do
 	{
