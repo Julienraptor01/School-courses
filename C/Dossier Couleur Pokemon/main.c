@@ -136,6 +136,7 @@ int main()
 #define CLR_2 TEXT_RGB(255, 127, 63)
 #define CLR_3 TEXT_RGB(255, 255, 0)
 #define CLR_4 TEXT_RGB(255, 0, 63)
+#define CLR_5 TEXT_RGB(255, 63, 127)
 	printf("   "CLR_1"...                                                                      \n");
 	printf("   ."CLR_2".'.."CLR_1".'..                                                                \n");
 	printf("    ."CLR_2"..."CLR_1":"CLR_3"kkdc,"CLR_1".                                                             \n");
@@ -157,13 +158,13 @@ int main()
 	printf("             :Okolcccldk00OOOOOOOOO0OOO0OOOOOOOOOOOOk"CLR_4"occlcco"CLR_3"k0d"CLR_1"'            \n");
 	printf("            .lOxlcclccokOOOOOOOOOkxxxxxdddxO0OOOOOOOd"CLR_4"ccclccc"CLR_3"dOO"CLR_1":            \n");
 	printf("            .lOkxoooodkOOOOOOOOOkoodxxddxolxOOOOOOOOkd"CLR_4"lllll"CLR_3"dkOOo"CLR_1".           \n");
-	printf("             :OOOOkkOOO0OOOOOOOOkloxxxxdxdoxOOOOOOOOOOkkkkkOOOOk"CLR_1";           \n");
-	printf("             .oOOOOOOOOOO0OOOOOOOxooodoododkOOOOOOOOOOOOOOOOOOOOl"CLR_1".          \n");
-	printf("              .oO0OOOOOOOOOOOO0OO0OkdddxxkOOOOOOOOOOOOOOOOOOOOOOd"CLR_1"'          \n");
-	printf("               .lOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOk"CLR_1";          \n");
-	printf("                'dOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO0Ol"CLR_1".         \n");
-	printf("                'x0OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOd"CLR_1".         \n");
-	printf("                .collllolllllooooooooooooooooooooooooooooooolllloc"CLR_1".         \n");
+	printf("             :"CLR_3"OOOOkkOOO0OOOOOOOO"CLR_1"k"CLR_5"loxxxxdxdo"CLR_1"x"CLR_3"OOOOOOOOOOkkkkkOOOOk"CLR_1";           \n");
+	printf("             ."CLR_3"oOOOOOOOOOO0OOOOOOO"CLR_1"x"CLR_5"ooodoodod"CLR_1"k"CLR_3"OOOOOOOOOOOOOOOOOOOOl"CLR_1".          \n");
+	printf("              ."CLR_3"oO0OOOOOOOOOOOO0OO0O"CLR_1"kdddxxk"CLR_3"OOOOOOOOOOOOOOOOOOOOOOd"CLR_1"'          \n");
+	printf("               ."CLR_3"lOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOk"CLR_1";          \n");
+	printf("                '"CLR_3"dOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO0Ol"CLR_1".         \n");
+	printf("                '"CLR_3"x0OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOd"CLR_1".         \n");
+	printf("                ."CLR_3"collllolllllooooooooooooooooooooooooooooooolllloc"CLR_1".         \n");
 	printf(TEXT_COLOR_RESET);
 #endif
 	//accueil de l'utilisateur
