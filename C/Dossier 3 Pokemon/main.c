@@ -1,7 +1,7 @@
 /************************************************************************************/
 /* Auteurs : BOLLY Julien, SECCO Johan												*/
 /* Groupe : 2131																	*/
-/* Application : Dossier 2 Pokémon ; Encodage, recherche et affichage des espèces	*/
+/* Application : Dossier 3 Pokémon ; Encodage, recherche et affichage des espèces	*/
 /* Date de la dernière modification : 01/03/2023									*/
 /************************************************************************************/
 
@@ -44,11 +44,11 @@ struct indEspece
 int encodeEspece(struct espece[], struct indEspece[], long);
 int rechercheEspece(struct espece[], struct indEspece[], long);
 void insertionInd(struct espece[], struct indEspece[], long);
-void afficheEspece(struct espece[], long);
+void afficheEspece(struct espece);
 int rechercheTypeEspece(long[], struct indEspece[], long, long*);
 
 //variable globale
-const char types[NOMBRE_TYPES][MAX_TAILLE_TYPE] = { "Acier", "Combat", "Dragon", "Eau", "Electrik", "Fee", "Feu", "Glace", "Insecte", "Normal", "Plante", "Poison", "Psy", "Roche", "Sol", "Spectre", "Tenebres", "Vol" };
+const char* types[] = { "Acier", "Combat", "Dragon", "Eau", "Electrik", "Fee", "Feu", "Glace", "Insecte", "Normal", "Plante", "Poison", "Psy", "Roche", "Sol", "Spectre", "Tenebres", "Vol" };
 
 int main()
 {
@@ -94,7 +94,7 @@ int main()
 			printf("\nEntrez n'importe quel caractere entre deux especes pour arreter l'affichage\nN'entrez rien pour continuer\n");
 			while (i < nEspece && strlen(arreteAffiche) == 0)
 			{
-				afficheEspece(especes, index[i].posI);
+				afficheEspece(especes[index[i].posI]);
 				i++;
 				fflush(stdin);
 				gets(arreteAffiche);
@@ -109,7 +109,7 @@ int main()
 				printf("\nEntrez n'importe quel caractere entre deux especes pour arreter l'affichage\nN'entrez rien pour continuer\n");
 				while (i < nEspeceType && strlen(arreteAffiche) == 0)
 				{
-					afficheEspece(especes, position[i]);
+					afficheEspece(especes[position[i]]);
 					i++;
 					fflush(stdin);
 					gets(arreteAffiche);
@@ -132,14 +132,14 @@ int main()
 	return 0;
 }
 
-/********************************************************************************************************************************************************************************/
-/* INPUT : un tableau de structures de type espece (les espèces), un tableau de structures de type indEspece (l'index), un pointeur sur un entier (le nombre d'espèces)			*/
-/* Process : récupère les informations sur une nouvelle espèce, vérifie l'unicité de l'espèce, l'ajoute à la liste, appelle l'ajout à l'index et incrémente le nombre d'espèces	*/
-/* OUTPUT : un entier (1 si une nouvelle espèce a été ajoutée, 0 sinon)																											*/
-/********************************************************************************************************************************************************************************/
+/************************************************************************************************************************************************************************/
+/* INPUT : un tableau de structures de type espece (les espèces), un tableau de structures de type indEspece (l'index), un pointeur sur un entier (le nombre d'espèces)	*/
+/* Process : récupère les informations sur une nouvelle espèce, vérifie l'unicité de l'espèce et l'ajoute à la liste													*/
+/* OUTPUT : un entier (1 si une nouvelle espèce a été ajoutée, 0 sinon)																									*/
+/************************************************************************************************************************************************************************/
 int encodeEspece(struct espece especes[], struct indEspece index[], long nEspece)
 {
-	int choixType = -1;
+	int choixType = -1, especeExiste = -1;
 	printf("\nCreation d'une nouvelle espece\nN'entrez rien pour revenir au menu principal\n");
 	//nom de l'espece
 	do
@@ -153,12 +153,12 @@ int encodeEspece(struct espece especes[], struct indEspece index[], long nEspece
 			return 0;
 		}
 		//vérification de l'unicité de l'espèce
-		else if (rechercheEspece(especes, index, nEspece) == 1)
+		else if (especeExiste = rechercheEspece(especes, index, nEspece) == 1)
 		{
 			printf("Le pokemon est deja present\n");
 		}
 	}
-	while (rechercheEspece(especes, index, nEspece) == 1);
+	while (especeExiste == 1);
 	//menu pour choisir le type
 	do
 	{
@@ -200,17 +200,7 @@ int rechercheEspece(struct espece especes[], struct indEspece index[], long nEsp
 		i--;
 	}
 	return (i >= 0) ? 1 : 0;
-	//on a utilisé l'opérateur ternaire pour remplacer le code ci-dessous par soucis de lisibilité, simplicité et concision, même si on ne l'a pas vu en cours
-	/*
-	if (i >= 0)
-	{
-		return 1;
-	}
-	else
-	{
-		return 0;
-	}
-	*/
+	//on a utilisé l'opérateur ternaire par soucis de lisibilité, simplicité et concision, même si on ne l'a pas vu en cours
 }
 
 /********************************************************************************************************************************************************/
@@ -239,14 +229,14 @@ void insertionInd(struct espece especes[], struct indEspece index[], long nEspec
 	index[i + 1].posI = nEspece;
 }
 
-/********************************************************************************************************************/
-/* INPUT : un tableau de structures de type espece (les espèces), un long (la position de l'espèce dans le tableau)	*/
-/* Process : affichage d'une espèce																					*/
-/* OUTPUT : rien																									*/
-/********************************************************************************************************************/
-void afficheEspece(struct espece especes[], long posI)
+/****************************************************/
+/* INPUT : une structure de type espece (l'espèce)	*/
+/* Process : affichage d'une espèce					*/
+/* OUTPUT : rien									*/
+/****************************************************/
+void afficheEspece(struct espece espece)
 {
-	printf("Nom : %s\nType : %s\nNombre de bonbons : %u\nNombre de PV Max : %u\nNombre de PC Max : %u\n", especes[posI].nomEspece, especes[posI].type, especes[posI].bonbons, especes[posI].pvMax, especes[posI].pcMax);
+	printf("Nom : %s\nType : %s\nNombre de bonbons : %u\nNombre de PV Max : %u\nNombre de PC Max : %u\n", espece.nomEspece, espece.type, espece.bonbons, espece.pvMax, espece.pcMax);
 }
 
 /********************************************************************************************************************************************************************************************************************************/
