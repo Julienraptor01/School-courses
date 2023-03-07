@@ -41,7 +41,7 @@ struct indEspece
 };
 
 //prototypes de fonctions
-int encodeEspece(struct espece[], struct indEspece[], long*);
+int encodeEspece(struct espece[], struct indEspece[], long);
 int rechercheEspece(struct espece[], struct indEspece[], long);
 void insertionInd(struct espece[], struct indEspece[], long);
 void afficheEspece(struct espece[], long);
@@ -79,7 +79,13 @@ int main()
 		{
 		//ajout d'une espèce
 		case 1:
-			while (nEspece < MAX_POKEMON && encodeEspece(especes, index, &nEspece) == 1);
+			while (nEspece < MAX_POKEMON && encodeEspece(especes, index, nEspece) == 1)
+			{
+				//appel de la fonction d'insertion dans l'index
+				insertionInd(especes, index, nEspece);
+				//incrementation de la valeur de nEspece
+				(nEspece)++;
+			}
 			break;
 		//affichage des espèces
 		case 2:
@@ -131,7 +137,7 @@ int main()
 /* Process : récupère les informations sur une nouvelle espèce, vérifie l'unicité de l'espèce, l'ajoute à la liste, appelle l'ajout à l'index et incrémente le nombre d'espèces	*/
 /* OUTPUT : un entier (1 si une nouvelle espèce a été ajoutée, 0 sinon)																											*/
 /********************************************************************************************************************************************************************************/
-int encodeEspece(struct espece especes[], struct indEspece index[], long* nEspece)
+int encodeEspece(struct espece especes[], struct indEspece index[], long nEspece)
 {
 	int choixType = -1;
 	printf("\nCreation d'une nouvelle espece\nN'entrez rien pour revenir au menu principal\n");
@@ -140,19 +146,19 @@ int encodeEspece(struct espece especes[], struct indEspece index[], long* nEspec
 	{
 		printf("Quel est le nom de l'espece ?\n");
 		fflush(stdin);
-		gets(especes[*nEspece].nomEspece);
+		gets(especes[nEspece].nomEspece);
 		//sortie si le nom est vide
-		if (strlen(especes[*nEspece].nomEspece) == 0)
+		if (strlen(especes[nEspece].nomEspece) == 0)
 		{
 			return 0;
 		}
 		//vérification de l'unicité de l'espèce
-		else if (rechercheEspece(especes, index, *nEspece) == 1)
+		else if (rechercheEspece(especes, index, nEspece) == 1)
 		{
 			printf("Le pokemon est deja present\n");
 		}
 	}
-	while (rechercheEspece(especes, index, *nEspece) == 1);
+	while (rechercheEspece(especes, index, nEspece) == 1);
 	//menu pour choisir le type
 	do
 	{
@@ -162,24 +168,20 @@ int encodeEspece(struct espece especes[], struct indEspece index[], long* nEspec
 	}
 	while (choixType < 1 || choixType > NOMBRE_TYPES);
 	//copie du type dans la structure
-	strcpy(especes[*nEspece].type, types[choixType - 1]);
+	strcpy(especes[nEspece].type, types[choixType - 1]);
 	//initialiser les bonbons à 0
-	especes[*nEspece].bonbons = 0;
+	especes[nEspece].bonbons = 0;
 	//demander le nombre de PV Max
 	do
 	{
 		printf("Quel est le nombre de PV Max ?\n");
 		fflush(stdin);
-		scanf("%u", &especes[*nEspece].pvMax);
+		scanf("%u", &especes[nEspece].pvMax);
 	}
 	//le nombre de PV Max doit être compris entre 1 et UINT_MAX/210 (pour éviter un dépassement de capacité lors du calcul du nombre de PC Max)
-	while (especes[*nEspece].pvMax < 1 || especes[*nEspece].pvMax >= UINT_MAX / 210);
+	while (especes[nEspece].pvMax < 1 || especes[nEspece].pvMax >= UINT_MAX / 210);
 	//calcul du nombre de PC Max avec une multiplication par un nombre aléatoire entre 19 et 21
-	especes[*nEspece].pcMax = especes[*nEspece].pvMax * (200 + (rand() % 21 - 10)) / 10;
-	//appel de la fonction d'insertion dans l'index
-	insertionInd(especes, index, *nEspece);
-	//incrementation de la valeur de nEspece
-	(*nEspece)++;
+	especes[nEspece].pcMax = especes[nEspece].pvMax * (200 + (rand() % 21 - 10)) / 10;
 	return 1;
 }
 
