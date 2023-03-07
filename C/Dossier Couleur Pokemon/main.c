@@ -44,6 +44,12 @@
 #endif
 //RGB MACRO
 #define TEXT_RGB(r, g, b) "\x1b[38;2;"#r";"#g";"#b"m"
+#define BACKGROUND_RGB(r, g, b) "\x1b[48;2;"#r";"#g";"#b"m"
+//MACRO TO CONVERT HEX TO RGB
+//TODO
+//COLOR RESET
+#define TEXT_COLOR_RESET "\x1b[0m"
+#define BACKGROUND_COLOR_RESET "\x1b[49m"
 #endif
 
 //structures de données
@@ -90,12 +96,75 @@ int main()
 	srand(time(NULL));
 	//FUN
 #ifdef FUN
+
+	DWORD dwMode;
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	GetConsoleMode(hConsole, &dwMode);
 	dwMode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
 	SetConsoleMode(hConsole, dwMode);
-	printf("   ...                                                                      \n   ..'...'..                                                                \n    ....:kkdc,.                                                             \n     ...:kOOOOko:'.                                              .,:c'...   \n       .:kOOO0OOOkd:.                                       .':ldkOOx,..    \n        .d0OOOO0OOOOko,.                               ..;cokOOOOOOOo'..    \n         ,xOOOOOOOOOOOOx:.                         .':ldkOOOOOO0OO0Oc..     \n          .lk0OOOOOOOOO0Od:...',,;;;;;;;,,,,''..':oxkOOOOOOOOOOOOOOo'       \n            ;dk0OOOOOOOOOOOkkOOOOOOO00OOOOOOOOkkOOOOOOOOOOOOOOOOOOl.        \n             .:xO0OOOOOOOOO0OOOOOOOOOOOOOOOOOOO0OOOOOOOOOOOO0OOOx;.         \n               .ldldOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOkkOOOOOx:.           \n                 .lkOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOkxddoc,.             \n                .:kOOOOOOxddkOOOOOOOOOOOOOOOOOOOkddkOOOOOkd,                \n                :kOOOOOOoco;;oOOOOOOOOOOOOOOOOOoll;;dOOOOOOd,               \n               ,xOOOOO0k;:d;.:kOOOOOOOOOOOOOO0k::d;.;k0OO0OOd'              \n              .dOOOOOOOkl,'.,lOOOOO0OOOOOOOOOOOl,..'cOOO0OOOOl.             \n              cO0OOOOOOOOkddxOOO0OdlllokOOOOOOOOxooxkOOOOOOOOx,             \n             'd0OkxxxkOOOOOOOOOO0kocc:lxOOOOOOOO0OOOOOkxxxkOOOc             \n             :Okolcccldk00OOOOOOOOO0OOO0OOOOOOOOOOOOkocclccok0d'            \n            .lOxlcclccokOOOOOOOOOkxxxxxdddxO0OOOOOOOdccclcccdOO:            \n            .lOkxoooodkOOOOOOOOOkoodxxddxolxOOOOOOOOkdllllldkOOo.           \n             :OOOOkkOOO0OOOOOOOOkloxxxxdxdoxOOOOOOOOOOkkkkkOOOOk;           \n             .oOOOOOOOOOO0OOOOOOOxooodoododkOOOOOOOOOOOOOOOOOOOOl.          \n              .oO0OOOOOOOOOOOO0OO0OkdddxxkOOOOOOOOOOOOOOOOOOOOOOd'          \n               .lOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOk;          \n                'dOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO0Ol.         \n                'x0OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOd.         \n                .collllolllllooooooooooooooooooooooooooooooolllloc.         \n");
-	printf(TEXT_RGB(131, 163, 227)"Hello world !\nOui, c'est une couleur custom : R131 G163 B227\n\x1b[0m");
+	/*
+	printf("   ...                                                                      \n");
+	printf("   ..'...'..                                                                \n");
+	printf("    ....:kkdc,.                                                             \n");
+	printf("     ...:kOOOOko:'.                                              .,:c'...   \n");
+	printf("       .:kOOO0OOOkd:.                                       .':ldkOOx,..    \n");
+	printf("        .d0OOOO0OOOOko,.                               ..;cokOOOOOOOo'..    \n");
+	printf("         ,xOOOOOOOOOOOOx:.                         .':ldkOOOOOO0OO0Oc..     \n");
+	printf("          .lk0OOOOOOOOO0Od:...',,;;;;;;;,,,,''..':oxkOOOOOOOOOOOOOOo'       \n");
+	printf("            ;dk0OOOOOOOOOOOkkOOOOOOO00OOOOOOOOkkOOOOOOOOOOOOOOOOOOl.        \n");
+	printf("             .:xO0OOOOOOOOO0OOOOOOOOOOOOOOOOOOO0OOOOOOOOOOOO0OOOx;.         \n");
+	printf("               .ldldOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOkkOOOOOx:.           \n");
+	printf("                 .lkOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOkxddoc,.             \n");
+	printf("                .:kOOOOOOxddkOOOOOOOOOOOOOOOOOOOkddkOOOOOkd,                \n");
+	printf("                :kOOOOOOoco;;oOOOOOOOOOOOOOOOOOoll;;dOOOOOOd,               \n");
+	printf("               ,xOOOOO0k;:d;.:kOOOOOOOOOOOOOO0k::d;.;k0OO0OOd'              \n");
+	printf("              .dOOOOOOOkl,'.,lOOOOO0OOOOOOOOOOOl,..'cOOO0OOOOl.             \n");
+	printf("              cO0OOOOOOOOkddxOOO0OdlllokOOOOOOOOxooxkOOOOOOOOx,             \n");
+	printf("             'd0OkxxxkOOOOOOOOOO0kocc:lxOOOOOOOO0OOOOOkxxxkOOOc             \n");
+	printf("             :Okolcccldk00OOOOOOOOO0OOO0OOOOOOOOOOOOkocclccok0d'            \n");
+	printf("            .lOxlcclccokOOOOOOOOOkxxxxxdddxO0OOOOOOOdccclcccdOO:            \n");
+	printf("            .lOkxoooodkOOOOOOOOOkoodxxddxolxOOOOOOOOkdllllldkOOo.           \n");
+	printf("             :OOOOkkOOO0OOOOOOOOkloxxxxdxdoxOOOOOOOOOOkkkkkOOOOk;           \n");
+	printf("             .oOOOOOOOOOO0OOOOOOOxooodoododkOOOOOOOOOOOOOOOOOOOOl.          \n");
+	printf("              .oO0OOOOOOOOOOOO0OO0OkdddxxkOOOOOOOOOOOOOOOOOOOOOOd'          \n");
+	printf("               .lOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOk;          \n");
+	printf("                'dOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO0Ol.         \n");
+	printf("                'x0OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOd.         \n");
+	printf("                .collllolllllooooooooooooooooooooooooooooooolllloc.         \n");
+	*/
+#define CLR_1 TEXT_RGB(127, 63, 31)
+#define CLR_2 TEXT_RGB(255, 127, 63)
+#define CLR_3 TEXT_RGB(255, 255, 0)
+#define CLR_4 TEXT_RGB(255, 0, 63)
+	printf("   "CLR_1"...                                                                      \n");
+	printf("   ."CLR_2".'.."CLR_1".'..                                                                \n");
+	printf("    ."CLR_2"..."CLR_1":"CLR_3"kkdc,"CLR_1".                                                             \n");
+	printf("     ...:kOOOOko:'.                                              .,:c'.."CLR_1".   \n");
+	printf("       .:kOOO0OOOkd:.                                       .':ldkOOx,."CLR_1".    \n");
+	printf("        .d0OOOO0OOOOko,.                               ..;cokOOOOOOOo'."CLR_1".    \n");
+	printf("         ,xOOOOOOOOOOOOx:.                         .':ldkOOOOOO0OO0Oc."CLR_1".     \n");
+	printf("          .lk0OOOOOOOOO0Od:...',,;;;;;;;,,,,''..':oxkOOOOOOOOOOOOOOo"CLR_1"'       \n");
+	printf("            ;dk0OOOOOOOOOOOkkOOOOOOO00OOOOOOOOkkOOOOOOOOOOOOOOOOOOl"CLR_1".        \n");
+	printf("             .:xO0OOOOOOOOO0OOOOOOOOOOOOOOOOOOO0OOOOOOOOOOOO0OOOx;"CLR_1".         \n");
+	printf("               .ldldOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOkkOOOOOx:"CLR_1".           \n");
+	printf("                 .lkOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOkxddoc,"CLR_1".             \n");
+	printf("                .:kOOOOOOxddkOOOOOOOOOOOOOOOOOOOkddkOOOOOkd"CLR_1",                \n");
+	printf("                :kOOOOOOoco;;oOOOOOOOOOOOOOOOOOoll;;dOOOOOOd"CLR_1",               \n");
+	printf("               ,xOOOOO0k;:d;.:kOOOOOOOOOOOOOO0k::d;.;k0OO0OOd"CLR_1"'              \n");
+	printf("              .dOOOOOOOkl,'.,lOOOOO0OOOOOOOOOOOl,..'cOOO0OOOOl"CLR_1".             \n");
+	printf("              cO0OOOOOOOOkddxOOO0OdlllokOOOOOOOOxooxkOOOOOOOOx"CLR_1",             \n");
+	printf("             'd0OkxxxkOOOOOOOOOO0kocc:lxOOOOOOOO0OOOOOk"CLR_4"xxx"CLR_3"kOOO"CLR_1"c             \n");
+	printf("             :Okolcccldk00OOOOOOOOO0OOO0OOOOOOOOOOOOk"CLR_4"occlcco"CLR_3"k0d"CLR_1"'            \n");
+	printf("            .lOxlcclccokOOOOOOOOOkxxxxxdddxO0OOOOOOOd"CLR_4"ccclccc"CLR_3"dOO"CLR_1":            \n");
+	printf("            .lOkxoooodkOOOOOOOOOkoodxxddxolxOOOOOOOOkd"CLR_4"lllll"CLR_3"dkOOo"CLR_1".           \n");
+	printf("             :OOOOkkOOO0OOOOOOOOkloxxxxdxdoxOOOOOOOOOOkkkkkOOOOk"CLR_1";           \n");
+	printf("             .oOOOOOOOOOO0OOOOOOOxooodoododkOOOOOOOOOOOOOOOOOOOOl"CLR_1".          \n");
+	printf("              .oO0OOOOOOOOOOOO0OO0OkdddxxkOOOOOOOOOOOOOOOOOOOOOOd"CLR_1"'          \n");
+	printf("               .lOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOk"CLR_1";          \n");
+	printf("                'dOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO0Ol"CLR_1".         \n");
+	printf("                'x0OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOd"CLR_1".         \n");
+	printf("                .collllolllllooooooooooooooooooooooooooooooolllloc"CLR_1".         \n");
+	printf(TEXT_COLOR_RESET);
 #endif
 	//accueil de l'utilisateur
 	printf("Bienvenue dans le programme de gestion des especes de Pokemon\n");
