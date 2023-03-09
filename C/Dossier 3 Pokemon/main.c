@@ -20,6 +20,8 @@
 #define MAX_TAILLE_TYPE 10
 //nombre de types différents
 #define NOMBRE_TYPES 18
+//taille maximum du nom d'un pseudo
+#define MAX_TAILLE_PSEUDO 50
 //décommentez la ligne ci-dessous pour activer le mode DEBUG ce qui pré-entre des espèces
 //#define DEBUG
 
@@ -40,12 +42,39 @@ struct indEspece
 	long posI;
 };
 
-//prototypes de fonctions
+struct date
+{
+	int jour;
+	int mois;
+	int année;
+};
+
+struct dresseur
+{
+	char pseudo[MAX_TAILLE_PSEUDO];
+	unsigned int poussiereEtoile;
+	unsigned long xpTotale;
+	struct date dateInscription;
+};
+
+//prototypes de fonctions liées aux menus
+void menuPrincipal();
+void menuEspece();
+void menuDresseur();
+
+//prototypes de fonctions liées à la partie espèces
 int encodeEspece(struct espece[], struct indEspece[], long);
 int rechercheEspece(struct espece[], struct indEspece[], long);
-void insertionInd(struct espece[], struct indEspece[], long);
+void insertionIndEspece(struct espece[], struct indEspece[], long);
 void afficheEspece(struct espece);
 int rechercheTypeEspece(long[], struct indEspece[], long, long*);
+
+//prototypes de fonctions liées à la partie dresseur
+//TODO : add the returns of the functions and the parameters
+void encodeDresseur();
+void rechercheDresseur();
+void afficheDresseur();
+void modificationDresseur();
 
 //variable globale
 const char* types[] = { "Acier", "Combat", "Dragon", "Eau", "Electrik", "Fee", "Feu", "Glace", "Insecte", "Normal", "Plante", "Poison", "Psy", "Roche", "Sol", "Spectre", "Tenebres", "Vol" };
@@ -68,7 +97,7 @@ int main()
 	char arreteAffiche[] = "";
 	srand(time(NULL));
 	//accueil de l'utilisateur
-	printf("Bienvenue dans le programme de gestion des especes de Pokemon\n");
+	printf("Bienvenue dans le menu de gestion des especes de Pokemon\n");
 	//boucle de menu
 	do
 	{
@@ -82,7 +111,7 @@ int main()
 			while (nEspece < MAX_POKEMON && encodeEspece(especes, index, nEspece) == 1)
 			{
 				//appel de la fonction d'insertion dans l'index
-				insertionInd(especes, index, nEspece);
+				insertionIndEspece(especes, index, nEspece);
 				//incrementation de la valeur de nEspece
 				(nEspece)++;
 			}
@@ -100,7 +129,7 @@ int main()
 				gets(arreteAffiche);
 			}
 			break;
-		//quitter le programme
+		//quitter le menu
 		case 3:
 			if (rechercheTypeEspece(position, index, nEspece, &nEspeceType) == 1)
 			{
@@ -121,7 +150,7 @@ int main()
 			}
 			break;
 		case 4:
-			printf("\nVous avez choisi de quitter le programme\n");
+			printf("\nVous avez choisi de quitter le menu\n");
 			break;
 		//cas d'erreur
 		default:
@@ -208,7 +237,7 @@ int rechercheEspece(struct espece especes[], struct indEspece index[], long nEsp
 /* Process : recherche séquentielle sur le type puis sur le nom pour trouver la position d'insertion et insertion dans l'index							*/
 /* OUTPUT : rien																																		*/
 /********************************************************************************************************************************************************/
-void insertionInd(struct espece especes[], struct indEspece index[], long nEspece)
+void insertionIndEspece(struct espece especes[], struct indEspece index[], long nEspece)
 {
 	long i = nEspece - 1;
 	//boucle de recherche sur le type
