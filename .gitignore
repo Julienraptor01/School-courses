@@ -9,3 +9,4 @@ x86/
 *.layout
 *.user
 .vscode/
+*.dat
