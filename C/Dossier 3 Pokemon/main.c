@@ -58,9 +58,9 @@ struct dresseur
 };
 
 //prototypes de fonctions liées aux menus
-void menuPrincipal();
-void menuEspece();
-void menuDresseur();
+int menuPrincipal();
+int menuEspece();
+int menuDresseur();
 
 //prototypes de fonctions liées à la partie espèces
 int encodeEspece(struct espece[], struct indEspece[], long);
@@ -74,15 +74,50 @@ int rechercheTypeEspece(long[], struct indEspece[], long, long*);
 void encodeDresseur();
 void rechercheDresseur();
 void afficheDresseur();
-void modificationDresseur();
+void modificationPseudoDresseur();
 
 //variable globale
 const char* types[] = { "Acier", "Combat", "Dragon", "Eau", "Electrik", "Fee", "Feu", "Glace", "Insecte", "Normal", "Plante", "Poison", "Psy", "Roche", "Sol", "Spectre", "Tenebres", "Vol" };
 
 int main()
 {
+	srand(time(NULL));
 #ifdef DEBUG
 	printf("DEBUG MODE\n");
+#endif
+	printf("Bienvenue dans le programme de gestion Pokemon !\n");
+	while(menuPrincipal);
+	return 0;
+}
+
+int menuPrincipal()
+{
+	int choixMenu = -1;
+	printf("\nQue voulez-vous faire :\n1) Gérer les espèces\n2) Gérer les Dressers\n3) Quitter\n");
+	fflush(stdin);
+	scanf("%d", &choixMenu);
+	switch (choixMenu)
+	{
+	case 1:
+		printf("Bienvenue dans le menu de gestion des especes\n");
+		while (menuEspece());
+		break;
+	case 2:
+		printf("Bienvenue dans le menu de gestion des dresseurs\n");
+		menuDresseur();
+		break;
+	case 3:
+		printf("\nVous avez choisi de quitter le programme\n");
+		break;
+	default:
+		printf("Vous devez choisir une valeur comprise entre 1 et 3\n");
+	}
+	return (choixMenu != 3) ? 1 : 0;
+}
+
+int menuEspece()
+{
+#ifdef DEBUG
 	//structures prédéfinies pour debug
 	struct espece especes[MAX_POKEMON] = { { "Roucarnage", "Normal", 0, 30, 630 }, { "Roucoups", "Normal", 0, 20, 400 }, { "Roucool", "Normal", 0, 10, 190 }, { "Piafabec", "Normal", 0, 12, 234 }, { "Rattatac", "Normal", 0, 25, 518 }, { "Rattata", "Normal", 0, 15, 290 }, { "Draco", "Dragon", 0, 100, 2100 }, { "Carapuce", "Eau", 0, 17, 354 }, { "Pikachu", "Electrik", 0, 17, 354 }, { "Salameche", "Feu", 0, 17, 354 }, { "Bulbizarre", "Plante", 0, 17, 354 }, { "Onix", "Acier", 0, 42, 878 } };
 	struct indEspece index[MAX_POKEMON] = { { "Acier", "Onix", 11 }, { "Dragon", "Draco", 6 }, { "Eau", "Carapuce", 7 }, { "Electrik", "Pikachu", 8 }, { "Feu", "Salameche", 9 }, { "Normal", "Piafabec", 3 }, { "Normal", "Rattata", 5 }, { "Normal", "Rattatac", 4 }, { "Normal", "Roucarnage", 0 }, { "Normal", "Roucool", 2 }, { "Normal", "Roucoups", 1 }, { "Plante", "Bulbizarre", 10 } };
@@ -95,70 +130,97 @@ int main()
 	long position[MAX_POKEMON], nEspeceType = 0;
 	int choixMenu = -1, i;
 	char arreteAffiche[] = "";
-	srand(time(NULL));
-	//accueil de l'utilisateur
-	printf("Bienvenue dans le menu de gestion des especes de Pokemon\n");
 	//boucle de menu
-	do
+	printf("\nQue voulez-vous faire :\n1) Ajouter une espece\n2) Afficher les especes\n3) Rechercher les pokemons d'un meme type\n4) Quitter\n");
+	fflush(stdin);
+	scanf("%d", &choixMenu);
+	switch (choixMenu)
 	{
-		printf("\nQue voulez-vous faire :\n1) Ajouter une espece\n2) Afficher les especes\n3) Rechercher les pokemons d'un meme type\n4) Quitter\n");
-		fflush(stdin);
-		scanf("%d", &choixMenu);
-		switch (choixMenu)
+	//ajout d'une espèce
+	case 1:
+		while (nEspece < MAX_POKEMON && encodeEspece(especes, index, nEspece) == 1)
 		{
-		//ajout d'une espèce
-		case 1:
-			while (nEspece < MAX_POKEMON && encodeEspece(especes, index, nEspece) == 1)
-			{
-				//appel de la fonction d'insertion dans l'index
-				insertionIndEspece(especes, index, nEspece);
-				//incrementation de la valeur de nEspece
-				(nEspece)++;
-			}
-			break;
-		//affichage des espèces
-		case 2:
+			//appel de la fonction d'insertion dans l'index
+			insertionIndEspece(especes, index, nEspece);
+			//incrementation de la valeur de nEspece
+			(nEspece)++;
+		}
+		break;
+	//affichage des espèces
+	case 2:
+		i = 0;
+		strcpy(arreteAffiche, "");
+		printf("\nEntrez n'importe quel caractere entre deux especes pour arreter l'affichage\nN'entrez rien pour continuer\n");
+		while (i < nEspece && strlen(arreteAffiche) == 0)
+		{
+			afficheEspece(especes[index[i].posI]);
+			i++;
+			fflush(stdin);
+			gets(arreteAffiche);
+		}
+		break;
+	case 3:
+		if (rechercheTypeEspece(position, index, nEspece, &nEspeceType) == 1)
+		{
 			i = 0;
 			strcpy(arreteAffiche, "");
 			printf("\nEntrez n'importe quel caractere entre deux especes pour arreter l'affichage\nN'entrez rien pour continuer\n");
-			while (i < nEspece && strlen(arreteAffiche) == 0)
+			while (i < nEspeceType && strlen(arreteAffiche) == 0)
 			{
-				afficheEspece(especes[index[i].posI]);
+				afficheEspece(especes[position[i]]);
 				i++;
 				fflush(stdin);
 				gets(arreteAffiche);
 			}
-			break;
-		//quitter le menu
-		case 3:
-			if (rechercheTypeEspece(position, index, nEspece, &nEspeceType) == 1)
-			{
-				i = 0;
-				strcpy(arreteAffiche, "");
-				printf("\nEntrez n'importe quel caractere entre deux especes pour arreter l'affichage\nN'entrez rien pour continuer\n");
-				while (i < nEspeceType && strlen(arreteAffiche) == 0)
-				{
-					afficheEspece(especes[position[i]]);
-					i++;
-					fflush(stdin);
-					gets(arreteAffiche);
-				}
-			}
-			else
-			{
-				printf("Aucune espece de ce type n'a ete trouvee\n");
-			}
-			break;
-		case 4:
-			printf("\nVous avez choisi de quitter le menu\n");
-			break;
-		//cas d'erreur
-		default:
-			printf("Vous devez choisir une valeur comprise entre 1 et 4\n");
 		}
+		else
+		{
+			printf("Aucune espece de ce type n'a ete trouvee\n");
+		}
+		break;
+	//quitter le menu
+	case 4:
+		printf("\nVous avez choisi de quitter le menu\n");
+		break;
+	//cas d'erreur
+	default:
+		printf("Vous devez choisir une valeur comprise entre 1 et 4\n");
 	}
-	while (choixMenu != 4);
-	return 0;
+	return (choixMenu != 4) ? 1 : 0;
+}
+
+int menuDresseur()
+{
+	ìnt choixMenu = -1;
+	printf("\nQue voulez-vous faire :\n1) Inscrire un dresseur\n2) Afficher les dresseurs\n3) Rechercher un dresseur\n4) Modifier le pseudo d'un dresseur\n5) Quitter\n");
+	fflush(stdin);
+	scanf("%d", &choixMenu);
+	switch (choixMenu)
+	{
+	//inscription d'un dresseur
+	case 1:
+		encodeDresseur();
+		break;
+	//affichage des dresseurs
+	case 2:
+		afficheDresseur();
+		break;
+	//recherche d'un dresseur
+	case 3:
+		rechercheDresseur();
+		break;
+	//modification d'un dresseur
+	case 4:
+		modificationPseudoDresseur();
+	//quitter le menu
+	case 5:
+		printf("\nVous avez choisi de quitter le menu\n");
+		break;
+	//cas d'erreur
+	default:
+		printf("Vous devez choisir une valeur comprise entre 1 et 5\n");
+	}
+	return (choixMenu != 5) ? 1 : 0;
 }
 
 /************************************************************************************************************************************************************************/
@@ -304,4 +366,20 @@ int rechercheTypeEspece(long position[], struct indEspece index[], long nEspece,
 	}
 	while (i < nEspece && strcmp(index[i].type, types[choixType - 1]) == 0);
 	return 1;
+}
+
+void encodeDresseur()
+{
+}
+
+void rechercheDresseur()
+{
+}
+
+void afficheDresseur()
+{
+}
+
+void modificationPseudoDresseur()
+{
 }
