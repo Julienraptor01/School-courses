@@ -46,7 +46,7 @@ struct date
 {
 	int jour;
 	int mois;
-	int année;
+	int annee;
 };
 
 struct dresseur
@@ -86,14 +86,14 @@ int main()
 	printf("DEBUG MODE\n");
 #endif
 	printf("Bienvenue dans le programme de gestion Pokemon !\n");
-	while(menuPrincipal);
+	while(menuPrincipal());
 	return 0;
 }
 
 int menuPrincipal()
 {
 	int choixMenu = -1;
-	printf("\nQue voulez-vous faire :\n1) Gérer les espèces\n2) Gérer les Dressers\n3) Quitter\n");
+	printf("\nQue voulez-vous faire :\n1) Gerer les especes\n2) Gerer les Dresseurs\n3) Quitter le programme\n");
 	fflush(stdin);
 	scanf("%d", &choixMenu);
 	switch (choixMenu)
@@ -107,7 +107,7 @@ int menuPrincipal()
 		menuDresseur();
 		break;
 	case 3:
-		printf("\nVous avez choisi de quitter le programme\n");
+		printf("Vous avez choisi de quitter le programme\n");
 		break;
 	default:
 		printf("Vous devez choisir une valeur comprise entre 1 et 3\n");
@@ -131,7 +131,7 @@ int menuEspece()
 	int choixMenu = -1, i;
 	char arreteAffiche[] = "";
 	//boucle de menu
-	printf("\nQue voulez-vous faire :\n1) Ajouter une espece\n2) Afficher les especes\n3) Rechercher les pokemons d'un meme type\n4) Quitter\n");
+	printf("\nQue voulez-vous faire :\n1) Ajouter une espece\n2) Afficher les especes\n3) Rechercher les pokemons d'un meme type\n4) Retour au menu principal\n");
 	fflush(stdin);
 	scanf("%d", &choixMenu);
 	switch (choixMenu)
@@ -180,7 +180,7 @@ int menuEspece()
 		break;
 	//quitter le menu
 	case 4:
-		printf("\nVous avez choisi de quitter le menu\n");
+		printf("Vous avez choisi de retourner au menu principal\n");
 		break;
 	//cas d'erreur
 	default:
@@ -191,8 +191,8 @@ int menuEspece()
 
 int menuDresseur()
 {
-	ìnt choixMenu = -1;
-	printf("\nQue voulez-vous faire :\n1) Inscrire un dresseur\n2) Afficher les dresseurs\n3) Rechercher un dresseur\n4) Modifier le pseudo d'un dresseur\n5) Quitter\n");
+	int choixMenu = -1;
+	printf("\nQue voulez-vous faire :\n1) Inscrire un dresseur\n2) Afficher les dresseurs\n3) Rechercher un dresseur\n4) Modifier le pseudo d'un dresseur\n5) Retour au menu principal\n");
 	fflush(stdin);
 	scanf("%d", &choixMenu);
 	switch (choixMenu)
@@ -214,7 +214,7 @@ int menuDresseur()
 		modificationPseudoDresseur();
 	//quitter le menu
 	case 5:
-		printf("\nVous avez choisi de quitter le menu\n");
+		printf("Vous avez choisi de retourner au menu principal\n");
 		break;
 	//cas d'erreur
 	default:
@@ -231,7 +231,7 @@ int menuDresseur()
 int encodeEspece(struct espece especes[], struct indEspece index[], long nEspece)
 {
 	int choixType = -1, especeExiste = -1;
-	printf("\nCreation d'une nouvelle espece\nN'entrez rien pour revenir au menu principal\n");
+	printf("\nCreation d'une nouvelle espece\nN'entrez rien pour revenir au menu de gestion des especes\n");
 	//nom de l'espece
 	do
 	{
@@ -244,7 +244,7 @@ int encodeEspece(struct espece especes[], struct indEspece index[], long nEspece
 			return 0;
 		}
 		//vérification de l'unicité de l'espèce
-		else if (especeExiste = rechercheEspece(especes, index, nEspece) == 1)
+		else if ((especeExiste = rechercheEspece(especes, index, nEspece)) == 1)
 		{
 			printf("Le pokemon est deja present\n");
 		}
