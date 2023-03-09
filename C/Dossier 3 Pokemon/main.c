@@ -104,7 +104,7 @@ int menuPrincipal()
 		break;
 	case 2:
 		printf("Bienvenue dans le menu de gestion des dresseurs\n");
-		menuDresseur();
+		while (menuDresseur());
 		break;
 	case 3:
 		printf("Vous avez choisi de quitter le programme\n");
