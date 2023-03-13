@@ -1,0 +1,1 @@
+alter session set nls_sort = french
