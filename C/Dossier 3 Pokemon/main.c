@@ -23,7 +23,7 @@
 //taille maximum du nom d'un pseudo
 #define MAX_TAILLE_PSEUDO 50
 //décommentez la ligne ci-dessous pour activer le mode DEBUG ce qui pré-entre des espèces
-//#define DEBUG
+#define DEBUG
 
 //structures de données
 struct espece
@@ -57,6 +57,15 @@ struct dresseur
 	struct date dateInscription;
 };
 
+//prep
+struct stockage
+{
+	struct espece* especes;
+	struct indEspece* index;
+	long nEspece;
+	FILE* fichier;
+};
+
 //prototypes de fonctions liées aux menus
 int menuPrincipal();
 int menuEspece();
@@ -81,10 +90,11 @@ const char* types[] = { "Acier", "Combat", "Dragon", "Eau", "Electrik", "Fee", "
 
 int main()
 {
-	srand(time(NULL));
 #ifdef DEBUG
 	printf("DEBUG MODE\n");
+	struct stockage stockage = { NULL, NULL, NULL, NULL };
 #endif
+	srand(time(NULL));
 	printf("Bienvenue dans le programme de gestion Pokemon !\n");
 	while(menuPrincipal());
 	return 0;
@@ -370,6 +380,7 @@ int rechercheTypeEspece(long position[], struct indEspece index[], long nEspece,
 
 void encodeDresseur()
 {
+
 }
 
 void rechercheDresseur()
