@@ -64,7 +64,7 @@ int menuDresseur();
 
 //prototypes de fonctions liées à la partie espèces
 int encodeEspece(struct espece[], struct indEspece[], long);
-int rechercheEspece(struct espece[], struct indEspece[], long);
+int rechercheNomEspece(struct espece[], struct indEspece[], long);
 void insertionIndEspece(struct espece[], struct indEspece[], long);
 void afficheEspece(struct espece);
 int rechercheTypeEspece(long[], struct indEspece[], long, long*);
@@ -244,7 +244,7 @@ int encodeEspece(struct espece especes[], struct indEspece index[], long nEspece
 			return 0;
 		}
 		//vérification de l'unicité de l'espèce
-		else if ((especeExiste = rechercheEspece(especes, index, nEspece)) == 1)
+		else if ((especeExiste = rechercheNomEspece(especes, index, nEspece)) == 1)
 		{
 			printf("Le pokemon est deja present\n");
 		}
@@ -281,7 +281,7 @@ int encodeEspece(struct espece especes[], struct indEspece index[], long nEspece
 /* Process : recherche séquentielle sur le nom de l'espèce dans l'index																					*/
 /* OUTPUT : un entier (1 si l'espèce est trouvée, 0 sinon)																								*/
 /********************************************************************************************************************************************************/
-int rechercheEspece(struct espece especes[], struct indEspece index[], long nEspece)
+int rechercheNomEspece(struct espece especes[], struct indEspece index[], long nEspece)
 {
 	long i = nEspece - 1;
 	//on fait la recherche à partir de la fin de l'index et on remonte vers le début, mais on aurait pu aussi faire l'inverse
