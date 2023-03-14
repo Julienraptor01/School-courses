@@ -23,7 +23,7 @@
 //taille maximum du nom d'un pseudo
 #define MAX_TAILLE_PSEUDO 50
 //décommentez la ligne ci-dessous pour activer le mode DEBUG ce qui pré-entre des espèces
-#define DEBUG
+//#define DEBUG
 
 //structures de données
 struct espece
@@ -44,9 +44,9 @@ struct indEspece
 
 struct date
 {
-	int jour;
-	int mois;
-	int annee;
+	short jour;
+	short mois;
+	short annee;
 };
 
 struct dresseur
@@ -60,10 +60,11 @@ struct dresseur
 //prep
 struct stockage
 {
-	struct espece* especes;
-	struct indEspece* index;
+	struct espece especes[MAX_POKEMON];
+	struct indEspece index[MAX_POKEMON];
 	long nEspece;
-	FILE* fichier;
+	char* nomFichier;
+	int nbDresseurs;
 };
 
 //prototypes de fonctions liées aux menus
@@ -80,10 +81,10 @@ int rechercheTypeEspece(long[], struct indEspece[], long, long*);
 
 //prototypes de fonctions liées à la partie dresseur
 //TODO : add the returns of the functions and the parameters
-void encodeDresseur();
-void rechercheDresseur();
-void afficheDresseur();
-void modificationPseudoDresseur();
+int encodeDresseur(char[], int);
+int rechercheDresseur(char[], char[]);
+void afficheDresseur(char[], int);
+void modificationPseudoDresseur(char[], char[]);
 
 //variable globale
 const char* types[] = { "Acier", "Combat", "Dragon", "Eau", "Electrik", "Fee", "Feu", "Glace", "Insecte", "Normal", "Plante", "Poison", "Psy", "Roche", "Sol", "Spectre", "Tenebres", "Vol" };
@@ -92,7 +93,6 @@ int main()
 {
 #ifdef DEBUG
 	printf("DEBUG MODE\n");
-	struct stockage stockage = { NULL, NULL, NULL, NULL };
 #endif
 	srand(time(NULL));
 	printf("Bienvenue dans le programme de gestion Pokemon !\n");
@@ -201,7 +201,15 @@ int menuEspece()
 
 int menuDresseur()
 {
-	int choixMenu = -1;
+	char nomFichier[] = "dresseurs.dat";
+	FILE* fDresseurs = fopen(nomFichier, "rb");
+	if (fDresseurs == NULL)
+	{
+		fDresseurs = fopen(nomFichier, "w+b");
+	}
+	fseek(fDresseurs, 0, SEEK_END);
+	int choixMenu = -1, nDresseurs = ftell(fDresseurs) / sizeof(struct dresseur), encode = 0;
+	fclose(fDresseurs);
 	printf("\nQue voulez-vous faire :\n1) Inscrire un dresseur\n2) Afficher les dresseurs\n3) Rechercher un dresseur\n4) Modifier le pseudo d'un dresseur\n5) Retour au menu principal\n");
 	fflush(stdin);
 	scanf("%d", &choixMenu);
@@ -209,19 +217,31 @@ int menuDresseur()
 	{
 	//inscription d'un dresseur
 	case 1:
-		encodeDresseur();
+		printf("\nCreation d'un nouveau dresseur\nN'entrez rien pour revenir au menu de gestion des dresseurs\n");
+		while ((encode = encodeDresseur(nomFichier, nDresseurs)) >= 0)
+		{
+			if (encode == 1)
+			{
+				nDresseurs++;
+				printf("\nCreation d'un nouveau dresseur\nN'entrez rien pour revenir au menu de gestion des dresseurs\n");
+			}
+			else
+			{
+				printf("\nCe pseudo est deja utilise\nEntrez-en un autre\n");
+			}
+		}
 		break;
 	//affichage des dresseurs
 	case 2:
-		afficheDresseur();
+		//afficheDresseur();
 		break;
 	//recherche d'un dresseur
 	case 3:
-		rechercheDresseur();
+		//rechercheDresseur();
 		break;
 	//modification d'un dresseur
 	case 4:
-		modificationPseudoDresseur();
+		//modificationPseudoDresseur();
 	//quitter le menu
 	case 5:
 		printf("Vous avez choisi de retourner au menu principal\n");
@@ -378,19 +398,51 @@ int rechercheTypeEspece(long position[], struct indEspece index[], long nEspece,
 	return 1;
 }
 
-void encodeDresseur()
+int encodeDresseur(char nomFichier[], int position)
 {
-
+	struct dresseur dress = { 0 };
+	FILE* fDresseurs = fopen(nomFichier, "r+b");
+	time_t rawDate = time(NULL);
+	struct tm* date = localtime(&rawDate);
+	//on demande le pseudo du dresseur
+	printf("\nPseudo : ");
+	fflush(stdin);
+	gets(dress.pseudo);
+	//si le pseudo est vide, on retourne -1
+	if (strlen(dress.pseudo) == 0)
+	{
+		return -1;
+	}
+	//sinon on vérifie que le pseudo n'est pas déjà utilisé
+	else if (rechercheDresseur(dress.pseudo, nomFichier) == 1)
+	{
+		return 0;
+	}
+	//on rempli le champ poussiereEtoile avec un nombre aléatoire entre 20k et 40k
+	dress.poussiereEtoile = rand() % 20001 + 20000;
+	//on set le champ xpTotale à 0
+	dress.xpTotale = 0;
+	//on met le champ dateInscritption à la date du jour
+	dress.dateInscription.jour = date->tm_mday;
+	dress.dateInscription.mois = date->tm_mon + 1;
+	dress.dateInscription.annee = date->tm_year + 1900;
+	//ecriture du dresseur dans le fichier
+	fseek(fDresseurs, position * sizeof(struct dresseur), SEEK_SET);
+	fwrite(&dress, sizeof(struct dresseur), 1, fDresseurs);
+	fclose(fDresseurs);
+	return 1;
 }
 
-void rechercheDresseur()
+int rechercheDresseur(char pseudo[], char nomFichier[])
+{
+	//return position;
+	return 0;
+}
+
+void afficheDresseur(char nomFichier[], int position)
 {
 }
 
-void afficheDresseur()
-{
-}
-
-void modificationPseudoDresseur()
+void modificationPseudoDresseur(char pseudo[], char nomFichier[])
 {
 }
