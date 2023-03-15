@@ -208,7 +208,8 @@ int menuDresseur()
 		fDresseurs = fopen(nomFichier, "w+b");
 	}
 	fseek(fDresseurs, 0, SEEK_END);
-	int choixMenu = -1, nDresseurs = ftell(fDresseurs) / sizeof(struct dresseur), encode = 0;
+	int choixMenu = -1, nDresseurs = ftell(fDresseurs) / sizeof(struct dresseur), encode = 0, i, position;
+	char arreteAffiche[] = "", pseudo[MAX_TAILLE_PSEUDO];
 	fclose(fDresseurs);
 	printf("\nQue voulez-vous faire :\n1) Inscrire un dresseur\n2) Afficher les dresseurs\n3) Rechercher un dresseur\n4) Modifier le pseudo d'un dresseur\n5) Retour au menu principal\n");
 	fflush(stdin);
@@ -218,9 +219,9 @@ int menuDresseur()
 	//inscription d'un dresseur
 	case 1:
 		printf("\nCreation d'un nouveau dresseur\nN'entrez rien pour revenir au menu de gestion des dresseurs\n");
-		while ((encode = encodeDresseur(nomFichier, nDresseurs)) >= 0)
+		while ((encode = encodeDresseur(nomFichier, nDresseurs)) >= -1)
 		{
-			if (encode == 1)
+			if (encode == -1)
 			{
 				nDresseurs++;
 				printf("\nCreation d'un nouveau dresseur\nN'entrez rien pour revenir au menu de gestion des dresseurs\n");
@@ -233,15 +234,53 @@ int menuDresseur()
 		break;
 	//affichage des dresseurs
 	case 2:
-		//afficheDresseur();
+		i = 0;
+		strcpy(arreteAffiche, "");
+		printf("\nEntrez n'importe quel caractere entre deux dresseurs pour arreter l'affichage\nN'entrez rien pour continuer\n");
+		while (i < nDresseurs && strlen(arreteAffiche) == 0)
+		{
+			afficheDresseur(nomFichier, i);
+			i++;
+			fflush(stdin);
+			gets(arreteAffiche);
+		}
 		break;
-	//recherche d'un dresseur
+	//recherche et affichage d'un dresseur
 	case 3:
-		//rechercheDresseur();
+		printf("Entrez le pseudo du dresseur que vous recherchez ou n'entrez rien pour revenir au menu de gestion des dresseurs\n");
+		fflush(stdin);
+		gets(pseudo);
+		if (strlen(pseudo) == 0)
+		{
+			printf("Retour au menu de gestion des dresseurs\n");
+		}
+		else
+		{
+			switch (position = rechercheDresseur(pseudo, nomFichier))
+			{
+			case -1:
+				printf("Le dresseur n'a pas ete trouve\n");
+				break;
+			default:
+				afficheDresseur(nomFichier, position);
+				break;
+			}
+		}
 		break;
 	//modification d'un dresseur
 	case 4:
-		//modificationPseudoDresseur();
+		printf("Entrez le pseudo du dresseur que vous souhaitez modifier ou n'entrez rien pour revenir au menu de gestion des dresseurs\n");
+		fflush(stdin);
+		gets(pseudo);
+		if (strlen(pseudo) == 0)
+		{
+			printf("Retour au menu de gestion des dresseurs\n");
+		}
+		else
+		{
+			modificationPseudoDresseur(pseudo, nomFichier);
+		}
+		break;
 	//quitter le menu
 	case 5:
 		printf("Vous avez choisi de retourner au menu principal\n");
@@ -401,48 +440,96 @@ int rechercheTypeEspece(long position[], struct indEspece index[], long nEspece,
 int encodeDresseur(char nomFichier[], int position)
 {
 	struct dresseur dress = { 0 };
-	FILE* fDresseurs = fopen(nomFichier, "r+b");
-	time_t rawDate = time(NULL);
-	struct tm* date = localtime(&rawDate);
+	int positionTrouve;
 	//on demande le pseudo du dresseur
 	printf("\nPseudo : ");
 	fflush(stdin);
 	gets(dress.pseudo);
-	//si le pseudo est vide, on retourne -1
+	//si le pseudo est vide, on retourne -2
 	if (strlen(dress.pseudo) == 0)
 	{
-		return -1;
+		return -2;
 	}
 	//sinon on vérifie que le pseudo n'est pas déjà utilisé
-	else if (rechercheDresseur(dress.pseudo, nomFichier) == 1)
+	else if ((positionTrouve = rechercheDresseur(dress.pseudo, nomFichier)) >= 0)
 	{
-		return 0;
+		return positionTrouve;
 	}
 	//on rempli le champ poussiereEtoile avec un nombre aléatoire entre 20k et 40k
 	dress.poussiereEtoile = rand() % 20001 + 20000;
 	//on set le champ xpTotale à 0
 	dress.xpTotale = 0;
+	time_t rawDate = time(NULL);
+	struct tm* date = localtime(&rawDate);
 	//on met le champ dateInscritption à la date du jour
 	dress.dateInscription.jour = date->tm_mday;
 	dress.dateInscription.mois = date->tm_mon + 1;
 	dress.dateInscription.annee = date->tm_year + 1900;
 	//ecriture du dresseur dans le fichier
+	FILE* fDresseurs = fopen(nomFichier, "r+b");
 	fseek(fDresseurs, position * sizeof(struct dresseur), SEEK_SET);
 	fwrite(&dress, sizeof(struct dresseur), 1, fDresseurs);
 	fclose(fDresseurs);
-	return 1;
+	return -1;
 }
 
 int rechercheDresseur(char pseudo[], char nomFichier[])
 {
-	//return position;
-	return 0;
+	struct dresseur dress = { 0 };
+	int position = 0;
+	FILE* fDresseurs = fopen(nomFichier, "rb");
+	//boucle de recherche sur le pseudo
+	while (fread(&dress, sizeof(struct dresseur), 1, fDresseurs) == 1)
+	{
+		if (strcmp(dress.pseudo, pseudo) == 0)
+		{
+			fclose(fDresseurs);
+			return position;
+		}
+		position++;
+	}
+	fclose(fDresseurs);
+	return -1;
 }
 
 void afficheDresseur(char nomFichier[], int position)
 {
+	struct dresseur dress = { 0 };
+	FILE* fDresseurs = fopen(nomFichier, "rb");
+	fseek(fDresseurs, position * sizeof(struct dresseur), SEEK_SET);
+	fread(&dress, sizeof(struct dresseur), 1, fDresseurs);
+	fclose(fDresseurs);
+	//affichage du dresseur
+	printf("Pseudo : %s\nPoussiere d'etoile : %u\nXP totale : %lu\nDate d'inscription : %hd/%hd/%hd\n", dress.pseudo, dress.poussiereEtoile, dress.xpTotale, dress.dateInscription.jour, dress.dateInscription.mois, dress.dateInscription.annee);
 }
 
 void modificationPseudoDresseur(char pseudo[], char nomFichier[])
 {
+	int positionRemplacement, positionTrouve;
+	//recherche du dresseur
+	if ((positionRemplacement = rechercheDresseur(pseudo, nomFichier)) == -1)
+	{
+		printf("Ce dresseur n'existe pas\n");
+	}
+	else
+	{
+		switch (positionTrouve = encodeDresseur(nomFichier, positionRemplacement))
+		{
+		case -2:
+			printf("Vous avez annule la modification\n");
+			break;
+		case -1:
+			printf("Modification effectuee\n");
+			break;
+		default:
+			if (positionTrouve == positionRemplacement)
+			{
+				printf("Vous avez remplace par le meme pseudo\n");
+			}
+			else
+			{
+				printf("Ce pseudo est deja utilise\n");
+			}
+		}
+	}
 }
