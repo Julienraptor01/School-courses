@@ -103,7 +103,7 @@ int main()
 int menuPrincipal()
 {
 	int choixMenu = -1;
-	printf("\nQue voulez-vous faire :\n1) Gerer les especes\n2) Gerer les Dresseurs\n3) Quitter le programme\n");
+	printf("\nQue voulez-vous faire :\n1) Gerer les especes\n2) Gerer les dresseurs\n3) Quitter le programme\n");
 	fflush(stdin);
 	scanf("%d", &choixMenu);
 	switch (choixMenu)
