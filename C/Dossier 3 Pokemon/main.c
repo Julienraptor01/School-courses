@@ -184,6 +184,7 @@ int menuPrincipal(struct stockage *stockage)
 	}
 	return (choixMenu != 3) ? 1 : 0;
 }
+
 /****************************************************************************************************************************************************/
 /* INPUT : un vecteur d'espèces (la liste des espèces), un vecteur d'index (l'index des espèces), un pointeur sur un entier (le nombre d'espèces)	*/
 /* Process : affiche le menu des espèces et appelle les fonctions liées aux sous-menus																*/
@@ -252,6 +253,7 @@ int menuEspece(struct espece especes[], struct indEspece index[], long *nEspece)
 	}
 	return (choixMenu != 4) ? 1 : 0;
 }
+
 /************************************************************************************************************************************/
 /* INPUT : un vecteur de caractères (le nom du fichier contenant les dresseurs), un pointeur sur un entier (le nombre de dresseurs) */
 /* Process : affiche le menu des dresseurs et appelle les fonctions liées aux sous-menus											*/
