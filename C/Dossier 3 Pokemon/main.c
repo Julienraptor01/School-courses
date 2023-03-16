@@ -23,7 +23,7 @@
 //taille maximum du nom d'un pseudo
 #define MAX_TAILLE_PSEUDO 50
 //décommentez la ligne ci-dessous pour activer le mode DEBUG ce qui pré-entre des espèces
-//#define DEBUG
+#define DEBUG
 
 //structures de données
 struct espece
@@ -91,7 +91,48 @@ const char* types[] = { "Acier", "Combat", "Dragon", "Eau", "Electrik", "Fee", "
 int main()
 {
 #ifdef DEBUG
-	printf("DEBUG MODE\n");
+	/*
+	struct espece especes[MAX_POKEMON] = { { "Roucarnage", "Normal", 0, 30, 630 }, { "Roucoups", "Normal", 0, 20, 400 }, { "Roucool", "Normal", 0, 10, 190 }, { "Piafabec", "Normal", 0, 12, 234 }, { "Rattatac", "Normal", 0, 25, 518 }, { "Rattata", "Normal", 0, 15, 290 }, { "Draco", "Dragon", 0, 100, 2100 }, { "Carapuce", "Eau", 0, 17, 354 }, { "Pikachu", "Electrik", 0, 17, 354 }, { "Salameche", "Feu", 0, 17, 354 }, { "Bulbizarre", "Plante", 0, 17, 354 }, { "Onix", "Acier", 0, 42, 878 } };
+	struct indEspece index[MAX_POKEMON] = { { "Acier", "Onix", 11 }, { "Dragon", "Draco", 6 }, { "Eau", "Carapuce", 7 }, { "Electrik", "Pikachu", 8 }, { "Feu", "Salameche", 9 }, { "Normal", "Piafabec", 3 }, { "Normal", "Rattata", 5 }, { "Normal", "Rattatac", 4 }, { "Normal", "Roucarnage", 0 }, { "Normal", "Roucool", 2 }, { "Normal", "Roucoups", 1 }, { "Plante", "Bulbizarre", 10 } };
+	long nEspece = 12;
+	char *nomFichier = "dresseurs.dat";
+	int nbDresseurs = 0;
+	*/
+	//init the struct stockage with the debug values
+	struct stockage stockage =
+	{
+		.especes = {
+			{"Roucarnage", "Normal", 0, 30, 630},
+			{"Roucoups", "Normal", 0, 20, 400},
+			{"Roucool", "Normal", 0, 10, 190},
+			{"Piafabec", "Normal", 0, 12, 234},
+			{"Rattatac", "Normal", 0, 25, 518},
+			{"Rattata", "Normal", 0, 15, 290},
+			{"Draco", "Dragon", 0, 100, 2100},
+			{"Carapuce", "Eau", 0, 17, 354},
+			{"Pikachu", "Electrik", 0, 17, 354},
+			{"Salameche", "Feu", 0, 17, 354},
+			{"Bulbizarre", "Plante", 0, 17, 354},
+			{"Onix", "Acier", 0, 42, 878}
+		},
+		.index = {
+			{"Acier", "Onix", 11},
+			{"Dragon", "Draco", 6},
+			{"Eau", "Carapuce", 7},
+			{"Electrik", "Pikachu", 8},
+			{"Feu", "Salameche", 9},
+			{"Normal", "Piafabec", 3},
+			{"Normal", "Rattata", 5},
+			{"Normal", "Rattatac", 4},
+			{"Normal", "Roucarnage", 0},
+			{"Normal", "Roucool", 2},
+			{"Normal", "Roucoups", 1},
+			{"Plante", "Bulbizarre", 10}
+		},
+		.nEspece = 12,
+		.nomFichier = "dresseurs.dat",
+		.nbDresseurs = 0
+	};
 #endif
 	srand(time(NULL));
 	printf("Bienvenue dans le programme de gestion Pokemon !\n");
