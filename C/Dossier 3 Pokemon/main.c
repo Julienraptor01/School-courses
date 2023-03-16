@@ -209,7 +209,7 @@ int menuEspece()
 
 int menuDresseur()
 {
-	const char nomFichier[] = "dresseurs.dat";
+	char nomFichier[] = "dresseurs.dat";
 	FILE* fDresseurs = fopen(nomFichier, "rb");
 	if (fDresseurs == NULL)
 	{
