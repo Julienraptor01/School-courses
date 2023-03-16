@@ -2,7 +2,7 @@
 /* Auteurs : BOLLY Julien, SECCO Johan												*/
 /* Groupe : 2131																	*/
 /* Application : Dossier 3 Pokémon ; Encodage, recherche et affichage des espèces	*/
-/* Date de la dernière modification : 01/03/2023									*/
+/* Date de la dernière modification : 16/03/2023									*/
 /************************************************************************************/
 
 #include <stdio.h>
@@ -209,7 +209,7 @@ int menuEspece()
 
 int menuDresseur()
 {
-	char nomFichier[] = "dresseurs.dat";
+	const char nomFichier[] = "dresseurs.dat";
 	FILE* fDresseurs = fopen(nomFichier, "rb");
 	if (fDresseurs == NULL)
 	{
@@ -227,13 +227,16 @@ int menuDresseur()
 	//inscription d'un dresseur
 	case 1:
 		printf("\nCreation d'un nouveau dresseur\nN'entrez rien pour revenir au menu de gestion des dresseurs\n");
+		//boucle de creation de dresseur
 		while ((encode = encodeDresseur(nomFichier, nDresseurs)) >= -1)
 		{
+			//si le pseudo n'est pas deja utilise -> incrémentation du nombre de dresseurs
 			if (encode == -1)
 			{
 				nDresseurs++;
 				printf("\nCreation d'un nouveau dresseur\nN'entrez rien pour revenir au menu de gestion des dresseurs\n");
 			}
+			//si le pseudo est deja utilise -> message pour l'utilisateur
 			else
 			{
 				printf("\nCe pseudo est deja utilise\nEntrez-en un autre\n");
@@ -541,6 +544,7 @@ void modificationPseudoDresseur(char pseudo[], char nomFichier[])
 	}
 	else
 	{
+		//verification du résultat de la modification et information de l'utilisateur
 		switch (positionTrouve = encodeDresseur(nomFichier, positionRemplacement))
 		{
 		case -2:
@@ -550,6 +554,7 @@ void modificationPseudoDresseur(char pseudo[], char nomFichier[])
 			printf("Modification effectuee\n");
 			break;
 		default:
+			//si le pseudo est déjà utilisé, on vérifie si c'est le même que celui qu'on veut modifier pour afficher un message adapté
 			if (positionTrouve == positionRemplacement)
 			{
 				printf("Vous avez remplace par le meme pseudo\n");
