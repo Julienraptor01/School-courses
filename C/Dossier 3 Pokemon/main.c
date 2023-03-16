@@ -23,7 +23,7 @@
 //taille maximum du nom d'un pseudo
 #define MAX_TAILLE_PSEUDO 50
 //décommentez la ligne ci-dessous pour activer le mode DEBUG ce qui pré-entre des espèces
-#define DEBUG
+//#define DEBUG
 
 //structures de données
 struct espece
@@ -57,7 +57,7 @@ struct dresseur
 	struct date dateInscription;
 };
 
-//prep
+//utilisation d'une structure de stockage pour faciliter la gestion des données au sein des menus et éviter de passer trop de paramètres
 struct stockage
 {
 	struct espece especes[MAX_POKEMON];
@@ -68,9 +68,9 @@ struct stockage
 };
 
 //prototypes de fonctions liées aux menus
-int menuPrincipal();
-int menuEspece();
-int menuDresseur();
+int menuPrincipal(struct stockage*);
+int menuEspece(struct espece[], struct indEspece[], long*);
+int menuDresseur(char[], int*);
 
 //prototypes de fonctions liées à la partie espèces
 int encodeEspece(struct espece[], struct indEspece[], long);
@@ -91,14 +91,7 @@ const char* types[] = { "Acier", "Combat", "Dragon", "Eau", "Electrik", "Fee", "
 int main()
 {
 #ifdef DEBUG
-	/*
-	struct espece especes[MAX_POKEMON] = { { "Roucarnage", "Normal", 0, 30, 630 }, { "Roucoups", "Normal", 0, 20, 400 }, { "Roucool", "Normal", 0, 10, 190 }, { "Piafabec", "Normal", 0, 12, 234 }, { "Rattatac", "Normal", 0, 25, 518 }, { "Rattata", "Normal", 0, 15, 290 }, { "Draco", "Dragon", 0, 100, 2100 }, { "Carapuce", "Eau", 0, 17, 354 }, { "Pikachu", "Electrik", 0, 17, 354 }, { "Salameche", "Feu", 0, 17, 354 }, { "Bulbizarre", "Plante", 0, 17, 354 }, { "Onix", "Acier", 0, 42, 878 } };
-	struct indEspece index[MAX_POKEMON] = { { "Acier", "Onix", 11 }, { "Dragon", "Draco", 6 }, { "Eau", "Carapuce", 7 }, { "Electrik", "Pikachu", 8 }, { "Feu", "Salameche", 9 }, { "Normal", "Piafabec", 3 }, { "Normal", "Rattata", 5 }, { "Normal", "Rattatac", 4 }, { "Normal", "Roucarnage", 0 }, { "Normal", "Roucool", 2 }, { "Normal", "Roucoups", 1 }, { "Plante", "Bulbizarre", 10 } };
-	long nEspece = 12;
-	char *nomFichier = "dresseurs.dat";
-	int nbDresseurs = 0;
-	*/
-	//init the struct stockage with the debug values
+	//structures prédéfinies pour le mode DEBUG
 	struct stockage stockage =
 	{
 		.especes = {
@@ -133,19 +126,41 @@ int main()
 		.nomFichier = "dresseurs.dat",
 		.nbDresseurs = 0
 	};
+#else
+	struct stockage stockage =
+	{
+		.especes = {},
+		.index = {},
+		.nEspece = 0,
+		.nomFichier = "dresseurs.dat",
+		.nbDresseurs = 0
+	};
 #endif
+	FILE* fDresseurs = fopen(stockage.nomFichier, "rb");
+	//si le fichier existe, on récupère le nombre de dresseurs
+	if (fDresseurs != NULL)
+	{
+		fseek(fDresseurs, 0, SEEK_END);
+		stockage.nbDresseurs = ftell(fDresseurs) / sizeof(struct dresseur);
+	}
+	//sinon on le crée et vu qu'on vient de le créer, il est vide donc la valeur initialisée est correcte
+	else
+	{
+		fDresseurs = fopen(stockage.nomFichier, "w+b");
+	}
+	fclose(fDresseurs);
 	srand(time(NULL));
 	printf("Bienvenue dans le programme de gestion Pokemon !\n");
-	while(menuPrincipal());
+	while(menuPrincipal(&stockage));
 	return 0;
 }
 
-/****************************************************************************************/
-/* INPUT : rien																			*/
-/* Process : affiche le menu principal et appelle les fonctions liées aux sous-menus	*/
-/* OUTPUT : un entier (0 si l'utilisateur a choisi de quitter le programme, 1 sinon)	*/
-/****************************************************************************************/
-int menuPrincipal()
+/************************************************************************************************/
+/* INPUT : un pointeur sur une structure stockage (toutes les infos nécessaires au sous-menus	*/
+/* Process : affiche le menu principal et appelle les fonctions liées aux sous-menus			*/
+/* OUTPUT : un entier (0 si l'utilisateur a choisi de quitter le programme, 1 sinon)			*/
+/************************************************************************************************/
+int menuPrincipal(struct stockage *stockage)
 {
 	int choixMenu = -1;
 	printf("\nQue voulez-vous faire :\n1) Gerer les especes\n2) Gerer les dresseurs\n3) Quitter le programme\n");
@@ -155,11 +170,11 @@ int menuPrincipal()
 	{
 	case 1:
 		printf("Bienvenue dans le menu de gestion des especes\n");
-		while (menuEspece());
+		while (menuEspece(stockage->especes, stockage->index, &stockage->nEspece));
 		break;
 	case 2:
 		printf("Bienvenue dans le menu de gestion des dresseurs\n");
-		while (menuDresseur());
+		while (menuDresseur(stockage->nomFichier, &stockage->nbDresseurs));
 		break;
 	case 3:
 		printf("Vous avez choisi de quitter le programme\n");
@@ -169,23 +184,13 @@ int menuPrincipal()
 	}
 	return (choixMenu != 3) ? 1 : 0;
 }
-/****************************************************************************************/
-/* INPUT : rien																			*/
-/* Process : affiche le menu des espèces et appelle les fonctions liées aux sous-menus	*/
-/* OUTPUT : un entier (0 si l'utilisateur a choisi de quitter le programme, 1 sinon)	*/
-/****************************************************************************************/
-int menuEspece()
+/****************************************************************************************************************************************************/
+/* INPUT : un vecteur d'espèces (la liste des espèces), un vecteur d'index (l'index des espèces), un pointeur sur un entier (le nombre d'espèces)	*/
+/* Process : affiche le menu des espèces et appelle les fonctions liées aux sous-menus																*/
+/* OUTPUT : un entier (0 si l'utilisateur a choisi de quitter le programme, 1 sinon)																*/
+/****************************************************************************************************************************************************/
+int menuEspece(struct espece especes[], struct indEspece index[], long *nEspece)
 {
-#ifdef DEBUG
-	//structures prédéfinies pour debug
-	struct espece especes[MAX_POKEMON] = { { "Roucarnage", "Normal", 0, 30, 630 }, { "Roucoups", "Normal", 0, 20, 400 }, { "Roucool", "Normal", 0, 10, 190 }, { "Piafabec", "Normal", 0, 12, 234 }, { "Rattatac", "Normal", 0, 25, 518 }, { "Rattata", "Normal", 0, 15, 290 }, { "Draco", "Dragon", 0, 100, 2100 }, { "Carapuce", "Eau", 0, 17, 354 }, { "Pikachu", "Electrik", 0, 17, 354 }, { "Salameche", "Feu", 0, 17, 354 }, { "Bulbizarre", "Plante", 0, 17, 354 }, { "Onix", "Acier", 0, 42, 878 } };
-	struct indEspece index[MAX_POKEMON] = { { "Acier", "Onix", 11 }, { "Dragon", "Draco", 6 }, { "Eau", "Carapuce", 7 }, { "Electrik", "Pikachu", 8 }, { "Feu", "Salameche", 9 }, { "Normal", "Piafabec", 3 }, { "Normal", "Rattata", 5 }, { "Normal", "Rattatac", 4 }, { "Normal", "Roucarnage", 0 }, { "Normal", "Roucool", 2 }, { "Normal", "Roucoups", 1 }, { "Plante", "Bulbizarre", 10 } };
-	long nEspece = 12;
-#else
-	struct espece especes[MAX_POKEMON];
-	struct indEspece index[MAX_POKEMON];
-	long nEspece = 0;
-#endif
 	long position[MAX_POKEMON], nEspeceType = 0;
 	int choixMenu = -1, i;
 	char arreteAffiche[] = "";
@@ -197,12 +202,12 @@ int menuEspece()
 	{
 	//ajout d'une espèce
 	case 1:
-		while (nEspece < MAX_POKEMON && encodeEspece(especes, index, nEspece) == 1)
+		while (*nEspece < MAX_POKEMON && encodeEspece(especes, index, *nEspece) == 1)
 		{
 			//appel de la fonction d'insertion dans l'index
-			insertionIndEspece(especes, index, nEspece);
+			insertionIndEspece(especes, index, *nEspece);
 			//incrementation de la valeur de nEspece
-			(nEspece)++;
+			(*nEspece)++;
 		}
 		break;
 	//affichage des espèces
@@ -210,7 +215,7 @@ int menuEspece()
 		i = 0;
 		strcpy(arreteAffiche, "");
 		printf("\nEntrez n'importe quel caractere entre deux especes pour arreter l'affichage\nN'entrez rien pour continuer\n");
-		while (i < nEspece && strlen(arreteAffiche) == 0)
+		while (i < *nEspece && strlen(arreteAffiche) == 0)
 		{
 			afficheEspece(especes[index[i].posI]);
 			i++;
@@ -219,7 +224,7 @@ int menuEspece()
 		}
 		break;
 	case 3:
-		if (rechercheTypeEspece(position, index, nEspece, &nEspeceType) == 1)
+		if (rechercheTypeEspece(position, index, *nEspece, &nEspeceType) == 1)
 		{
 			i = 0;
 			strcpy(arreteAffiche, "");
@@ -247,19 +252,15 @@ int menuEspece()
 	}
 	return (choixMenu != 4) ? 1 : 0;
 }
-
-int menuDresseur()
+/************************************************************************************************************************************/
+/* INPUT : un vecteur de caractères (le nom du fichier contenant les dresseurs), un pointeur sur un entier (le nombre de dresseurs) */
+/* Process : affiche le menu des dresseurs et appelle les fonctions liées aux sous-menus											*/
+/* OUTPUT : un entier (0 si l'utilisateur a choisi de quitter le programme, 1 sinon)												*/
+/************************************************************************************************************************************/
+int menuDresseur(char nomFichier[], int *nDresseurs)
 {
-	char nomFichier[] = "dresseurs.dat";
-	FILE* fDresseurs = fopen(nomFichier, "rb");
-	if (fDresseurs == NULL)
-	{
-		fDresseurs = fopen(nomFichier, "w+b");
-	}
-	fseek(fDresseurs, 0, SEEK_END);
-	int choixMenu = -1, nDresseurs = ftell(fDresseurs) / sizeof(struct dresseur), encode = 0, i, position;
+	int choixMenu = -1, encode = 0, i, position;
 	char arreteAffiche[] = "", pseudo[MAX_TAILLE_PSEUDO];
-	fclose(fDresseurs);
 	printf("\nQue voulez-vous faire :\n1) Inscrire un dresseur\n2) Afficher les dresseurs\n3) Rechercher un dresseur\n4) Modifier le pseudo d'un dresseur\n5) Retour au menu principal\n");
 	fflush(stdin);
 	scanf("%d", &choixMenu);
@@ -269,12 +270,12 @@ int menuDresseur()
 	case 1:
 		printf("\nCreation d'un nouveau dresseur\nN'entrez rien pour revenir au menu de gestion des dresseurs\n");
 		//boucle de creation de dresseur
-		while ((encode = encodeDresseur(nomFichier, nDresseurs)) >= -1)
+		while ((encode = encodeDresseur(nomFichier, *nDresseurs)) >= -1)
 		{
 			//si le pseudo n'est pas deja utilise -> incrémentation du nombre de dresseurs
 			if (encode == -1)
 			{
-				nDresseurs++;
+				(*nDresseurs)++;
 				printf("\nCreation d'un nouveau dresseur\nN'entrez rien pour revenir au menu de gestion des dresseurs\n");
 			}
 			//si le pseudo est deja utilise -> message pour l'utilisateur
@@ -289,7 +290,7 @@ int menuDresseur()
 		i = 0;
 		strcpy(arreteAffiche, "");
 		printf("\nEntrez n'importe quel caractere entre deux dresseurs pour arreter l'affichage\nN'entrez rien pour continuer\n");
-		while (i < nDresseurs && strlen(arreteAffiche) == 0)
+		while (i < *nDresseurs && strlen(arreteAffiche) == 0)
 		{
 			afficheDresseur(nomFichier, i);
 			i++;
@@ -568,6 +569,7 @@ void afficheDresseur(char nomFichier[], int position)
 	fclose(fDresseurs);
 	//affichage du dresseur
 	printf("Pseudo : %s\nPoussiere d'etoile : %u\nXP totale : %lu\nDate d'inscription : %hd/%hd/%hd\n", dress.pseudo, dress.poussiereEtoile, dress.xpTotale, dress.dateInscription.jour, dress.dateInscription.mois, dress.dateInscription.annee);
+	//dans les consignes du TP, il est demandé d'afficher la date au format Jour Mois valeurJour Heure:Minute:Seconde Année (ex : Tue May 26 21:30:00 2015), mais c'est impossible ici vu que la structure date imposée ne contient pas de champ pour les heures, minutes et secondes
 }
 
 /********************************************************************************************************************************************************************************************************************************/
