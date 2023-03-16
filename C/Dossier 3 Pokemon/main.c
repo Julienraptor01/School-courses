@@ -80,7 +80,6 @@ void afficheEspece(struct espece);
 int rechercheTypeEspece(long[], struct indEspece[], long, long*);
 
 //prototypes de fonctions liées à la partie dresseur
-//TODO : add the returns of the functions and the parameters
 int encodeDresseur(char[], int);
 int rechercheDresseur(char[], char[]);
 void afficheDresseur(char[], int);
@@ -100,6 +99,11 @@ int main()
 	return 0;
 }
 
+/****************************************************************************************/
+/* INPUT : rien																			*/
+/* Process : affiche le menu principal et appelle les fonctions liées aux sous-menus	*/
+/* OUTPUT : un entier (0 si l'utilisateur a choisi de quitter le programme, 1 sinon)	*/
+/****************************************************************************************/
 int menuPrincipal()
 {
 	int choixMenu = -1;
@@ -124,7 +128,11 @@ int menuPrincipal()
 	}
 	return (choixMenu != 3) ? 1 : 0;
 }
-
+/****************************************************************************************/
+/* INPUT : rien																			*/
+/* Process : affiche le menu des espèces et appelle les fonctions liées aux sous-menus	*/
+/* OUTPUT : un entier (0 si l'utilisateur a choisi de quitter le programme, 1 sinon)	*/
+/****************************************************************************************/
 int menuEspece()
 {
 #ifdef DEBUG
@@ -437,6 +445,11 @@ int rechercheTypeEspece(long position[], struct indEspece index[], long nEspece,
 	return 1;
 }
 
+/************************************************************************************************************************************************************************/
+/* INPUT : un vecteur de caractères (le nom du fichier), un entier (la position où aller encoder le dresseur)															*/
+/* Process : demande le pseudo du dresseur, vérifie qu'il n'est pas déjà utilisé, génère un nombre aléatoire de poussières d'étoile, encode le dresseur dans le fichier	*/
+/* OUTPUT : un entier (soit -2 si le pseudo est vide, soit la position du dresseur si le pseudo est déjà utilisé, soit -1 si l'encodage a réussi) 						*/
+/************************************************************************************************************************************************************************/
 int encodeDresseur(char nomFichier[], int position)
 {
 	struct dresseur dress = { 0 };
@@ -473,6 +486,11 @@ int encodeDresseur(char nomFichier[], int position)
 	return -1;
 }
 
+/************************************************************************************************************/
+/* INPUT : un vecteur de caractères (le pseudo du dresseur), un vecteur de caractères (le nom du fichier)	*/
+/* Process : recherche séquentielle sur le pseudo du dresseur dans le fichier pour trouver sa position		*/
+/* OUTPUT : un entier (la position du dresseur si il est trouvé, -1 sinon)									*/
+/************************************************************************************************************/
 int rechercheDresseur(char pseudo[], char nomFichier[])
 {
 	struct dresseur dress = { 0 };
@@ -492,6 +510,11 @@ int rechercheDresseur(char pseudo[], char nomFichier[])
 	return -1;
 }
 
+/********************************************************************************************************/
+/* INPUT : un vecteur de caractères (le nom du fichier), un entier (la position du dresseur à afficher)	*/
+/* Process : lit le dresseur à la position donnée dans le fichier et l'affiche							*/
+/* OUTPUT : rien																						*/
+/********************************************************************************************************/
 void afficheDresseur(char nomFichier[], int position)
 {
 	struct dresseur dress = { 0 };
@@ -503,6 +526,11 @@ void afficheDresseur(char nomFichier[], int position)
 	printf("Pseudo : %s\nPoussiere d'etoile : %u\nXP totale : %lu\nDate d'inscription : %hd/%hd/%hd\n", dress.pseudo, dress.poussiereEtoile, dress.xpTotale, dress.dateInscription.jour, dress.dateInscription.mois, dress.dateInscription.annee);
 }
 
+/********************************************************************************************************************************************************************************************************************************/
+/* INPUT : un vecteur de caractères (le pseudo du dresseur à modifier), un vecteur de caractères (le nom du fichier)																											*/
+/* Process : apelle la recherche, et si le dresseur est trouvé, appelle la fonction encodeDresseur pour le modifier, puis en fonction du retour de cette fonction, affiche un message pour indiquer l'état de la modification	*/
+/* OUTPUT : rien																																																				*/
+/********************************************************************************************************************************************************************************************************************************/
 void modificationPseudoDresseur(char pseudo[], char nomFichier[])
 {
 	int positionRemplacement, positionTrouve;
