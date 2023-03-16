@@ -16,6 +16,7 @@ void USART_SendString(char* sMsg);
 int main(void)
 {
 	char cCommande, cPort = 'B', cPin, cValue;
+	int i;
 	//set the port B and C as output by default
 	DDRB = 0xFF;
 	DDRC = 0xFF;
@@ -109,7 +110,7 @@ int main(void)
 			USART_Transmit(cPin);
 			USART_SendString(" est allume\r\n");
 			break;
-		//(Eteindre) : turn off one pin (0 to 7)
+		//(E)teindre : turn off one pin (0 to 7)
 		case 'E':
 			do
 			{
