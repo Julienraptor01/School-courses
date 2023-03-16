@@ -1,12 +1,18 @@
 #include <avr/io.h>
 
+#define SetBit(x,y) (x |= (1 << y))
+#define ClearBit(x,y) (x &= ~(1 << y))
+#define TestBit(x,y) (x & (1 << y))
+
 #define FOSC 8000000 // Clock Speed
 #define BAUD 4800 // Baud Rate
 #define MYUBRR FOSC/16/BAUD-1 // UBRR Value
 
-#define SetBit(x,y) (x |= (1 << y))
-#define ClearBit(x,y) (x &= ~(1 << y))
-#define TestBit(x,y) (x & (1 << y))
+#define BaseDelayMicroSeconds 125 //125µs
+#define ClockFrequency 8 //8MHz
+#define Prescalar 8 // 1/8
+
+void waitBaseDelayNormalMicroSeconds(long);
 
 void USART_Init(unsigned int ubrr);
 void USART_Transmit(unsigned char data);
@@ -159,9 +165,9 @@ int main(void)
 				for (i = 0; i < 5; i++)
 				{
 					SetBit(PORTB, cPin);
-					_delay_ms(500);
+					waitBaseDelayNormalMicroSeconds(500000);
 					ClearBit(PORTB, cPin);
-					_delay_ms(500);
+					waitBaseDelayNormalMicroSeconds(500000);
 				}
 			}
 			else
@@ -172,15 +178,15 @@ int main(void)
 				for (i = 0; i < 5; i++)
 				{
 					SetBit(PORTC, cPin);
-					_delay_ms(500);
+					waitBaseDelayNormalMicroSeconds(500000);
 					ClearBit(PORTC, cPin);
-					_delay_ms(500);
+					waitBaseDelayNormalMicroSeconds(500000);
 				}
 			}
 			//tell the user the pin was blinked
 			USART_SendString("La broche ");
 			USART_Transmit(cPin);
-			USART_SendString(" a clignote\r\n")
+			USART_SendString(" a clignote\r\n");
 			break;
 		default:
 			USART_SendString("Commande inconnue\r\n");
@@ -188,6 +194,19 @@ int main(void)
 		}
 	}
 	while (1);
+}
+
+void waitBaseDelayNormalMicroSeconds(long timeToWait)
+{
+	TCCR0A = 0;
+	SetBit(TCCR0B, CS01);
+	for (int i = 0; i < timeToWait / BaseDelayMicroSeconds; i++)
+	{
+		TCNT0 = 256 - ((ClockFrequency / Prescalar) * BaseDelayMicroSeconds);
+		TIFR0 = 1 << TOV0;
+		while (!TestBit(TIFR0, TOV0));
+		TCCR0B = 0;
+	}
 }
 
 void USART_Init(unsigned int ubrr)
