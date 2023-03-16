@@ -188,6 +188,14 @@ int main(void)
 			USART_Transmit(cPin);
 			USART_SendString(" a clignote\r\n");
 			break;
+		/*
+		//(C)lignoter : activation du clignotement de la LED sur la broche x (x est compris entre 0 et 7) grâce à le gestion d’une interruption sur un timer. De cette manière le LED clignote en continu et le programme continue à fonctionner pour les autres options. Une seule LED peut clignoter à un moment donné. Le changement de l'état de la LED se fait toutes les 0,5 secondes.
+		case 'C':
+			break;
+		//(S)topper : arrêt du clignotement de la LED.
+		case 'S':
+			break;
+		*/
 		default:
 			USART_SendString("Commande inconnue\r\n");
 			break;
