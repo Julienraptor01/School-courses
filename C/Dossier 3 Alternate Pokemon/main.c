@@ -155,7 +155,7 @@ int main()
 /* Process : récupère les informations sur une nouvelle espèce, vérifie l'unicité de l'espèce, l'ajoute à la liste, appelle l'ajout à l'index et incrémente le nombre d'espèces	*/
 /* OUTPUT : un entier (1 si une nouvelle espèce a été ajoutée, 0 sinon)																											*/
 /********************************************************************************************************************************************************************************/
-int encodeEspece(char[], struct indEspece index[], long nEspece)
+int encodeEspece(char nomFichierEspece[], struct indEspece index[], long nEspece)
 {
 	struct espece espece;
 	int choixType = -1, especeExiste = -1;
@@ -217,7 +217,7 @@ int rechercheEspece(struct espece especes[], struct indEspece index[], long nEsp
 	long i = nEspece - 1;
 	//on fait la recherche à partir de la fin de l'index et on remonte vers le début, mais on aurait pu aussi faire l'inverse
 	//tel qu'on l'a fait, la valeur de i est la position de l'espèce dans l'index si elle est trouvée, sinon i vaudra -1
-	while (i >= 0 && strcmp(especes[nEspece].nomEspece, index[i].nomEspece) != 0)
+	while (i >= 0 && strcmp(espece.nomEspece, index[i].nomEspece) != 0)
 	{
 		i--;
 	}
