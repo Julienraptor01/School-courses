@@ -42,9 +42,9 @@ struct indEspece
 
 //prototypes de fonctions
 int encodeEspece(char[], struct indEspece[], long);
-int rechercheEspece(struct espece[], struct indEspece[], long);
-void insertionInd(struct espece[], struct indEspece[], long);
-void afficheEspece(struct espece[], long);
+int rechercheEspece(struct espece, struct indEspece[], long);
+void insertionInd(struct espece, struct indEspece[], long);
+void afficheEspece(struct espece);
 int rechercheTypeEspece(long[], struct indEspece[], long, long*);
 
 //variable globale
@@ -65,6 +65,7 @@ int main()
 	long nEspece = 0;
 #endif
 	*/
+	struct espece espece;
 	struct indEspece index[MAX_POKEMON];
 	char nomFichierEspece[] = "especes.dat";
 	int nEspece = 0;
@@ -99,8 +100,6 @@ int main()
 		case 1:
 			while (nEspece < MAX_POKEMON && encodeEspece(nomFichierEspece, index, nEspece) == 1)
 			{
-				//appel de la fonction d'insertion dans l'index
-				insertionInd(espece, index, nEspece);
 				//incrementation de la valeur de nEspece
 				nEspece++;
 			}
@@ -112,13 +111,15 @@ int main()
 			printf("\nEntrez n'importe quel caractere entre deux especes pour arreter l'affichage\nN'entrez rien pour continuer\n");
 			while (i < nEspece && strlen(arreteAffiche) == 0)
 			{
-				afficheEspece(especes, index[i].posI);
+				fEspeces = fopen(nomFichierEspece, "rb");
+				fread(&espece, sizeof(struct espece), 1, fEspeces);
+				fclose(fEspeces)
+				afficheEspece(espece);
 				i++;
 				fflush(stdin);
 				gets(arreteAffiche);
 			}
 			break;
-		//quitter le programme
 		case 3:
 			if (rechercheTypeEspece(position, index, nEspece, &nEspeceType) == 1)
 			{
@@ -138,6 +139,7 @@ int main()
 				printf("Aucune espece de ce type n'a ete trouvee\n");
 			}
 			break;
+			//quitter le programme
 		case 4:
 			printf("\nVous avez choisi de quitter le programme\n");
 			break;
@@ -204,6 +206,8 @@ int encodeEspece(char nomFichierEspece[], struct indEspece index[], long nEspece
 	FILE* fEspeces = fopen(nomFichierEspece, "ab");
 	fwrite(&espece, sizeof(struct espece), 1, fEspeces);
 	fclose(fEspeces);
+	//appel de la fonction d'insertion dans l'index
+	insertionInd(espece, index, nEspece);
 	return 1;
 }
 
@@ -212,7 +216,7 @@ int encodeEspece(char nomFichierEspece[], struct indEspece index[], long nEspece
 /* Process : recherche séquentielle sur le nom de l'espèce dans l'index																					*/
 /* OUTPUT : un entier (1 si l'espèce est trouvée, 0 sinon)																								*/
 /********************************************************************************************************************************************************/
-int rechercheEspece(struct espece especes[], struct indEspece index[], long nEspece)
+int rechercheEspece(struct espece espece, struct indEspece index[], long nEspece)
 {
 	long i = nEspece - 1;
 	//on fait la recherche à partir de la fin de l'index et on remonte vers le début, mais on aurait pu aussi faire l'inverse
@@ -240,24 +244,24 @@ int rechercheEspece(struct espece especes[], struct indEspece index[], long nEsp
 /* Process : recherche séquentielle sur le type puis sur le nom pour trouver la position d'insertion et insertion dans l'index							*/
 /* OUTPUT : rien																																		*/
 /********************************************************************************************************************************************************/
-void insertionInd(struct espece especes[], struct indEspece index[], long nEspece)
+void insertionInd(struct espece espece, struct indEspece index[], long nEspece)
 {
 	long i = nEspece - 1;
 	//boucle de recherche sur le type
-	while (i >= 0 && strcmp(especes[nEspece].type, index[i].type) < 0)
+	while (i >= 0 && strcmp(espece.type, index[i].type) < 0)
 	{
 		index[i + 1] = index[i];
 		i--;
 	}
 	//boucle de recherche sur le nom
-	while (i >= 0 && strcmp(especes[nEspece].type, index[i].type) == 0 && strcmp(especes[nEspece].nomEspece, index[i].nomEspece) < 0)
+	while (i >= 0 && strcmp(espece.type, index[i].type) == 0 && strcmp(espece.nomEspece, index[i].nomEspece) < 0)
 	{
 		index[i + 1] = index[i];
 		i--;
 	}
 	//insertion de l'espèce dans l'index
-	strcpy(index[i + 1].type, especes[nEspece].type);
-	strcpy(index[i + 1].nomEspece, especes[nEspece].nomEspece);
+	strcpy(index[i + 1].type, espece.type);
+	strcpy(index[i + 1].nomEspece, espece.nomEspece);
 	index[i + 1].posI = nEspece;
 }
 
@@ -266,9 +270,9 @@ void insertionInd(struct espece especes[], struct indEspece index[], long nEspec
 /* Process : affichage d'une espèce																					*/
 /* OUTPUT : rien																									*/
 /********************************************************************************************************************/
-void afficheEspece(struct espece especes[], long posI)
+void afficheEspece(struct espece espece)
 {
-	printf("Nom : %s\nType : %s\nNombre de bonbons : %u\nNombre de PV Max : %u\nNombre de PC Max : %u\n", especes[posI].nomEspece, especes[posI].type, especes[posI].bonbons, especes[posI].pvMax, especes[posI].pcMax);
+	printf("Nom : %s\nType : %s\nNombre de bonbons : %u\nNombre de PV Max : %u\nNombre de PC Max : %u\n", espece.nomEspece, espece.type, espece.bonbons, espece.pvMax, espece.pcMax);
 }
 
 /********************************************************************************************************************************************************************************************************************************/
