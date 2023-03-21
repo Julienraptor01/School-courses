@@ -73,13 +73,17 @@ int main()
 	//si le fichier existe, on récupère le nombre d'espèces
 	if (fEspeces != NULL)
 	{
-		fseek(fEspeces, 0, SEEK_END);
-		nEspece = ftell(fEspeces) / sizeof(struct espece);
+		//création index et initialisation du nombre d'espèces si nécessaire
+		while (fread(&espece, sizeof(struct espece), 1, fEspeces) == 1)
+		{
+			insertionInd(espece,index,nEspece);
+			nEspece++;
+		}
 	}
 	//sinon on le crée et vu qu'on vient de le créer, il est vide donc la valeur initialisée est correcte
 	else
 	{
-		fEspeces = fopen(nomFichierEspece, "w+b");
+		fEspeces = fopen(nomFichierEspece, "wb");
 	}
 	fclose(fEspeces);
 	long position[MAX_POKEMON], nEspeceType = 0;
@@ -109,16 +113,17 @@ int main()
 			i = 0;
 			strcpy(arreteAffiche, "");
 			printf("\nEntrez n'importe quel caractere entre deux especes pour arreter l'affichage\nN'entrez rien pour continuer\n");
+			fEspeces = fopen(nomFichierEspece, "rb");
 			while (i < nEspece && strlen(arreteAffiche) == 0)
 			{
-				fEspeces = fopen(nomFichierEspece, "rb");
+				fseek(fEspeces, sizeof(struct espece) * index[i].posI, SEEK_SET);
 				fread(&espece, sizeof(struct espece), 1, fEspeces);
-				fclose(fEspeces)
 				afficheEspece(espece);
 				i++;
 				fflush(stdin);
 				gets(arreteAffiche);
 			}
+			fclose(fEspeces);
 			break;
 		case 3:
 			if (rechercheTypeEspece(position, index, nEspece, &nEspeceType) == 1)
@@ -126,13 +131,17 @@ int main()
 				i = 0;
 				strcpy(arreteAffiche, "");
 				printf("\nEntrez n'importe quel caractere entre deux especes pour arreter l'affichage\nN'entrez rien pour continuer\n");
+				fEspeces = fopen(nomFichierEspece, "rb");
 				while (i < nEspeceType && strlen(arreteAffiche) == 0)
 				{
-					afficheEspece(especes, position[i]);
+					fseek(fEspeces, sizeof(struct espece) * position[i], SEEK_SET);
+					fread(&espece, sizeof(struct espece), 1, fEspeces);
+					afficheEspece(espece);
 					i++;
 					fflush(stdin);
 					gets(arreteAffiche);
 				}
+				fclose(fEspeces);
 			}
 			else
 			{
@@ -174,7 +183,7 @@ int encodeEspece(char nomFichierEspece[], struct indEspece index[], long nEspece
 			return 0;
 		}
 		//vérification de l'unicité de l'espèce
-		else if ((especeExiste = rechercheNomEspece(espece, index, nEspece)) == 1)
+		else if ((especeExiste = rechercheEspece(espece, index, nEspece)) == 1)
 		{
 			printf("Le pokemon est deja present\n");
 		}
