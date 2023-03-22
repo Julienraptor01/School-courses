@@ -12,6 +12,8 @@
 #define ClockFrequency 8 //8MHz
 #define Prescalar 8 // 1/8
 
+#define OFFSET 48 // ASCII table offset for numbers
+
 void waitBaseDelayNormalMicroSeconds(long);
 
 void USART_Init(unsigned int ubrr);
@@ -19,9 +21,11 @@ void USART_Transmit(unsigned char data);
 unsigned char USART_Receive(void);
 void USART_SendString(char* sMsg);
 
+unsigned char USART_ReceiveNumber(void); //patch number with offset
+
 int main(void)
 {
-	char cCommande, cPort = 'B', cPin, cValue;
+	unsigned char cCommande, cPort = 'B', cPin, cValue;
 	int i;
 	//set the port B and C as output by default
 	DDRB = 0xFF;
@@ -61,7 +65,8 @@ int main(void)
 				//tell the user to input
 				USART_SendString("Entrez le numero de broche (0 a 7)\r\n");
 				//get the input
-				cPin = USART_Receive();
+				// 
+				cPin = USART_ReceiveNumber();
 			}
 			while ((cPin < '0') || (cPin > '7'));
 			//read the pin on the selected port
@@ -86,14 +91,14 @@ int main(void)
 			USART_Transmit(cValue);
 			USART_SendString("\r\n");
 			break;
-		//(Allumer) : turn on one pin (0 to 7)
+		//(A)llumer : turn on one pin (0 to 7)
 		case 'A':
 			do
 			{
 				//tell the user to input
 				USART_SendString("Entrez le numero de broche (0 a 7)\r\n");
 				//get the input
-				cPin = USART_Receive();
+				cPin = USART_ReceiveNumber();
 			}
 			while ((cPin < '0') || (cPin > '7'));
 			//turn on the pin on the selected port
@@ -123,7 +128,7 @@ int main(void)
 				//tell the user to input
 				USART_SendString("Entrez le numero de broche (0 a 7)\r\n");
 				//get the input
-				cPin = USART_Receive();
+				cPin = USART_ReceiveNumber();
 			}
 			while ((cPin < '0') || (cPin > '7'));
 			//turn off the pin on the selected port
@@ -153,7 +158,7 @@ int main(void)
 				//tell the user to input
 				USART_SendString("Entrez le numero de broche (0 a 7)\r\n");
 				//get the input
-				cPin = USART_Receive();
+				cPin = USART_ReceiveNumber();
 			}
 			while ((cPin < '0') || (cPin > '7'));
 			//blink the pin on the selected port
@@ -250,4 +255,9 @@ void USART_SendString(char* sMsg)
 		USART_Transmit(*sMsg);
 		sMsg++;
 	}
+}
+
+unsigned char USART_ReceiveNumber(void)
+{
+	return USART_Receive() - OFFSET;
 }
