@@ -22,6 +22,7 @@ unsigned char USART_Receive(void);
 void USART_SendString(char* sMsg);
 
 unsigned char USART_ReceiveNumber(void); //patch number with offset
+void USART_TransmitNumber(unsigned char data); //same
 
 int main(void)
 {
@@ -84,11 +85,12 @@ int main(void)
 				//read the pin
 				cValue = TestBit(PINC, cPin);
 			}
+			cValue = (cValue == 0) ? 0 : 1;
 			//tell the user the value of the pin
 			USART_SendString("La valeur de la broche ");
-			USART_Transmit(cPin);
+			USART_TransmitNumber(cPin);
 			USART_SendString(" est ");
-			USART_Transmit(cValue);
+			USART_TransmitNumber(cValue);
 			USART_SendString("\r\n");
 			break;
 		//(A)llumer : turn on one pin (0 to 7)
@@ -118,7 +120,7 @@ int main(void)
 			}
 			//tell the user the pin was turned on
 			USART_SendString("La broche ");
-			USART_Transmit(cPin);
+			USART_TransmitNumber(cPin);
 			USART_SendString(" est allume\r\n");
 			break;
 		//(E)teindre : turn off one pin (0 to 7)
@@ -148,7 +150,7 @@ int main(void)
 			}
 			//tell the user the pin was turned off
 			USART_SendString("La broche ");
-			USART_Transmit(cPin);
+			USART_TransmitNumber(cPin);
 			USART_SendString(" est eteinte\r\n");
 			break;
 		//(C)lignoter : blink one pin (0 to 7) 5 times at a rate of 1Hz
@@ -190,7 +192,7 @@ int main(void)
 			}
 			//tell the user the pin was blinked
 			USART_SendString("La broche ");
-			USART_Transmit(cPin);
+			USART_TransmitNumber(cPin);
 			USART_SendString(" a clignote\r\n");
 			break;
 		/*
@@ -218,8 +220,8 @@ void waitBaseDelayNormalMicroSeconds(long timeToWait)
 		TCNT0 = 256 - ((ClockFrequency / Prescalar) * BaseDelayMicroSeconds);
 		TIFR0 = 1 << TOV0;
 		while (!TestBit(TIFR0, TOV0));
-		TCCR0B = 0;
 	}
+	TCCR0B = 0;
 }
 
 void USART_Init(unsigned int ubrr)
@@ -260,4 +262,9 @@ void USART_SendString(char* sMsg)
 unsigned char USART_ReceiveNumber(void)
 {
 	return USART_Receive() - OFFSET;
+}
+
+void USART_TransmitNumber(unsigned char data)
+{
+	USART_Transmit(data + OFFSET);
 }
