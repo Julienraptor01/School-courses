@@ -100,7 +100,7 @@ int main(void)
 				//get the input
 				cPin = USART_ReceiveNumber();
 			}
-			while ((cPin < '0') || (cPin > '7'));
+			while ((cPin < 0) || (cPin > 7));
 			//turn on the pin on the selected port
 			if (cPort == 'B')
 			{
