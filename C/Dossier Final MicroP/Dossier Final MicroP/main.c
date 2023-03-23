@@ -68,7 +68,7 @@ int main(void)
 				// 
 				cPin = USART_ReceiveNumber();
 			}
-			while ((cPin < '0') || (cPin > '7'));
+			while ((cPin < 0) || (cPin > 7));
 			//read the pin on the selected port
 			if (cPort == 'B')
 			{
@@ -130,7 +130,7 @@ int main(void)
 				//get the input
 				cPin = USART_ReceiveNumber();
 			}
-			while ((cPin < '0') || (cPin > '7'));
+			while ((cPin < 0) || (cPin > 7));
 			//turn off the pin on the selected port
 			if (cPort == 'B')
 			{
@@ -160,7 +160,7 @@ int main(void)
 				//get the input
 				cPin = USART_ReceiveNumber();
 			}
-			while ((cPin < '0') || (cPin > '7'));
+			while ((cPin < 0) || (cPin > 7));
 			//blink the pin on the selected port
 			if (cPort == 'B')
 			{
