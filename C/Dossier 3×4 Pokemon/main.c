@@ -1,8 +1,8 @@
 /************************************************************************************/
 /* Auteurs : BOLLY Julien, SECCO Johan												*/
 /* Groupe : 2131																	*/
-/* Application : Dossier 3 Pokémon ; Encodage, recherche et affichage des espèces	*/
-/* Date de la dernière modification : 16/03/2023									*/
+/* Application : Dossier 2 Pokémon ; Encodage, recherche et affichage des espèces	*/
+/* Date de la dernière modification : 01/03/2023									*/
 /************************************************************************************/
 
 #include <stdio.h>
@@ -22,8 +22,6 @@
 #define NOMBRE_TYPES 18
 //taille maximum du nom d'un pseudo
 #define MAX_TAILLE_PSEUDO 50
-//décommentez la ligne ci-dessous pour activer le mode DEBUG ce qui pré-entre des espèces
-//#define DEBUG
 
 //structures de données
 struct espece
@@ -60,22 +58,22 @@ struct dresseur
 //utilisation d'une structure de stockage pour faciliter la gestion des données au sein des menus et éviter de passer trop de paramètres
 struct stockage
 {
-	struct espece especes[MAX_POKEMON];
+	char* nomFichierEspece;
 	struct indEspece index[MAX_POKEMON];
 	long nEspece;
-	char* nomFichier;
+	char* nomFichierDresseur;
 	int nbDresseurs;
 };
 
 //prototypes de fonctions liées aux menus
 int menuPrincipal(struct stockage*);
-int menuEspece(struct espece[], struct indEspece[], long*);
+int menuEspece(char[], struct indEspece[], long*);
 int menuDresseur(char[], int*);
 
 //prototypes de fonctions liées à la partie espèces
-int encodeEspece(struct espece[], struct indEspece[], long);
-int rechercheNomEspece(struct espece[], struct indEspece[], long);
-void insertionIndEspece(struct espece[], struct indEspece[], long);
+int encodeEspece(char[], struct indEspece[], long);
+int rechercheNomEspece(struct espece, struct indEspece[], long);
+void insertionInd(struct espece, struct indEspece[], long);
 void afficheEspece(struct espece);
 int rechercheTypeEspece(long[], struct indEspece[], long, long*);
 
@@ -90,53 +88,33 @@ const char* types[] = { "Acier", "Combat", "Dragon", "Eau", "Electrik", "Fee", "
 
 int main()
 {
-#ifdef DEBUG
-	//structures prédéfinies pour le mode DEBUG
 	struct stockage stockage =
 	{
-		.especes = {
-			{"Roucarnage", "Normal", 0, 30, 630},
-			{"Roucoups", "Normal", 0, 20, 400},
-			{"Roucool", "Normal", 0, 10, 190},
-			{"Piafabec", "Normal", 0, 12, 234},
-			{"Rattatac", "Normal", 0, 25, 518},
-			{"Rattata", "Normal", 0, 15, 290},
-			{"Draco", "Dragon", 0, 100, 2100},
-			{"Carapuce", "Eau", 0, 17, 354},
-			{"Pikachu", "Electrik", 0, 17, 354},
-			{"Salameche", "Feu", 0, 17, 354},
-			{"Bulbizarre", "Plante", 0, 17, 354},
-			{"Onix", "Acier", 0, 42, 878}
-		},
-		.index = {
-			{"Acier", "Onix", 11},
-			{"Dragon", "Draco", 6},
-			{"Eau", "Carapuce", 7},
-			{"Electrik", "Pikachu", 8},
-			{"Feu", "Salameche", 9},
-			{"Normal", "Piafabec", 3},
-			{"Normal", "Rattata", 5},
-			{"Normal", "Rattatac", 4},
-			{"Normal", "Roucarnage", 0},
-			{"Normal", "Roucool", 2},
-			{"Normal", "Roucoups", 1},
-			{"Plante", "Bulbizarre", 10}
-		},
-		.nEspece = 12,
-		.nomFichier = "dresseurs.dat",
-		.nbDresseurs = 0
-	};
-#else
-	struct stockage stockage =
-	{
-		.especes = {},
+		.nomFichierEspece = "especes.dat",
 		.index = {},
 		.nEspece = 0,
-		.nomFichier = "dresseurs.dat",
+		.nomFichierDresseur = "dresseurs.dat",
 		.nbDresseurs = 0
 	};
-#endif
-	FILE* fDresseurs = fopen(stockage.nomFichier, "rb");
+	struct espece espece;
+	FILE* fEspeces = fopen(stockage.nomFichierEspece, "rb");
+	//si le fichier existe, on récupère le nombre d'espèces
+	if (fEspeces != NULL)
+	{
+		//création index et initialisation du nombre d'espèces si nécessaire
+		while (fread(&espece, sizeof(struct espece), 1, fEspeces) == 1)
+		{
+			insertionInd(espece, stockage.index, stockage.nEspece);
+			stockage.nEspece++;
+		}
+	}
+	//sinon on le crée et vu qu'on vient de le créer, il est vide donc la valeur initialisée est correcte
+	else
+	{
+		fEspeces = fopen(stockage.nomFichierEspece, "wb");
+	}
+	fclose(fEspeces);
+	FILE* fDresseurs = fopen(stockage.nomFichierDresseur, "rb");
 	//si le fichier existe, on récupère le nombre de dresseurs
 	if (fDresseurs != NULL)
 	{
@@ -146,12 +124,12 @@ int main()
 	//sinon on le crée et vu qu'on vient de le créer, il est vide donc la valeur initialisée est correcte
 	else
 	{
-		fDresseurs = fopen(stockage.nomFichier, "w+b");
+		fDresseurs = fopen(stockage.nomFichierDresseur, "wb");
 	}
 	fclose(fDresseurs);
 	srand(time(NULL));
 	printf("Bienvenue dans le programme de gestion Pokemon !\n");
-	while(menuPrincipal(&stockage));
+	while (menuPrincipal(&stockage));
 	return 0;
 }
 
@@ -160,7 +138,7 @@ int main()
 /* Process : affiche le menu principal et appelle les fonctions liées aux sous-menus			*/
 /* OUTPUT : un entier (0 si l'utilisateur a choisi de quitter le programme, 1 sinon)			*/
 /************************************************************************************************/
-int menuPrincipal(struct stockage *stockage)
+int menuPrincipal(struct stockage* stockage)
 {
 	int choixMenu = -1;
 	printf("\nQue voulez-vous faire :\n1) Gerer les especes\n2) Gerer les dresseurs\n3) Quitter le programme\n");
@@ -170,11 +148,11 @@ int menuPrincipal(struct stockage *stockage)
 	{
 	case 1:
 		printf("Bienvenue dans le menu de gestion des especes\n");
-		while (menuEspece(stockage->especes, stockage->index, &stockage->nEspece));
+		while (menuEspece(stockage->nomFichierEspece, stockage->index, &stockage->nEspece));
 		break;
 	case 2:
 		printf("Bienvenue dans le menu de gestion des dresseurs\n");
-		while (menuDresseur(stockage->nomFichier, &stockage->nbDresseurs));
+		while (menuDresseur(stockage->nomFichierDresseur, &stockage->nbDresseurs));
 		break;
 	case 3:
 		printf("Vous avez choisi de quitter le programme\n");
@@ -190,12 +168,14 @@ int menuPrincipal(struct stockage *stockage)
 /* Process : affiche le menu des espèces et appelle les fonctions liées aux sous-menus																*/
 /* OUTPUT : un entier (0 si l'utilisateur a choisi de quitter le programme, 1 sinon)																*/
 /****************************************************************************************************************************************************/
-int menuEspece(struct espece especes[], struct indEspece index[], long *nEspece)
+int menuEspece(char nomFichierEspece[], struct indEspece index[], long* nEspece)
 {
 	long position[MAX_POKEMON], nEspeceType = 0;
 	int choixMenu = -1, i;
 	char arreteAffiche[] = "";
-	//boucle de menu
+	struct espece espece;
+	//accueil de l'utilisateur
+	printf("Bienvenue dans le programme de gestion des especes de Pokemon\n");
 	printf("\nQue voulez-vous faire :\n1) Ajouter une espece\n2) Afficher les especes\n3) Rechercher les pokemons d'un meme type\n4) Retour au menu principal\n");
 	fflush(stdin);
 	scanf("%d", &choixMenu);
@@ -203,10 +183,8 @@ int menuEspece(struct espece especes[], struct indEspece index[], long *nEspece)
 	{
 	//ajout d'une espèce
 	case 1:
-		while (*nEspece < MAX_POKEMON && encodeEspece(especes, index, *nEspece) == 1)
+		while (*nEspece < MAX_POKEMON && encodeEspece(nomFichierEspece, index, *nEspece) == 1)
 		{
-			//appel de la fonction d'insertion dans l'index
-			insertionIndEspece(especes, index, *nEspece);
 			//incrementation de la valeur de nEspece
 			(*nEspece)++;
 		}
@@ -216,13 +194,17 @@ int menuEspece(struct espece especes[], struct indEspece index[], long *nEspece)
 		i = 0;
 		strcpy(arreteAffiche, "");
 		printf("\nEntrez n'importe quel caractere entre deux especes pour arreter l'affichage\nN'entrez rien pour continuer\n");
+		FILE* fEspeces = fopen(nomFichierEspece, "rb");
 		while (i < *nEspece && strlen(arreteAffiche) == 0)
 		{
-			afficheEspece(especes[index[i].posI]);
+			fseek(fEspeces, sizeof(struct espece) * index[i].posI, SEEK_SET);
+			fread(&espece, sizeof(struct espece), 1, fEspeces);
+			afficheEspece(espece);
 			i++;
 			fflush(stdin);
 			gets(arreteAffiche);
 		}
+		fclose(fEspeces);
 		break;
 	case 3:
 		if (rechercheTypeEspece(position, index, *nEspece, &nEspeceType) == 1)
@@ -230,13 +212,17 @@ int menuEspece(struct espece especes[], struct indEspece index[], long *nEspece)
 			i = 0;
 			strcpy(arreteAffiche, "");
 			printf("\nEntrez n'importe quel caractere entre deux especes pour arreter l'affichage\nN'entrez rien pour continuer\n");
+			fEspeces = fopen(nomFichierEspece, "rb");
 			while (i < nEspeceType && strlen(arreteAffiche) == 0)
 			{
-				afficheEspece(especes[position[i]]);
+				fseek(fEspeces, sizeof(struct espece) * position[i], SEEK_SET);
+				fread(&espece, sizeof(struct espece), 1, fEspeces);
+				afficheEspece(espece);
 				i++;
 				fflush(stdin);
 				gets(arreteAffiche);
 			}
+			fclose(fEspeces);
 		}
 		else
 		{
@@ -259,9 +245,9 @@ int menuEspece(struct espece especes[], struct indEspece index[], long *nEspece)
 /* Process : affiche le menu des dresseurs et appelle les fonctions liées aux sous-menus											*/
 /* OUTPUT : un entier (0 si l'utilisateur a choisi de quitter le programme, 1 sinon)												*/
 /************************************************************************************************************************************/
-int menuDresseur(char nomFichier[], int *nDresseurs)
+int menuDresseur(char nomFichierDresseur[], int *nDresseurs)
 {
-	int choixMenu = -1, encode = 0, i, position;
+	int choixMenu = -1, encode = 0, i, position = -2;
 	char arreteAffiche[] = "", pseudo[MAX_TAILLE_PSEUDO];
 	printf("\nQue voulez-vous faire :\n1) Inscrire un dresseur\n2) Afficher les dresseurs\n3) Rechercher un dresseur\n4) Modifier le pseudo d'un dresseur\n5) Retour au menu principal\n");
 	fflush(stdin);
@@ -272,7 +258,7 @@ int menuDresseur(char nomFichier[], int *nDresseurs)
 	case 1:
 		printf("\nCreation d'un nouveau dresseur\nN'entrez rien pour revenir au menu de gestion des dresseurs\n");
 		//boucle de creation de dresseur
-		while ((encode = encodeDresseur(nomFichier, *nDresseurs)) >= -1)
+		while ((encode = encodeDresseur(nomFichierDresseur, *nDresseurs)) >= -1)
 		{
 			//si le pseudo n'est pas deja utilise -> incrémentation du nombre de dresseurs
 			if (encode == -1)
@@ -294,7 +280,7 @@ int menuDresseur(char nomFichier[], int *nDresseurs)
 		printf("\nEntrez n'importe quel caractere entre deux dresseurs pour arreter l'affichage\nN'entrez rien pour continuer\n");
 		while (i < *nDresseurs && strlen(arreteAffiche) == 0)
 		{
-			afficheDresseur(nomFichier, i);
+			afficheDresseur(nomFichierDresseur, i);
 			i++;
 			fflush(stdin);
 			gets(arreteAffiche);
@@ -311,13 +297,13 @@ int menuDresseur(char nomFichier[], int *nDresseurs)
 		}
 		else
 		{
-			switch (position = rechercheDresseur(pseudo, nomFichier))
+			switch (position = rechercheDresseur(pseudo, nomFichierDresseur))
 			{
 			case -1:
 				printf("Le dresseur n'a pas ete trouve\n");
 				break;
 			default:
-				afficheDresseur(nomFichier, position);
+				afficheDresseur(nomFichierDresseur, position);
 				break;
 			}
 		}
@@ -333,7 +319,7 @@ int menuDresseur(char nomFichier[], int *nDresseurs)
 		}
 		else
 		{
-			modificationPseudoDresseur(pseudo, nomFichier);
+			modificationPseudoDresseur(pseudo, nomFichierDresseur);
 		}
 		break;
 	//quitter le menu
@@ -349,11 +335,12 @@ int menuDresseur(char nomFichier[], int *nDresseurs)
 
 /************************************************************************************************************************************************************************/
 /* INPUT : un tableau de structures de type espece (les espèces), un tableau de structures de type indEspece (l'index), un pointeur sur un entier (le nombre d'espèces)	*/
-/* Process : récupère les informations sur une nouvelle espèce, vérifie l'unicité de l'espèce et l'ajoute à la liste													*/
+/* Process : récupère les informations sur une nouvelle espèce, vérifie l'unicité de l'espèce, l'ajoute à la liste et appelle l'ajout à l'index							*/
 /* OUTPUT : un entier (1 si une nouvelle espèce a été ajoutée, 0 sinon)																									*/
 /************************************************************************************************************************************************************************/
-int encodeEspece(struct espece especes[], struct indEspece index[], long nEspece)
+int encodeEspece(char nomFichierEspece[], struct indEspece index[], long nEspece)
 {
+	struct espece espece = { 0 };
 	int choixType = -1, especeExiste = -1;
 	printf("\nCreation d'une nouvelle espece\nN'entrez rien pour revenir au menu de gestion des especes\n");
 	//nom de l'espece
@@ -361,14 +348,14 @@ int encodeEspece(struct espece especes[], struct indEspece index[], long nEspece
 	{
 		printf("Quel est le nom de l'espece ?\n");
 		fflush(stdin);
-		gets(especes[nEspece].nomEspece);
+		gets(espece.nomEspece);
 		//sortie si le nom est vide
-		if (strlen(especes[nEspece].nomEspece) == 0)
+		if (strlen(espece.nomEspece) == 0)
 		{
 			return 0;
 		}
 		//vérification de l'unicité de l'espèce
-		else if ((especeExiste = rechercheNomEspece(especes, index, nEspece)) == 1)
+		else if ((especeExiste = rechercheNomEspece(espece, index, nEspece)) == 1)
 		{
 			printf("Le pokemon est deja present\n");
 		}
@@ -383,20 +370,25 @@ int encodeEspece(struct espece especes[], struct indEspece index[], long nEspece
 	}
 	while (choixType < 1 || choixType > NOMBRE_TYPES);
 	//copie du type dans la structure
-	strcpy(especes[nEspece].type, types[choixType - 1]);
+	strcpy(espece.type, types[choixType - 1]);
 	//initialiser les bonbons à 0
-	especes[nEspece].bonbons = 0;
+	espece.bonbons = 0;
 	//demander le nombre de PV Max
 	do
 	{
 		printf("Quel est le nombre de PV Max ?\n");
 		fflush(stdin);
-		scanf("%u", &especes[nEspece].pvMax);
+		scanf("%u", &espece.pvMax);
 	}
 	//le nombre de PV Max doit être compris entre 1 et UINT_MAX/210 (pour éviter un dépassement de capacité lors du calcul du nombre de PC Max)
-	while (especes[nEspece].pvMax < 1 || especes[nEspece].pvMax >= UINT_MAX / 210);
+	while (espece.pvMax < 1 || espece.pvMax >= UINT_MAX / 210);
 	//calcul du nombre de PC Max avec une multiplication par un nombre aléatoire entre 19 et 21
-	especes[nEspece].pcMax = especes[nEspece].pvMax * (200 + (rand() % 21 - 10)) / 10;
+	espece.pcMax = espece.pvMax * (200 + (rand() % 21 - 10)) / 10;
+	FILE* fEspeces = fopen(nomFichierEspece, "ab");
+	fwrite(&espece, sizeof(struct espece), 1, fEspeces);
+	fclose(fEspeces);
+	//appel de la fonction d'insertion dans l'index
+	insertionInd(espece, index, nEspece);
 	return 1;
 }
 
@@ -405,17 +397,16 @@ int encodeEspece(struct espece especes[], struct indEspece index[], long nEspece
 /* Process : recherche séquentielle sur le nom de l'espèce dans l'index																					*/
 /* OUTPUT : un entier (1 si l'espèce est trouvée, 0 sinon)																								*/
 /********************************************************************************************************************************************************/
-int rechercheNomEspece(struct espece especes[], struct indEspece index[], long nEspece)
+int rechercheNomEspece(struct espece espece, struct indEspece index[], long nEspece)
 {
 	long i = nEspece - 1;
 	//on fait la recherche à partir de la fin de l'index et on remonte vers le début, mais on aurait pu aussi faire l'inverse
 	//tel qu'on l'a fait, la valeur de i est la position de l'espèce dans l'index si elle est trouvée, sinon i vaudra -1
-	while (i >= 0 && strcmp(especes[nEspece].nomEspece, index[i].nomEspece) != 0)
+	while (i >= 0 && strcmp(espece.nomEspece, index[i].nomEspece) != 0)
 	{
 		i--;
 	}
 	return (i >= 0) ? 1 : 0;
-	//on a utilisé l'opérateur ternaire par soucis de lisibilité, simplicité et concision, même si on ne l'a pas vu en cours
 }
 
 /********************************************************************************************************************************************************/
@@ -423,24 +414,24 @@ int rechercheNomEspece(struct espece especes[], struct indEspece index[], long n
 /* Process : recherche séquentielle sur le type puis sur le nom pour trouver la position d'insertion et insertion dans l'index							*/
 /* OUTPUT : rien																																		*/
 /********************************************************************************************************************************************************/
-void insertionIndEspece(struct espece especes[], struct indEspece index[], long nEspece)
+void insertionInd(struct espece espece, struct indEspece index[], long nEspece)
 {
 	long i = nEspece - 1;
 	//boucle de recherche sur le type
-	while (i >= 0 && strcmp(especes[nEspece].type, index[i].type) < 0)
+	while (i >= 0 && strcmp(espece.type, index[i].type) < 0)
 	{
 		index[i + 1] = index[i];
 		i--;
 	}
 	//boucle de recherche sur le nom
-	while (i >= 0 && strcmp(especes[nEspece].type, index[i].type) == 0 && strcmp(especes[nEspece].nomEspece, index[i].nomEspece) < 0)
+	while (i >= 0 && strcmp(espece.type, index[i].type) == 0 && strcmp(espece.nomEspece, index[i].nomEspece) < 0)
 	{
 		index[i + 1] = index[i];
 		i--;
 	}
 	//insertion de l'espèce dans l'index
-	strcpy(index[i + 1].type, especes[nEspece].type);
-	strcpy(index[i + 1].nomEspece, especes[nEspece].nomEspece);
+	strcpy(index[i + 1].type, espece.type);
+	strcpy(index[i + 1].nomEspece, espece.nomEspece);
 	index[i + 1].posI = nEspece;
 }
 
@@ -492,12 +483,13 @@ int rechercheTypeEspece(long position[], struct indEspece index[], long nEspece,
 	return 1;
 }
 
+
 /************************************************************************************************************************************************************************/
 /* INPUT : un vecteur de caractères (le nom du fichier), un entier (la position où aller encoder le dresseur)															*/
 /* Process : demande le pseudo du dresseur, vérifie qu'il n'est pas déjà utilisé, génère un nombre aléatoire de poussières d'étoile, encode le dresseur dans le fichier	*/
 /* OUTPUT : un entier (soit -2 si le pseudo est vide, soit la position du dresseur si le pseudo est déjà utilisé, soit -1 si l'encodage a réussi) 						*/
 /************************************************************************************************************************************************************************/
-int encodeDresseur(char nomFichier[], int position)
+int encodeDresseur(char nomFichierDresseur[], int position)
 {
 	struct dresseur dress = { 0 };
 	int positionTrouve;
@@ -511,7 +503,7 @@ int encodeDresseur(char nomFichier[], int position)
 		return -2;
 	}
 	//sinon on vérifie que le pseudo n'est pas déjà utilisé
-	else if ((positionTrouve = rechercheDresseur(dress.pseudo, nomFichier)) >= 0)
+	else if ((positionTrouve = rechercheDresseur(dress.pseudo, nomFichierDresseur)) >= 0)
 	{
 		return positionTrouve;
 	}
@@ -526,7 +518,7 @@ int encodeDresseur(char nomFichier[], int position)
 	dress.dateInscription.mois = date->tm_mon + 1;
 	dress.dateInscription.annee = date->tm_year + 1900;
 	//ecriture du dresseur dans le fichier
-	FILE* fDresseurs = fopen(nomFichier, "r+b");
+	FILE* fDresseurs = fopen(nomFichierDresseur, "r+b");
 	fseek(fDresseurs, position * sizeof(struct dresseur), SEEK_SET);
 	fwrite(&dress, sizeof(struct dresseur), 1, fDresseurs);
 	fclose(fDresseurs);
@@ -538,11 +530,11 @@ int encodeDresseur(char nomFichier[], int position)
 /* Process : recherche séquentielle sur le pseudo du dresseur dans le fichier pour trouver sa position		*/
 /* OUTPUT : un entier (la position du dresseur si il est trouvé, -1 sinon)									*/
 /************************************************************************************************************/
-int rechercheDresseur(char pseudo[], char nomFichier[])
+int rechercheDresseur(char pseudo[], char nomFichierDresseur[])
 {
 	struct dresseur dress = { 0 };
 	int position = 0;
-	FILE* fDresseurs = fopen(nomFichier, "rb");
+	FILE* fDresseurs = fopen(nomFichierDresseur, "rb");
 	//boucle de recherche sur le pseudo
 	while (fread(&dress, sizeof(struct dresseur), 1, fDresseurs) == 1)
 	{
@@ -562,10 +554,10 @@ int rechercheDresseur(char pseudo[], char nomFichier[])
 /* Process : lit le dresseur à la position donnée dans le fichier et l'affiche							*/
 /* OUTPUT : rien																						*/
 /********************************************************************************************************/
-void afficheDresseur(char nomFichier[], int position)
+void afficheDresseur(char nomFichierDresseur[], int position)
 {
 	struct dresseur dress = { 0 };
-	FILE* fDresseurs = fopen(nomFichier, "rb");
+	FILE* fDresseurs = fopen(nomFichierDresseur, "rb");
 	fseek(fDresseurs, position * sizeof(struct dresseur), SEEK_SET);
 	fread(&dress, sizeof(struct dresseur), 1, fDresseurs);
 	fclose(fDresseurs);
@@ -579,18 +571,18 @@ void afficheDresseur(char nomFichier[], int position)
 /* Process : apelle la recherche, et si le dresseur est trouvé, appelle la fonction encodeDresseur pour le modifier, puis en fonction du retour de cette fonction, affiche un message pour indiquer l'état de la modification	*/
 /* OUTPUT : rien																																																				*/
 /********************************************************************************************************************************************************************************************************************************/
-void modificationPseudoDresseur(char pseudo[], char nomFichier[])
+void modificationPseudoDresseur(char pseudo[], char nomFichierDresseur[])
 {
-	int positionRemplacement, positionTrouve;
+	int positionRemplacement, positionTrouve = -3;
 	//recherche du dresseur
-	if ((positionRemplacement = rechercheDresseur(pseudo, nomFichier)) == -1)
+	if ((positionRemplacement = rechercheDresseur(pseudo, nomFichierDresseur)) == -1)
 	{
 		printf("Ce dresseur n'existe pas\n");
 	}
 	else
 	{
 		//verification du résultat de la modification et information de l'utilisateur
-		switch (positionTrouve = encodeDresseur(nomFichier, positionRemplacement))
+		switch (positionTrouve = encodeDresseur(nomFichierDresseur, positionRemplacement))
 		{
 		case -2:
 			printf("Vous avez annule la modification\n");
