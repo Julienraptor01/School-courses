@@ -38,6 +38,7 @@ struct indEspece
 	char type[MAX_TAILLE_TYPE];
 	char nomEspece[MAX_TAILLE_NOM];
 	long posI;
+	struct indEspece* psvt; //psvt = Pointeur SuiVanT
 };
 
 struct date
@@ -59,7 +60,7 @@ struct dresseur
 struct stockage
 {
 	char* nomFichierEspece;
-	struct indEspece index[MAX_POKEMON];
+	struct indEspece* teteIndex;
 	long nEspece;
 	char* nomFichierDresseur;
 	int nbDresseurs;
@@ -67,15 +68,15 @@ struct stockage
 
 //prototypes de fonctions liées aux menus
 int menuPrincipal(struct stockage*);
-int menuEspece(char[], struct indEspece[], long*);
+int menuEspece(char[], struct indEspece**, long*);
 int menuDresseur(char[], int*);
 
 //prototypes de fonctions liées à la partie espèces
-int encodeEspece(char[], struct indEspece[], long);
-int rechercheNomEspece(struct espece, struct indEspece[], long);
-void insertionInd(struct espece, struct indEspece[], long);
+int encodeEspece(char[], struct indEspece**, long);
+int rechercheNomEspece(struct espece, struct indEspece*, long);
+void insertionInd(struct espece, struct indEspece**, long);
 void afficheEspece(struct espece);
-int rechercheTypeEspece(long[], struct indEspece[], long, long*);
+int rechercheTypeEspece(long[], struct indEspece*, long, long*);
 
 //prototypes de fonctions liées à la partie dresseur
 int encodeDresseur(char[], int);
@@ -91,7 +92,7 @@ int main()
 	struct stockage stockage =
 	{
 		.nomFichierEspece = "especes.dat",
-		.index = {},
+		.teteIndex = NULL,
 		.nEspece = 0,
 		.nomFichierDresseur = "dresseurs.dat",
 		.nbDresseurs = 0
@@ -148,7 +149,7 @@ int menuPrincipal(struct stockage* stockage)
 	{
 	case 1:
 		printf("Bienvenue dans le menu de gestion des especes\n");
-		while (menuEspece(stockage->nomFichierEspece, stockage->index, &stockage->nEspece));
+		while (menuEspece(stockage->nomFichierEspece, &stockage->teteIndex, &stockage->nEspece));
 		break;
 	case 2:
 		printf("Bienvenue dans le menu de gestion des dresseurs\n");
@@ -168,7 +169,7 @@ int menuPrincipal(struct stockage* stockage)
 /* Process : affiche le menu des espèces et appelle les fonctions liées aux sous-menus																*/
 /* OUTPUT : un entier (0 si l'utilisateur a choisi de quitter le programme, 1 sinon)																*/
 /****************************************************************************************************************************************************/
-int menuEspece(char nomFichierEspece[], struct indEspece index[], long* nEspece)
+int menuEspece(char nomFichierEspece[], struct indEspece** teteIndex, long* nEspece)
 {
 	long position[MAX_POKEMON], nEspeceType = 0;
 	int choixMenu = -1, i;
@@ -183,7 +184,7 @@ int menuEspece(char nomFichierEspece[], struct indEspece index[], long* nEspece)
 	{
 	//ajout d'une espèce
 	case 1:
-		while (*nEspece < MAX_POKEMON && encodeEspece(nomFichierEspece, index, *nEspece) == 1)
+		while (*nEspece < MAX_POKEMON && encodeEspece(nomFichierEspece, teteIndex, *nEspece) == 1)
 		{
 			//incrementation de la valeur de nEspece
 			(*nEspece)++;
