@@ -105,7 +105,7 @@ int main()
 		//création index et initialisation du nombre d'espèces si nécessaire
 		while (fread(&espece, sizeof(struct espece), 1, fEspeces) == 1)
 		{
-			insertionInd(espece, stockage.index, stockage.nEspece);
+			insertionInd(espece, &stockage.teteIndex, stockage.nEspece);
 			stockage.nEspece++;
 		}
 	}
