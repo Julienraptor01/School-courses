@@ -209,7 +209,7 @@ int menuEspece(char nomFichierEspece[], struct indEspece** teteIndex, long* nEsp
 		fclose(fEspeces);
 		break;
 	case 3:
-		if (rechercheTypeEspece(position, index, *nEspece, &nEspeceType) == 1)
+		if (rechercheTypeEspece(position, *teteIndex, *nEspece, &nEspeceType) == 1)
 		{
 			i = 0;
 			strcpy(arreteAffiche, "");
