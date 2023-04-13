@@ -175,6 +175,7 @@ int menuEspece(char nomFichierEspece[], struct indEspece** teteIndex, long* nEsp
 	int choixMenu = -1, i;
 	char arreteAffiche[] = "";
 	struct espece espece;
+	struct indEspece* actuel;
 	//accueil de l'utilisateur
 	printf("Bienvenue dans le programme de gestion des especes de Pokemon\n");
 	printf("\nQue voulez-vous faire :\n1) Ajouter une espece\n2) Afficher les especes\n3) Rechercher les pokemons d'un meme type\n4) Retour au menu principal\n");
@@ -192,16 +193,16 @@ int menuEspece(char nomFichierEspece[], struct indEspece** teteIndex, long* nEsp
 		break;
 	//affichage des espèces
 	case 2:
-		i = 0;
+		actuel = *teteIndex;
 		strcpy(arreteAffiche, "");
 		printf("\nEntrez n'importe quel caractere entre deux especes pour arreter l'affichage\nN'entrez rien pour continuer\n");
 		FILE* fEspeces = fopen(nomFichierEspece, "rb");
-		while (i < *nEspece && strlen(arreteAffiche) == 0)
+		while (actuel != NULL && strlen(arreteAffiche) == 0)
 		{
-			fseek(fEspeces, sizeof(struct espece) * index[i].posI, SEEK_SET);
+			fseek(fEspeces, sizeof(struct espece) * actuel->posI, SEEK_SET);
 			fread(&espece, sizeof(struct espece), 1, fEspeces);
 			afficheEspece(espece);
-			i++;
+			actuel = actuel->suivant;
 			fflush(stdin);
 			gets(arreteAffiche);
 		}
