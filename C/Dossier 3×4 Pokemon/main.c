@@ -202,7 +202,7 @@ int menuEspece(char nomFichierEspece[], struct indEspece** teteIndex, long* nEsp
 			fseek(fEspeces, sizeof(struct espece) * actuel->posI, SEEK_SET);
 			fread(&espece, sizeof(struct espece), 1, fEspeces);
 			afficheEspece(espece);
-			actuel = actuel->suivant;
+			actuel = actuel->psvt;
 			fflush(stdin);
 			gets(arreteAffiche);
 		}
