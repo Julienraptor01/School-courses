@@ -469,7 +469,7 @@ void suppressionInd(char nomEspece[], struct indEspece** teteIndex)
 {
 	struct indEspece* actuel = *teteIndex;
 	struct indEspece* precedent = NULL;
-	while (actuel != NULL && strcmp(nomEspece, actuel->nomEspece) > 0)
+	while (actuel != NULL && strcmp(nomEspece, actuel->nomEspece) != 0)
 	{
 		precedent = actuel;
 		actuel = actuel->psvt;
