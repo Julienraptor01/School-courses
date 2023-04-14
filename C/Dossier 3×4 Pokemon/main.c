@@ -605,6 +605,7 @@ void modificationEspece(char nomEspece[], char nomFichierEspece[], struct indEsp
 	if (especeExistante.pvMax == espece.pvMax)
 	{
 		printf("Le nombre de PV Max n'a pas change\n");
+		espece.pcMax = especeExistante.pcMax;
 	}
 	else
 	{
