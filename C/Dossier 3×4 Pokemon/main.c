@@ -406,7 +406,7 @@ int rechercheNomEspece(struct espece espece, struct indEspece* teteIndex, long n
 	struct indEspece* actuel = teteIndex;
 	while (actuel != NULL && strcmp(espece.nomEspece, actuel->nomEspece) != 0)
 	{
-		actuel = actuel->suivant;
+		actuel = actuel->psvt;
 	}
 	return (actuel != NULL) ? 1 : 0;
 }
