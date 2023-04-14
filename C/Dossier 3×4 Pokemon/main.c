@@ -468,9 +468,9 @@ void afficheEspece(struct espece espece)
 /* Process : recherche séquentielle sur le type d'une espèce dans l'index pour trouver toutes les espèces d'un même type et ajouter leur position respective dans un vecteur pour les afficher dans l'ordre alphabétique		*/
 /* OUTPUT : un entier (1 si le type est trouvé, 0 sinon)																																										*/
 /********************************************************************************************************************************************************************************************************************************/
-int rechercheTypeEspece(long position[], struct indEspece index[], long nEspece, long* nEspeceType)
+int rechercheTypeEspece(long position[], struct indEspece *index, long nEspece, long* nEspeceType)
+// TODO : rework to remove the nEspece parameter
 {
-	long i = 0;
 	int choixType = -1;
 	//menu de choix du type
 	do
@@ -480,12 +480,13 @@ int rechercheTypeEspece(long position[], struct indEspece index[], long nEspece,
 	}
 	while (choixType < 1 || choixType > 18);
 	//recherche du type dans l'index
-	while (i < nEspece && strcmp(index[i].type, types[choixType - 1]) != 0)
+	struct indEspece* actuel = index;
+	while (actuel != NULL && strcmp(actuel->type, types[choixType - 1]) != 0)
 	{
-		i++;
+		actuel = actuel->psvt;
 	}
 	//si le type n'est pas trouvé, on retourne 0
-	if (i == nEspece)
+	if (actuel == NULL)
 	{
 		return 0;
 	}
@@ -493,11 +494,11 @@ int rechercheTypeEspece(long position[], struct indEspece index[], long nEspece,
 	*nEspeceType = 0;
 	do
 	{
-		position[*nEspeceType] = index[i].posI;
-		i++;
+		position[*nEspeceType] = actuel->posI;
+		actuel = actuel->psvt;
 		(*nEspeceType)++;
 	}
-	while (i < nEspece && strcmp(index[i].type, types[choixType - 1]) == 0);
+	while (actuel != NULL && strcmp(actuel->type, types[choixType - 1]) == 0);
 	return 1;
 }
 
