@@ -340,7 +340,7 @@ int menuDresseur(char nomFichierDresseur[], int *nDresseurs)
 /* Process : récupère les informations sur une nouvelle espèce, vérifie l'unicité de l'espèce, l'ajoute à la liste et appelle l'ajout à l'index							*/
 /* OUTPUT : un entier (1 si une nouvelle espèce a été ajoutée, 0 sinon)																									*/
 /************************************************************************************************************************************************************************/
-int encodeEspece(char nomFichierEspece[], struct indEspece index[], long nEspece)
+int encodeEspece(char nomFichierEspece[], struct indEspece **teteIndex, long nEspece)
 {
 	struct espece espece = { 0 };
 	int choixType = -1, especeExiste = -1;
@@ -357,7 +357,7 @@ int encodeEspece(char nomFichierEspece[], struct indEspece index[], long nEspece
 			return 0;
 		}
 		//vérification de l'unicité de l'espèce
-		else if ((especeExiste = rechercheNomEspece(espece, index, nEspece)) == 1)
+		else if ((especeExiste = rechercheNomEspece(espece, *teteIndex, nEspece)) == 1)
 		{
 			printf("Le pokemon est deja present\n");
 		}
@@ -390,7 +390,7 @@ int encodeEspece(char nomFichierEspece[], struct indEspece index[], long nEspece
 	fwrite(&espece, sizeof(struct espece), 1, fEspeces);
 	fclose(fEspeces);
 	//appel de la fonction d'insertion dans l'index
-	insertionInd(espece, index, nEspece);
+	insertionInd(espece, teteIndex, nEspece);
 	return 1;
 }
 
@@ -399,16 +399,16 @@ int encodeEspece(char nomFichierEspece[], struct indEspece index[], long nEspece
 /* Process : recherche séquentielle sur le nom de l'espèce dans l'index																					*/
 /* OUTPUT : un entier (1 si l'espèce est trouvée, 0 sinon)																								*/
 /********************************************************************************************************************************************************/
-int rechercheNomEspece(struct espece espece, struct indEspece index[], long nEspece)
+//int rechercheNomEspece(struct espece espece, struct indEspece index[], long nEspece)
+int rechercheNomEspece(struct espece espece, struct indEspece* teteIndex, long nEspece)
+// TODO : rework to remove the nEspece parameter and reduce the espece parameter to a nomEspece string parameter
 {
-	long i = nEspece - 1;
-	//on fait la recherche à partir de la fin de l'index et on remonte vers le début, mais on aurait pu aussi faire l'inverse
-	//tel qu'on l'a fait, la valeur de i est la position de l'espèce dans l'index si elle est trouvée, sinon i vaudra -1
-	while (i >= 0 && strcmp(espece.nomEspece, index[i].nomEspece) != 0)
+	struct indEspece* actuel = teteIndex;
+	while (actuel != NULL && strcmp(espece.nomEspece, actuel->nomEspece) != 0)
 	{
-		i--;
+		actuel = actuel->suivant;
 	}
-	return (i >= 0) ? 1 : 0;
+	return (actuel != NULL) ? 1 : 0;
 }
 
 /********************************************************************************************************************************************************/
