@@ -73,10 +73,10 @@ int menuDresseur(char[], int*);
 
 //prototypes de fonctions liées à la partie espèces
 int encodeEspece(char[], struct indEspece**, long);
-int rechercheNomEspece(struct espece, struct indEspece*, long);
+int rechercheNomEspece(char[], struct indEspece*);
 void insertionInd(struct espece, struct indEspece**, long);
 void afficheEspece(struct espece);
-int rechercheTypeEspece(long[], struct indEspece*, long, long*);
+int rechercheTypeEspece(long[], struct indEspece*, long*);
 
 //prototypes de fonctions liées à la partie dresseur
 int encodeDresseur(char[], int);
@@ -209,7 +209,7 @@ int menuEspece(char nomFichierEspece[], struct indEspece** teteIndex, long* nEsp
 		fclose(fEspeces);
 		break;
 	case 3:
-		if (rechercheTypeEspece(position, *teteIndex, *nEspece, &nEspeceType) == 1)
+		if (rechercheTypeEspece(position, *teteIndex, &nEspeceType) == 1)
 		{
 			i = 0;
 			strcpy(arreteAffiche, "");
@@ -357,7 +357,7 @@ int encodeEspece(char nomFichierEspece[], struct indEspece **teteIndex, long nEs
 			return 0;
 		}
 		//vérification de l'unicité de l'espèce
-		else if ((especeExiste = rechercheNomEspece(espece, *teteIndex, nEspece)) == 1)
+		else if ((especeExiste = rechercheNomEspece(espece.nomEspece, *teteIndex)) == 1)
 		{
 			printf("Le pokemon est deja present\n");
 		}
@@ -399,12 +399,10 @@ int encodeEspece(char nomFichierEspece[], struct indEspece **teteIndex, long nEs
 /* Process : recherche séquentielle sur le nom de l'espèce dans l'index																					*/
 /* OUTPUT : un entier (1 si l'espèce est trouvée, 0 sinon)																								*/
 /********************************************************************************************************************************************************/
-//int rechercheNomEspece(struct espece espece, struct indEspece index[], long nEspece)
-int rechercheNomEspece(struct espece espece, struct indEspece* teteIndex, long nEspece)
-// TODO : rework to remove the nEspece parameter and reduce the espece parameter to a nomEspece string parameter
+int rechercheNomEspece(char nomEspece[], struct indEspece* teteIndex)
 {
 	struct indEspece* actuel = teteIndex;
-	while (actuel != NULL && strcmp(espece.nomEspece, actuel->nomEspece) != 0)
+	while (actuel != NULL && strcmp(nomEspece, actuel->nomEspece) != 0)
 	{
 		actuel = actuel->psvt;
 	}
@@ -468,7 +466,7 @@ void afficheEspece(struct espece espece)
 /* Process : recherche séquentielle sur le type d'une espèce dans l'index pour trouver toutes les espèces d'un même type et ajouter leur position respective dans un vecteur pour les afficher dans l'ordre alphabétique		*/
 /* OUTPUT : un entier (1 si le type est trouvé, 0 sinon)																																										*/
 /********************************************************************************************************************************************************************************************************************************/
-int rechercheTypeEspece(long position[], struct indEspece *index, long nEspece, long* nEspeceType)
+int rechercheTypeEspece(long position[], struct indEspece *index, long* nEspeceType)
 // TODO : rework to remove the nEspece parameter
 {
 	int choixType = -1;
