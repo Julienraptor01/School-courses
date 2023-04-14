@@ -38,6 +38,7 @@ struct indEspece
 	char type[MAX_TAILLE_TYPE];
 	char nomEspece[MAX_TAILLE_NOM];
 	long posI;
+	struct indEspece* psvt; //psvt = Pointeur SuiVanT
 };
 
 struct date
@@ -59,7 +60,7 @@ struct dresseur
 struct stockage
 {
 	char* nomFichierEspece;
-	struct indEspece index[MAX_POKEMON];
+	struct indEspece* teteIndex;
 	long nEspece;
 	char* nomFichierDresseur;
 	int nbDresseurs;
@@ -67,15 +68,15 @@ struct stockage
 
 //prototypes de fonctions liées aux menus
 int menuPrincipal(struct stockage*);
-int menuEspece(char[], struct indEspece[], long*);
+int menuEspece(char[], struct indEspece**, long*);
 int menuDresseur(char[], int*);
 
 //prototypes de fonctions liées à la partie espèces
-int encodeEspece(char[], struct indEspece[], long);
-int rechercheNomEspece(struct espece, struct indEspece[], long);
-void insertionInd(struct espece, struct indEspece[], long);
+int encodeEspece(char[], struct indEspece**, long);
+int rechercheNomEspece(struct espece, struct indEspece*, long);
+void insertionInd(struct espece, struct indEspece**, long);
 void afficheEspece(struct espece);
-int rechercheTypeEspece(long[], struct indEspece[], long, long*);
+int rechercheTypeEspece(long[], struct indEspece*, long, long*);
 
 //prototypes de fonctions liées à la partie dresseur
 int encodeDresseur(char[], int);
@@ -91,7 +92,7 @@ int main()
 	struct stockage stockage =
 	{
 		.nomFichierEspece = "especes.dat",
-		.index = {},
+		.teteIndex = NULL,
 		.nEspece = 0,
 		.nomFichierDresseur = "dresseurs.dat",
 		.nbDresseurs = 0
@@ -104,7 +105,7 @@ int main()
 		//création index et initialisation du nombre d'espèces si nécessaire
 		while (fread(&espece, sizeof(struct espece), 1, fEspeces) == 1)
 		{
-			insertionInd(espece, stockage.index, stockage.nEspece);
+			insertionInd(espece, &stockage.teteIndex, stockage.nEspece);
 			stockage.nEspece++;
 		}
 	}
@@ -148,7 +149,7 @@ int menuPrincipal(struct stockage* stockage)
 	{
 	case 1:
 		printf("Bienvenue dans le menu de gestion des especes\n");
-		while (menuEspece(stockage->nomFichierEspece, stockage->index, &stockage->nEspece));
+		while (menuEspece(stockage->nomFichierEspece, &stockage->teteIndex, &stockage->nEspece));
 		break;
 	case 2:
 		printf("Bienvenue dans le menu de gestion des dresseurs\n");
@@ -168,12 +169,13 @@ int menuPrincipal(struct stockage* stockage)
 /* Process : affiche le menu des espèces et appelle les fonctions liées aux sous-menus																*/
 /* OUTPUT : un entier (0 si l'utilisateur a choisi de quitter le programme, 1 sinon)																*/
 /****************************************************************************************************************************************************/
-int menuEspece(char nomFichierEspece[], struct indEspece index[], long* nEspece)
+int menuEspece(char nomFichierEspece[], struct indEspece** teteIndex, long* nEspece)
 {
 	long position[MAX_POKEMON], nEspeceType = 0;
 	int choixMenu = -1, i;
 	char arreteAffiche[] = "";
 	struct espece espece;
+	struct indEspece* actuel;
 	//accueil de l'utilisateur
 	printf("Bienvenue dans le programme de gestion des especes de Pokemon\n");
 	printf("\nQue voulez-vous faire :\n1) Ajouter une espece\n2) Afficher les especes\n3) Rechercher les pokemons d'un meme type\n4) Retour au menu principal\n");
@@ -183,7 +185,7 @@ int menuEspece(char nomFichierEspece[], struct indEspece index[], long* nEspece)
 	{
 	//ajout d'une espèce
 	case 1:
-		while (*nEspece < MAX_POKEMON && encodeEspece(nomFichierEspece, index, *nEspece) == 1)
+		while (*nEspece < MAX_POKEMON && encodeEspece(nomFichierEspece, teteIndex, *nEspece) == 1)
 		{
 			//incrementation de la valeur de nEspece
 			(*nEspece)++;
@@ -191,23 +193,23 @@ int menuEspece(char nomFichierEspece[], struct indEspece index[], long* nEspece)
 		break;
 	//affichage des espèces
 	case 2:
-		i = 0;
+		actuel = *teteIndex;
 		strcpy(arreteAffiche, "");
 		printf("\nEntrez n'importe quel caractere entre deux especes pour arreter l'affichage\nN'entrez rien pour continuer\n");
 		FILE* fEspeces = fopen(nomFichierEspece, "rb");
-		while (i < *nEspece && strlen(arreteAffiche) == 0)
+		while (actuel != NULL && strlen(arreteAffiche) == 0)
 		{
-			fseek(fEspeces, sizeof(struct espece) * index[i].posI, SEEK_SET);
+			fseek(fEspeces, sizeof(struct espece) * actuel->posI, SEEK_SET);
 			fread(&espece, sizeof(struct espece), 1, fEspeces);
 			afficheEspece(espece);
-			i++;
+			actuel = actuel->psvt;
 			fflush(stdin);
 			gets(arreteAffiche);
 		}
 		fclose(fEspeces);
 		break;
 	case 3:
-		if (rechercheTypeEspece(position, index, *nEspece, &nEspeceType) == 1)
+		if (rechercheTypeEspece(position, *teteIndex, *nEspece, &nEspeceType) == 1)
 		{
 			i = 0;
 			strcpy(arreteAffiche, "");
@@ -338,7 +340,7 @@ int menuDresseur(char nomFichierDresseur[], int *nDresseurs)
 /* Process : récupère les informations sur une nouvelle espèce, vérifie l'unicité de l'espèce, l'ajoute à la liste et appelle l'ajout à l'index							*/
 /* OUTPUT : un entier (1 si une nouvelle espèce a été ajoutée, 0 sinon)																									*/
 /************************************************************************************************************************************************************************/
-int encodeEspece(char nomFichierEspece[], struct indEspece index[], long nEspece)
+int encodeEspece(char nomFichierEspece[], struct indEspece **teteIndex, long nEspece)
 {
 	struct espece espece = { 0 };
 	int choixType = -1, especeExiste = -1;
@@ -355,7 +357,7 @@ int encodeEspece(char nomFichierEspece[], struct indEspece index[], long nEspece
 			return 0;
 		}
 		//vérification de l'unicité de l'espèce
-		else if ((especeExiste = rechercheNomEspece(espece, index, nEspece)) == 1)
+		else if ((especeExiste = rechercheNomEspece(espece, *teteIndex, nEspece)) == 1)
 		{
 			printf("Le pokemon est deja present\n");
 		}
@@ -388,7 +390,7 @@ int encodeEspece(char nomFichierEspece[], struct indEspece index[], long nEspece
 	fwrite(&espece, sizeof(struct espece), 1, fEspeces);
 	fclose(fEspeces);
 	//appel de la fonction d'insertion dans l'index
-	insertionInd(espece, index, nEspece);
+	insertionInd(espece, teteIndex, nEspece);
 	return 1;
 }
 
@@ -397,16 +399,16 @@ int encodeEspece(char nomFichierEspece[], struct indEspece index[], long nEspece
 /* Process : recherche séquentielle sur le nom de l'espèce dans l'index																					*/
 /* OUTPUT : un entier (1 si l'espèce est trouvée, 0 sinon)																								*/
 /********************************************************************************************************************************************************/
-int rechercheNomEspece(struct espece espece, struct indEspece index[], long nEspece)
+//int rechercheNomEspece(struct espece espece, struct indEspece index[], long nEspece)
+int rechercheNomEspece(struct espece espece, struct indEspece* teteIndex, long nEspece)
+// TODO : rework to remove the nEspece parameter and reduce the espece parameter to a nomEspece string parameter
 {
-	long i = nEspece - 1;
-	//on fait la recherche à partir de la fin de l'index et on remonte vers le début, mais on aurait pu aussi faire l'inverse
-	//tel qu'on l'a fait, la valeur de i est la position de l'espèce dans l'index si elle est trouvée, sinon i vaudra -1
-	while (i >= 0 && strcmp(espece.nomEspece, index[i].nomEspece) != 0)
+	struct indEspece* actuel = teteIndex;
+	while (actuel != NULL && strcmp(espece.nomEspece, actuel->nomEspece) != 0)
 	{
-		i--;
+		actuel = actuel->psvt;
 	}
-	return (i >= 0) ? 1 : 0;
+	return (actuel != NULL) ? 1 : 0;
 }
 
 /********************************************************************************************************************************************************/
@@ -414,25 +416,41 @@ int rechercheNomEspece(struct espece espece, struct indEspece index[], long nEsp
 /* Process : recherche séquentielle sur le type puis sur le nom pour trouver la position d'insertion et insertion dans l'index							*/
 /* OUTPUT : rien																																		*/
 /********************************************************************************************************************************************************/
-void insertionInd(struct espece espece, struct indEspece index[], long nEspece)
+void insertionInd(struct espece espece, struct indEspece** teteIndex, long nEspece)
 {
-	long i = nEspece - 1;
-	//boucle de recherche sur le type
-	while (i >= 0 && strcmp(espece.type, index[i].type) < 0)
+	struct indEspece* nouvelElement = (struct indEspece*)malloc(sizeof(struct indEspece));
+	strcpy(nouvelElement->type, espece.type);
+	strcpy(nouvelElement->nomEspece, espece.nomEspece);
+	nouvelElement->posI = nEspece;
+	if (*teteIndex == NULL)
 	{
-		index[i + 1] = index[i];
-		i--;
+		nouvelElement->psvt = NULL;
+		*teteIndex = nouvelElement;
 	}
-	//boucle de recherche sur le nom
-	while (i >= 0 && strcmp(espece.type, index[i].type) == 0 && strcmp(espece.nomEspece, index[i].nomEspece) < 0)
+	else
 	{
-		index[i + 1] = index[i];
-		i--;
+		struct indEspece* actuel = *teteIndex;
+		struct indEspece* precedent = NULL;
+		while (actuel != NULL && strcmp(espece.type, actuel->type) > 0)
+		{
+			precedent = actuel;
+			actuel = actuel->psvt;
+		}
+		while (actuel != NULL && strcmp(espece.type, actuel->type) == 0 && strcmp(espece.nomEspece, actuel->nomEspece) > 0)
+		{
+			precedent = actuel;
+			actuel = actuel->psvt;
+		}
+		nouvelElement->psvt = actuel;
+		if (precedent == NULL)
+		{
+			*teteIndex = nouvelElement;
+		}
+		else
+		{
+			precedent->psvt = nouvelElement;
+		}
 	}
-	//insertion de l'espèce dans l'index
-	strcpy(index[i + 1].type, espece.type);
-	strcpy(index[i + 1].nomEspece, espece.nomEspece);
-	index[i + 1].posI = nEspece;
 }
 
 /****************************************************/
@@ -450,9 +468,9 @@ void afficheEspece(struct espece espece)
 /* Process : recherche séquentielle sur le type d'une espèce dans l'index pour trouver toutes les espèces d'un même type et ajouter leur position respective dans un vecteur pour les afficher dans l'ordre alphabétique		*/
 /* OUTPUT : un entier (1 si le type est trouvé, 0 sinon)																																										*/
 /********************************************************************************************************************************************************************************************************************************/
-int rechercheTypeEspece(long position[], struct indEspece index[], long nEspece, long* nEspeceType)
+int rechercheTypeEspece(long position[], struct indEspece *index, long nEspece, long* nEspeceType)
+// TODO : rework to remove the nEspece parameter
 {
-	long i = 0;
 	int choixType = -1;
 	//menu de choix du type
 	do
@@ -462,12 +480,13 @@ int rechercheTypeEspece(long position[], struct indEspece index[], long nEspece,
 	}
 	while (choixType < 1 || choixType > 18);
 	//recherche du type dans l'index
-	while (i < nEspece && strcmp(index[i].type, types[choixType - 1]) != 0)
+	struct indEspece* actuel = index;
+	while (actuel != NULL && strcmp(actuel->type, types[choixType - 1]) != 0)
 	{
-		i++;
+		actuel = actuel->psvt;
 	}
 	//si le type n'est pas trouvé, on retourne 0
-	if (i == nEspece)
+	if (actuel == NULL)
 	{
 		return 0;
 	}
@@ -475,11 +494,11 @@ int rechercheTypeEspece(long position[], struct indEspece index[], long nEspece,
 	*nEspeceType = 0;
 	do
 	{
-		position[*nEspeceType] = index[i].posI;
-		i++;
+		position[*nEspeceType] = actuel->posI;
+		actuel = actuel->psvt;
 		(*nEspeceType)++;
 	}
-	while (i < nEspece && strcmp(index[i].type, types[choixType - 1]) == 0);
+	while (actuel != NULL && strcmp(actuel->type, types[choixType - 1]) == 0);
 	return 1;
 }
 
