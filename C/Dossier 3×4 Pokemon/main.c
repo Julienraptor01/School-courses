@@ -23,6 +23,9 @@
 //taille maximum du nom d'un pseudo
 #define MAX_TAILLE_PSEUDO 50
 
+//full safe gets
+#define saferGETS(var) fgets(var, sizeof(var), stdin); var[strcspn(var, "\n")] = '\0'
+
 //structures de données
 struct espece
 {
@@ -204,7 +207,7 @@ int menuEspece(char nomFichierEspece[], struct indEspece** teteIndex, long* nEsp
 			afficheEspece(espece);
 			actuel = actuel->psvt;
 			fflush(stdin);
-			gets(arreteAffiche);
+			getchar(arreteAffiche);
 		}
 		fclose(fEspeces);
 		break;
@@ -223,7 +226,7 @@ int menuEspece(char nomFichierEspece[], struct indEspece** teteIndex, long* nEsp
 				afficheEspece(espece);
 				i++;
 				fflush(stdin);
-				gets(arreteAffiche);
+				getchar(arreteAffiche);
 			}
 			fclose(fEspeces);
 		}
@@ -236,7 +239,7 @@ int menuEspece(char nomFichierEspece[], struct indEspece** teteIndex, long* nEsp
 	case 4:
 		printf("Entrez le nom de l'espece que vous voulez modifier ou n'entrez rien pour revenir au de gestion des especes\n");
 		fflush(stdin);
-		gets(nomEspece);
+		saferGETS(nomEspece);
 		if (strlen(nomEspece) == 0)
 		{
 			printf("Retour au menu de gestion des especes\n");
@@ -300,14 +303,14 @@ int menuDresseur(char nomFichierDresseur[], int *nDresseurs)
 			afficheDresseur(nomFichierDresseur, i);
 			i++;
 			fflush(stdin);
-			gets(arreteAffiche);
+			getchar(arreteAffiche);
 		}
 		break;
 	//recherche et affichage d'un dresseur
 	case 3:
 		printf("Entrez le pseudo du dresseur que vous recherchez ou n'entrez rien pour revenir au menu de gestion des dresseurs\n");
 		fflush(stdin);
-		gets(pseudo);
+		saferGETS(pseudo);
 		if (strlen(pseudo) == 0)
 		{
 			printf("Retour au menu de gestion des dresseurs\n");
@@ -329,7 +332,7 @@ int menuDresseur(char nomFichierDresseur[], int *nDresseurs)
 	case 4:
 		printf("Entrez le pseudo du dresseur que vous souhaitez modifier ou n'entrez rien pour revenir au menu de gestion des dresseurs\n");
 		fflush(stdin);
-		gets(pseudo);
+		saferGETS(pseudo);
 		if (strlen(pseudo) == 0)
 		{
 			printf("Retour au menu de gestion des dresseurs\n");
@@ -365,7 +368,7 @@ int encodeEspece(char nomFichierEspece[], struct indEspece **teteIndex, long pos
 	{
 		printf("Quel est le nom de l'espece ?\n");
 		fflush(stdin);
-		gets(espece.nomEspece);
+		saferGETS(espece.nomEspece);
 		//sortie si le nom est vide
 		if (strlen(espece.nomEspece) == 0)
 		{
@@ -554,7 +557,7 @@ void modificationEspece(char nomEspece[], char nomFichierEspece[], struct indEsp
 	{
 		printf("Quel est le nom de l'espece ?\n");
 		fflush(stdin);
-		gets(espece.nomEspece);
+		saferGETS(espece.nomEspece);
 		//sortie si le nom est vide
 		if (strlen(espece.nomEspece) == 0)
 		{
@@ -643,7 +646,7 @@ int encodeDresseur(char nomFichierDresseur[], int position)
 	//on demande le pseudo du dresseur
 	printf("\nPseudo : ");
 	fflush(stdin);
-	gets(dress.pseudo);
+	saferGETS(dress.pseudo);
 	//si le pseudo est vide, on retourne -2
 	if (strlen(dress.pseudo) == 0)
 	{
