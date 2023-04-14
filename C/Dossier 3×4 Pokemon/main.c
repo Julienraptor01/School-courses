@@ -539,7 +539,7 @@ void modificationEspece(char nomEspece[], char nomFichierEspece[], struct indEsp
 	//vérification de l'existence de l'espèce
 	if (especeAModifier == NULL)
 	{
-		printf("\nL'espèce n'existe pas.\n");
+		printf("\nL'espece n'existe pas.\n");
 		return;
 	}
 	struct espece espece = { 0 }, especeExistante = { 0 };
