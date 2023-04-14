@@ -73,11 +73,12 @@ int menuDresseur(char[], int*);
 
 //prototypes de fonctions liées à la partie espèces
 int encodeEspece(char[], struct indEspece**, long);
-int rechercheNomEspece(char[], struct indEspece*);
+struct indEspece* rechercheNomEspece(char[], struct indEspece*);
 void insertionInd(struct espece, struct indEspece**, long);
 void suppressionInd(char[], struct indEspece**);
 void afficheEspece(struct espece);
 int rechercheTypeEspece(long[], struct indEspece*, long*);
+void modificationEspece(char[], char[], struct indEspece**);
 
 //prototypes de fonctions liées à la partie dresseur
 int encodeDresseur(char[], int);
@@ -174,7 +175,7 @@ int menuEspece(char nomFichierEspece[], struct indEspece** teteIndex, long* nEsp
 {
 	long position[MAX_POKEMON], nEspeceType = 0;
 	int choixMenu = -1, i;
-	char arreteAffiche[] = "";
+	char arreteAffiche[] = "", nomEspece[MAX_TAILLE_NOM];
 	struct espece espece;
 	struct indEspece* actuel;
 	printf("\nQue voulez-vous faire :\n1) Ajouter une espece\n2) Afficher les especes\n3) Rechercher les pokemons d'un meme type\n4) Retour au menu principal\n");
@@ -207,6 +208,7 @@ int menuEspece(char nomFichierEspece[], struct indEspece** teteIndex, long* nEsp
 		}
 		fclose(fEspeces);
 		break;
+	//recherche des espèces d'un même type
 	case 3:
 		if (rechercheTypeEspece(position, *teteIndex, &nEspeceType) == 1)
 		{
@@ -230,15 +232,29 @@ int menuEspece(char nomFichierEspece[], struct indEspece** teteIndex, long* nEsp
 			printf("Aucune espece de ce type n'a ete trouvee\n");
 		}
 		break;
-	//quitter le menu
+	//modifier une espece
 	case 4:
+		printf("Entrez le nom de l'espece que vous voulez modifier ou n'entrez rien pour revenir au de gestion des especes\n");
+		fflush(stdin);
+		gets(nomEspece);
+		if (strlen(nomEspece) == 0)
+		{
+			printf("Retour au menu de gestion des especes\n");
+		}
+		else
+		{
+			modificationEspece(nomEspece, nomFichierEspece, teteIndex);
+		}
+		break;
+	//quitter le menu
+	case 5:
 		printf("Vous avez choisi de retourner au menu principal\n");
 		break;
 	//cas d'erreur
 	default:
 		printf("Vous devez choisir une valeur comprise entre 1 et 4\n");
 	}
-	return (choixMenu != 4) ? 1 : 0;
+	return (choixMenu != 5) ? 1 : 0;
 }
 
 /************************************************************************************************************************************/
@@ -339,7 +355,7 @@ int menuDresseur(char nomFichierDresseur[], int *nDresseurs)
 /* Process : récupère les informations sur une nouvelle espèce, vérifie l'unicité de l'espèce, l'ajoute à la liste et appelle l'ajout à l'index							*/
 /* OUTPUT : un entier (1 si une nouvelle espèce a été ajoutée, 0 sinon)																									*/
 /************************************************************************************************************************************************************************/
-int encodeEspece(char nomFichierEspece[], struct indEspece **teteIndex, long nEspece)
+int encodeEspece(char nomFichierEspece[], struct indEspece **teteIndex, long positionFichier)
 {
 	struct espece espece = { 0 };
 	int choixType = -1, especeExiste = -1;
@@ -355,8 +371,7 @@ int encodeEspece(char nomFichierEspece[], struct indEspece **teteIndex, long nEs
 		{
 			return 0;
 		}
-		//vérification de l'unicité de l'espèce
-		else if ((especeExiste = rechercheNomEspece(espece.nomEspece, *teteIndex)) == 1)
+		else if ((especeExiste = (rechercheNomEspece(espece.nomEspece, *teteIndex) != NULL ? 1 : 0)) == 1)
 		{
 			printf("Le pokemon est deja present\n");
 		}
@@ -389,7 +404,7 @@ int encodeEspece(char nomFichierEspece[], struct indEspece **teteIndex, long nEs
 	fwrite(&espece, sizeof(struct espece), 1, fEspeces);
 	fclose(fEspeces);
 	//appel de la fonction d'insertion dans l'index
-	insertionInd(espece, teteIndex, nEspece);
+	insertionInd(espece, teteIndex, positionFichier);
 	return 1;
 }
 
@@ -398,14 +413,14 @@ int encodeEspece(char nomFichierEspece[], struct indEspece **teteIndex, long nEs
 /* Process : recherche séquentielle sur le nom de l'espèce dans l'index																					*/
 /* OUTPUT : un entier (1 si l'espèce est trouvée, 0 sinon)																								*/
 /********************************************************************************************************************************************************/
-int rechercheNomEspece(char nomEspece[], struct indEspece* teteIndex)
+struct indEspece* rechercheNomEspece(char nomEspece[], struct indEspece* teteIndex)
 {
 	struct indEspece* actuel = teteIndex;
 	while (actuel != NULL && strcmp(nomEspece, actuel->nomEspece) != 0)
 	{
 		actuel = actuel->psvt;
 	}
-	return (actuel != NULL) ? 1 : 0;
+	return actuel;
 }
 
 /********************************************************************************************************************************************************/
@@ -413,12 +428,12 @@ int rechercheNomEspece(char nomEspece[], struct indEspece* teteIndex)
 /* Process : recherche séquentielle sur le type puis sur le nom pour trouver la position d'insertion et insertion dans l'index							*/
 /* OUTPUT : rien																																		*/
 /********************************************************************************************************************************************************/
-void insertionInd(struct espece espece, struct indEspece** teteIndex, long nEspece)
+void insertionInd(struct espece espece, struct indEspece** teteIndex, long positionFichier)
 {
 	struct indEspece* nouvelElement = (struct indEspece*)malloc(sizeof(struct indEspece));
 	strcpy(nouvelElement->type, espece.type);
 	strcpy(nouvelElement->nomEspece, espece.nomEspece);
-	nouvelElement->posI = nEspece;
+	nouvelElement->posI = positionFichier;
 	if (*teteIndex == NULL)
 	{
 		nouvelElement->psvt = NULL;
@@ -486,7 +501,6 @@ void afficheEspece(struct espece espece)
 /* OUTPUT : un entier (1 si le type est trouvé, 0 sinon)																																										*/
 /********************************************************************************************************************************************************************************************************************************/
 int rechercheTypeEspece(long position[], struct indEspece *index, long* nEspeceType)
-// TODO : rework to remove the nEspece parameter
 {
 	int choixType = -1;
 	//menu de choix du type
@@ -519,6 +533,102 @@ int rechercheTypeEspece(long position[], struct indEspece *index, long* nEspeceT
 	return 1;
 }
 
+void modificationEspece(char nomEspece[], char nomFichierEspece[], struct indEspece** teteIndex)
+{
+	struct indEspece* especeAModifier = rechercheNomEspece(nomEspece, *teteIndex);
+	//vérification de l'existence de l'espèce
+	if (especeAModifier == NULL)
+	{
+		printf("\nL'espèce n'existe pas.\n");
+		return;
+	}
+	struct espece espece = { 0 }, especeExistante = { 0 };
+	int choixType = -1, especeExiste = -1;
+	FILE* fEspeces = fopen(nomFichierEspece, "rb");
+	fseek(fEspeces, especeAModifier->posI * sizeof(struct espece), SEEK_SET);
+	fread(&especeExistante, sizeof(struct espece), 1, fEspeces);
+	fclose(fEspeces);
+	printf("\nModification de l'espece %s\nN'entrez rien pour annuler la modification\n", nomEspece);
+	//nom de l'espece
+	do
+	{
+		printf("Quel est le nom de l'espece ?\n");
+		fflush(stdin);
+		gets(espece.nomEspece);
+		//sortie si le nom est vide
+		if (strlen(espece.nomEspece) == 0)
+		{
+			printf("Modification annulee\n");
+			return;
+		}
+		else if (strcmp(espece.nomEspece, nomEspece) != 0 && (especeExiste = (rechercheNomEspece(espece.nomEspece, *teteIndex) != NULL ? 1 : 0)) == 1)
+		{
+			printf("Le pokemon est deja present\n");
+		}
+	} while (especeExiste == 1);
+	if (strcmp(espece.nomEspece, nomEspece) == 0)
+	{
+		printf("Le nom de l'espece n'a pas change\n");
+	}
+	else
+	{
+		printf("Le nom de l'espece est bien change de %s en %s\n", nomEspece, espece.nomEspece);
+	}
+	//menu pour choisir le type
+	do
+	{
+		printf("Quel est le type du pokemon ?\n1) Acier\n2) Combat\n3) Dragon\n4) Eau\n5) Electrik\n6) Fee\n7) Feu\n8) Glace\n9) Insecte\n10) Normal\n11) Plante\n12) Poison\n13) Psy\n14) Roche\n15) Sol\n16) Spectre\n17) Tenebres\n18) Vol\n");
+		fflush(stdin);
+		scanf("%d", &choixType);
+	} while (choixType < 1 || choixType > NOMBRE_TYPES);
+	//copie du type dans la structure
+	strcpy(espece.type, types[choixType - 1]);
+	if (strcmp(especeExistante.type, types[choixType - 1]) == 0)
+	{
+		printf("Le type de l'espece n'a pas change\n");
+	}
+	else
+	{
+		printf("Le type est bien change de %s a %s\n", especeExistante.type, espece.type);
+	}
+	//copie des bonbons
+	espece.bonbons = especeExistante.bonbons;
+	//demander le nombre de PV Max
+	do
+	{
+		printf("Quel est le nombre de PV Max ?\n");
+		fflush(stdin);
+		scanf("%u", &espece.pvMax);
+	}
+	//le nombre de PV Max doit être compris entre 1 et UINT_MAX/210 (pour éviter un dépassement de capacité lors du calcul du nombre de PC Max)
+	while (espece.pvMax < 1 || espece.pvMax >= UINT_MAX / 210);
+	if (especeExistante.pvMax == espece.pvMax)
+	{
+		printf("Le nombre de PV Max n'a pas change\n");
+	}
+	else
+	{
+		printf("Le nombre de PV Max est bien change de %u a %u\n", especeExistante.pvMax, espece.pvMax);
+		//re-calcul du nombre de PC Max avec une multiplication par un nombre aléatoire entre 19 et 21
+		espece.pcMax = espece.pvMax * (200 + (rand() % 21 - 10)) / 10;
+	}
+	//vérification de si qqch a changé
+	if (espece == especeExistante)
+	{
+		printf("Aucune modification n'a ete effectuee\n");
+		return;
+	}
+	FILE* fEspeces = fopen(nomFichierEspece, "r+b");
+	//fseek at the seek set with offset based on especeAModifier->posI
+	fseek(fEspeces, especeAModifier->posI * sizeof(struct espece), SEEK_SET);
+	fwrite(&espece, sizeof(struct espece), 1, fEspeces);
+	fclose(fEspeces);
+	//appel de la fonction de suppression dans l'index
+	suppressionInd(especeExistante.nomEspece, teteIndex);
+	//appel de la fonction d'insertion dans l'index
+	insertionInd(espece, teteIndex, especeAModifier->posI);
+	return;
+}
 
 /************************************************************************************************************************************************************************/
 /* INPUT : un vecteur de caractères (le nom du fichier), un entier (la position où aller encoder le dresseur)															*/
