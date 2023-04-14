@@ -613,12 +613,12 @@ void modificationEspece(char nomEspece[], char nomFichierEspece[], struct indEsp
 		espece.pcMax = espece.pvMax * (200 + (rand() % 21 - 10)) / 10;
 	}
 	//vérification de si qqch a changé
-	if (espece == especeExistante)
+	if (strcmp(espece.nomEspece, nomEspece) == 0 && strcmp(espece.type, especeExistante.type) == 0 && espece.pvMax == especeExistante.pvMax)
 	{
 		printf("Aucune modification n'a ete effectuee\n");
 		return;
 	}
-	FILE* fEspeces = fopen(nomFichierEspece, "r+b");
+	fEspeces = fopen(nomFichierEspece, "r+b");
 	//fseek at the seek set with offset based on especeAModifier->posI
 	fseek(fEspeces, especeAModifier->posI * sizeof(struct espece), SEEK_SET);
 	fwrite(&espece, sizeof(struct espece), 1, fEspeces);
