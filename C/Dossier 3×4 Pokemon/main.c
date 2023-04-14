@@ -176,8 +176,6 @@ int menuEspece(char nomFichierEspece[], struct indEspece** teteIndex, long* nEsp
 	char arreteAffiche[] = "";
 	struct espece espece;
 	struct indEspece* actuel;
-	//accueil de l'utilisateur
-	printf("Bienvenue dans le programme de gestion des especes de Pokemon\n");
 	printf("\nQue voulez-vous faire :\n1) Ajouter une espece\n2) Afficher les especes\n3) Rechercher les pokemons d'un meme type\n4) Retour au menu principal\n");
 	fflush(stdin);
 	scanf("%d", &choixMenu);
