@@ -416,25 +416,41 @@ int rechercheNomEspece(struct espece espece, struct indEspece* teteIndex, long n
 /* Process : recherche séquentielle sur le type puis sur le nom pour trouver la position d'insertion et insertion dans l'index							*/
 /* OUTPUT : rien																																		*/
 /********************************************************************************************************************************************************/
-void insertionInd(struct espece espece, struct indEspece index[], long nEspece)
+void insertionInd(struct espece espece, struct indEspece** teteIndex, long nEspece)
 {
-	long i = nEspece - 1;
-	//boucle de recherche sur le type
-	while (i >= 0 && strcmp(espece.type, index[i].type) < 0)
+	struct indEspece* nouvelElement = (struct indEspece*)malloc(sizeof(struct indEspece));
+	strcpy(nouvelElement->type, espece.type);
+	strcpy(nouvelElement->nomEspece, espece.nomEspece);
+	nouvelElement->posI = nEspece;
+	if (*teteIndex == NULL)
 	{
-		index[i + 1] = index[i];
-		i--;
+		nouvelElement->psvt = NULL;
+		*teteIndex = nouvelElement;
 	}
-	//boucle de recherche sur le nom
-	while (i >= 0 && strcmp(espece.type, index[i].type) == 0 && strcmp(espece.nomEspece, index[i].nomEspece) < 0)
+	else
 	{
-		index[i + 1] = index[i];
-		i--;
+		struct indEspece* actuel = *teteIndex;
+		struct indEspece* precedent = NULL;
+		while (actuel != NULL && strcmp(espece.type, actuel->type) > 0)
+		{
+			precedent = actuel;
+			actuel = actuel->psvt;
+		}
+		while (actuel != NULL && strcmp(espece.type, actuel->type) == 0 && strcmp(espece.nomEspece, actuel->nomEspece) > 0)
+		{
+			precedent = actuel;
+			actuel = actuel->psvt;
+		}
+		nouvelElement->psvt = actuel;
+		if (precedent == NULL)
+		{
+			*teteIndex = nouvelElement;
+		}
+		else
+		{
+			precedent->psvt = nouvelElement;
+		}
 	}
-	//insertion de l'espèce dans l'index
-	strcpy(index[i + 1].type, espece.type);
-	strcpy(index[i + 1].nomEspece, espece.nomEspece);
-	index[i + 1].posI = nEspece;
 }
 
 /****************************************************/
