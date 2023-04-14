@@ -75,6 +75,7 @@ int menuDresseur(char[], int*);
 int encodeEspece(char[], struct indEspece**, long);
 int rechercheNomEspece(char[], struct indEspece*);
 void insertionInd(struct espece, struct indEspece**, long);
+void suppressionInd(char[], struct indEspece**);
 void afficheEspece(struct espece);
 int rechercheTypeEspece(long[], struct indEspece*, long*);
 
@@ -447,6 +448,26 @@ void insertionInd(struct espece espece, struct indEspece** teteIndex, long nEspe
 			precedent->psvt = nouvelElement;
 		}
 	}
+}
+
+void suppressionInd(char nomEspece[], struct indEspece** teteIndex)
+{
+	struct indEspece* actuel = *teteIndex;
+	struct indEspece* precedent = NULL;
+	while (actuel != NULL && strcmp(nomEspece, actuel->nomEspece) > 0)
+	{
+		precedent = actuel;
+		actuel = actuel->psvt;
+	}
+	if (precedent == NULL)
+	{
+		*teteIndex = actuel->psvt;
+	}
+	else
+	{
+		precedent->psvt = actuel->psvt;
+	}
+	free(actuel);
 }
 
 /****************************************************/
