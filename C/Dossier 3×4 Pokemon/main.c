@@ -207,7 +207,7 @@ int menuEspece(char nomFichierEspece[], struct indEspece** teteIndex, long* nEsp
 			afficheEspece(espece);
 			actuel = actuel->psvt;
 			fflush(stdin);
-			getchar(arreteAffiche);
+			saferGETS(arreteAffiche);
 		}
 		fclose(fEspeces);
 		break;
@@ -226,7 +226,7 @@ int menuEspece(char nomFichierEspece[], struct indEspece** teteIndex, long* nEsp
 				afficheEspece(espece);
 				i++;
 				fflush(stdin);
-				getchar(arreteAffiche);
+				saferGETS(arreteAffiche);
 			}
 			fclose(fEspeces);
 		}
@@ -303,7 +303,7 @@ int menuDresseur(char nomFichierDresseur[], int *nDresseurs)
 			afficheDresseur(nomFichierDresseur, i);
 			i++;
 			fflush(stdin);
-			getchar(arreteAffiche);
+			saferGETS(arreteAffiche);
 		}
 		break;
 	//recherche et affichage d'un dresseur
