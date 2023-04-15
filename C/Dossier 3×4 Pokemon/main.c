@@ -178,7 +178,7 @@ int menuEspece(char nomFichierEspece[], struct indEspece** teteIndex, long* nEsp
 {
 	long position[MAX_POKEMON], nEspeceType = 0;
 	int choixMenu = -1, i;
-	char arreteAffiche, nomEspece[MAX_TAILLE_NOM];
+	char arreteAffiche[2] = "", nomEspece[MAX_TAILLE_NOM];
 	struct espece espece;
 	struct indEspece* actuel;
 	printf("\nQue voulez-vous faire :\n1) Ajouter une espece\n2) Afficher les especes\n3) Rechercher les pokemons d'un meme type\n4) Modifier une espece\n5) Retour au menu principal\n");
@@ -197,17 +197,17 @@ int menuEspece(char nomFichierEspece[], struct indEspece** teteIndex, long* nEsp
 	//affichage des espèces
 	case 2:
 		actuel = *teteIndex;
-		arreteAffiche = '\n';
+		strcpy(arreteAffiche, "");
 		printf("\nEntrez n'importe quel caractere entre deux especes pour arreter l'affichage\nN'entrez rien pour continuer\n");
 		FILE* fEspeces = fopen(nomFichierEspece, "rb");
-		while (actuel != NULL && arreteAffiche == '\n')
+		while (actuel != NULL && strlen(arreteAffiche) == 0)
 		{
 			fseek(fEspeces, sizeof(struct espece) * actuel->posI, SEEK_SET);
 			fread(&espece, sizeof(struct espece), 1, fEspeces);
 			afficheEspece(espece);
 			actuel = actuel->psvt;
 			fflush(stdin);
-			arreteAffiche = getchar();
+			saferGETS(arreteAffiche);
 		}
 		fclose(fEspeces);
 		break;
@@ -216,17 +216,17 @@ int menuEspece(char nomFichierEspece[], struct indEspece** teteIndex, long* nEsp
 		if (rechercheTypeEspece(position, *teteIndex, &nEspeceType) == 1)
 		{
 			i = 0;
-			arreteAffiche = '\n';
+			strcpy(arreteAffiche, "");
 			printf("\nEntrez n'importe quel caractere entre deux especes pour arreter l'affichage\nN'entrez rien pour continuer\n");
 			fEspeces = fopen(nomFichierEspece, "rb");
-			while (i < nEspeceType && arreteAffiche == '\n')
+			while (i < nEspeceType && strlen(arreteAffiche) == 0)
 			{
 				fseek(fEspeces, sizeof(struct espece) * position[i], SEEK_SET);
 				fread(&espece, sizeof(struct espece), 1, fEspeces);
 				afficheEspece(espece);
 				i++;
 				fflush(stdin);
-				arreteAffiche = getchar();
+				saferGETS(arreteAffiche);
 			}
 			fclose(fEspeces);
 		}
@@ -268,7 +268,7 @@ int menuEspece(char nomFichierEspece[], struct indEspece** teteIndex, long* nEsp
 int menuDresseur(char nomFichierDresseur[], int *nDresseurs)
 {
 	int choixMenu = -1, encode = 0, i, position = -2;
-	char arreteAffiche, pseudo[MAX_TAILLE_PSEUDO];
+	char arreteAffiche[2] = "", pseudo[MAX_TAILLE_PSEUDO];
 	printf("\nQue voulez-vous faire :\n1) Inscrire un dresseur\n2) Afficher les dresseurs\n3) Rechercher un dresseur\n4) Modifier le pseudo d'un dresseur\n5) Retour au menu principal\n");
 	fflush(stdin);
 	scanf("%d", &choixMenu);
@@ -296,14 +296,14 @@ int menuDresseur(char nomFichierDresseur[], int *nDresseurs)
 	//affichage des dresseurs
 	case 2:
 		i = 0;
-		arreteAffiche = '\n';
+		strcpy(arreteAffiche, "");
 		printf("\nEntrez n'importe quel caractere entre deux dresseurs pour arreter l'affichage\nN'entrez rien pour continuer\n");
-		while (i < *nDresseurs && arreteAffiche == '\n')
+		while (i < *nDresseurs && strlen(arreteAffiche) == 0)
 		{
 			afficheDresseur(nomFichierDresseur, i);
 			i++;
 			fflush(stdin);
-			arreteAffiche = getchar();
+			saferGETS(arreteAffiche);
 		}
 		break;
 	//recherche et affichage d'un dresseur
