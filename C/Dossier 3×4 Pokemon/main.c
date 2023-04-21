@@ -487,7 +487,7 @@ void suppressionInd(char nomEspece[], struct indEspece** teteIndex)
 		precedent->psvt = actuel->psvt;
 	}
 	*/
-	precedent == NULL ? *teteIndex = actuel->psvt : precedent->psvt = actuel->psvt;
+	precedent == NULL ? (*teteIndex = actuel->psvt) : (precedent->psvt = actuel->psvt);
 	free(actuel);
 }
 
