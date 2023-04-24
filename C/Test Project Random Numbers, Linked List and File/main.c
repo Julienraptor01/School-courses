@@ -45,7 +45,6 @@ void printQueue(struct node**, struct node**);
 
 // file functions
 void writeToFile(int, char*);
-void readFromFile(int, char*);
 void printFile(char*);
 
 int main()
@@ -248,16 +247,6 @@ void writeToFile(int data, char* fileName)
 	FILE* file = fopen(fileName, "ab");
 	//the file cannot not exist, we'll make sure at the start of the program so no need to check for it
 	fwrite(&data, sizeof(data), 1, file);
-	fclose(file);
-}
-
-void readFromFile(int position, char* fileName)
-{
-	FILE* file = fopen(fileName, "rb");
-	//the file cannot not exist, we'll make sure at the start of the program so no need to check for it
-	int data;
-	fseek(file, sizeof(data) * position, SEEK_SET);
-	fread(&data, sizeof(data), 1, file);
 	fclose(file);
 }
 
