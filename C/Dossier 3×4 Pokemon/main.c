@@ -166,7 +166,7 @@ int menuPrincipal(struct stockage* stockage)
 	default:
 		printf("Vous devez choisir une valeur comprise entre 1 et 3\n");
 	}
-	return (choixMenu != 3) ? 1 : 0;
+	return (choixMenu != 3);
 }
 
 /****************************************************************************************************************************************************/
@@ -257,7 +257,7 @@ int menuEspece(char nomFichierEspece[], struct indEspece** teteIndex, long* nEsp
 	default:
 		printf("Vous devez choisir une valeur comprise entre 1 et 4\n");
 	}
-	return (choixMenu != 5) ? 1 : 0;
+	return (choixMenu != 5);
 }
 
 /************************************************************************************************************************************/
@@ -350,7 +350,7 @@ int menuDresseur(char nomFichierDresseur[], int *nDresseurs)
 	default:
 		printf("Vous devez choisir une valeur comprise entre 1 et 5\n");
 	}
-	return (choixMenu != 5) ? 1 : 0;
+	return (choixMenu != 5);
 }
 
 /************************************************************************************************************************************************************************/
