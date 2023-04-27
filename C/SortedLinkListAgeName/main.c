@@ -80,7 +80,7 @@ bool menu(struct node **headByName, struct node **headByAge)
 	default:
 		printf("Choose a valid option (1-4)\n");
 	}
-	return (choice != 4);
+	return (choice != 5);
 }
 
 void createPerson(struct node **headByName, struct node **headByAge)
