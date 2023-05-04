@@ -14,10 +14,10 @@ class Jeu:
         self.score = 0
 
     def demarrer(self):
-        self.presentation.afficher_score(self.score)
 
         while self.nbEchecs < 3:
 
+            self.presentation.afficher_score(self.score)
             self.cle.changer_etat()
 
             evenement = self.presentation.lire_evenement()
@@ -31,6 +31,8 @@ class Jeu:
                     # draw the monkey with the key
                     self.dkjr.attrapage_cle(True)
                     # remove a part of the cage
+                    # play good sound
+                    self.presentation.jouer_son(3)
                     # add points
                     self.score += 10
                     # wait a bit
@@ -48,6 +50,8 @@ class Jeu:
                     time.sleep(0.3)
                     # place the monkey in the bush
                     self.dkjr.chute_apres_cle(False)
+                    # play bad sound
+                    self.presentation.jouer_son(1)
                     # add a failure to the counter
                     self.nbEchecs += 1
                     # wait a bit
@@ -56,6 +60,11 @@ class Jeu:
                     if self.nbEchecs < 3:
                         self.dkjr.reinitialiser_etat(False)
 
+            time.sleep(0.1)
+
+        # play 10 times the bad sound
+        for i in range(10):
+            self.presentation.jouer_son(1)
             time.sleep(0.1)
 
         self.presentation.attendre_fermeture_fenetre()

@@ -29,8 +29,9 @@ class Cle:
             elif self.etat == 4:
                 self.etat = 3
                 self.augmente = False
-            self.presentation.effacer_carre(3, 13, 2, 2)
+                self.presentation.effacer_carre(3, 13, 2, 2)
             self.presentation.afficher_cle(self.etat)
+            self.presentation.jouer_son(2)
             self.delai = 7
 
     def effacer_cle(self):
