@@ -7,4 +7,6 @@ class Cle:
         self.delai = 0
         self.etat = 2
 
-    def changerEtat(self,
+    def changer_etat(self):
+        if self.delai > 0:
+            self.delai -= 1

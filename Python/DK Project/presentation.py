@@ -2,6 +2,15 @@ import pygame
 import time
 
 
+def attendre_fermeture_fenetre():
+    while True:
+        for evenement in pygame.event.get():
+            if evenement.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+        time.sleep(0.2)
+
+
 class Presentation:
 
     def __init__(self):
@@ -73,7 +82,8 @@ class Presentation:
     # retourner la touche sur laquelle a appuyé le joueur ou fermer la fenêtre
     # si clic sur la croix
 
-    def lireEvenement(self):
+    @staticmethod
+    def lire_evenement():
         for evenement in pygame.event.get():
             if evenement.type == pygame.QUIT:
                 pygame.quit()
@@ -85,145 +95,137 @@ class Presentation:
     # ------------------------------------------------------------------------
     # Fermer la fenêtre si clic sur la croix
 
-    def attendreFermetureFenetre(self):
-        while True:
-            for evenement in pygame.event.get():
-                if evenement.type == pygame.QUIT:
-                    pygame.quit()
-                    exit()
-            time.sleep(0.2)
-
     # ------------------------------------------------------------------------
     # afficher les différentes images de la clé (num est le numéro de l'image)
 
-    def afficherCle(self, num):
+    def afficher_cle(self, num):
         if num == 1:
-            self.afficherImage(3, 12, self.imgCle1)
+            self.afficher_image(3, 12, self.imgCle1)
         elif num == 2:
-            self.afficherImage(3, 13, self.imgCle2)
+            self.afficher_image(3, 13, self.imgCle2)
         elif num == 3:
-            self.afficherImage(3, 13, self.imgCle3)
+            self.afficher_image(3, 13, self.imgCle3)
         elif num == 4:
-            self.afficherImage(3, 13, self.imgCle4)
+            self.afficher_image(3, 13, self.imgCle4)
 
     # ------------------------------------------------------------------------
     # afficher les différentes images d'un corbeau
 
-    def afficherCorbeau(self, colonne, num):
+    def afficher_corbeau(self, colonne, num):
         if num == 1:
-            self.afficherImage(10, colonne, self.imgCorbeau1)
+            self.afficher_image(10, colonne, self.imgCorbeau1)
         elif num == 2:
-            self.afficherImage(9, colonne, self.imgCorbeau2)
+            self.afficher_image(9, colonne, self.imgCorbeau2)
 
     # ------------------------------------------------------------------------
     # afficher les différentes images d'un croco
 
-    def afficherCroco(self, colonne, num):
+    def afficher_croco(self, colonne, num):
         if num == 1:
-            self.afficherImage(8, colonne, self.imgCroco1)
+            self.afficher_image(8, colonne, self.imgCroco1)
         elif num == 2:
-            self.afficherImage(8, colonne, self.imgCroco2)
+            self.afficher_image(8, colonne, self.imgCroco2)
         elif num == 3:
-            self.afficherImage(9, 23, self.imgCroco3)
+            self.afficher_image(9, 23, self.imgCroco3)
         elif num == 4:
-            self.afficherImage(12, colonne, self.imgCroco4)
+            self.afficher_image(12, colonne, self.imgCroco4)
         elif num == 5:
-            self.afficherImage(12, colonne, self.imgCroco5)
+            self.afficher_image(12, colonne, self.imgCroco5)
 
     # ------------------------------------------------------------------------
     # afficher les différentes images de Donkey Kong Jr
 
-    def afficherDKJr(self, ligne, colonne, num):
+    def afficher_dk_jr(self, ligne, colonne, num):
         if num == 1:
-            self.afficherImage(ligne, colonne, self.imgDKJr1)
+            self.afficher_image(ligne, colonne, self.imgDKJr1)
         elif num == 2:
-            self.afficherImage(ligne, colonne, self.imgDKJr2)
+            self.afficher_image(ligne, colonne, self.imgDKJr2)
         elif num == 3:
-            self.afficherImage(ligne, colonne, self.imgDKJr3)
+            self.afficher_image(ligne, colonne, self.imgDKJr3)
         elif num == 4:
-            self.afficherImage(ligne, colonne, self.imgDKJr4)
+            self.afficher_image(ligne, colonne, self.imgDKJr4)
         elif num == 5:
-            self.afficherImage(10, 21, self.imgDKJr5)
+            self.afficher_image(10, 21, self.imgDKJr5)
         elif num == 6:
-            self.afficherImage(7, 21, self.imgDKJr6)
+            self.afficher_image(7, 21, self.imgDKJr6)
         elif num == 7:
-            self.afficherImage(ligne, colonne, self.imgDKJr7)
+            self.afficher_image(ligne, colonne, self.imgDKJr7)
         elif num == 8:
-            self.afficherImage(ligne, colonne, self.imgDKJr8)
+            self.afficher_image(ligne, colonne, self.imgDKJr8)
         elif num == 9:
-            self.afficherImage(5, 12, self.imgDKJr9)
+            self.afficher_image(5, 12, self.imgDKJr9)
         elif num == 10:
-            self.afficherImage(3, 11, self.imgDKJr10)
+            self.afficher_image(3, 11, self.imgDKJr10)
         elif num == 11:
-            self.afficherImage(6, 10, self.imgDKJr11)
+            self.afficher_image(6, 10, self.imgDKJr11)
         elif num == 12:
-            self.afficherImage(6, 11, self.imgDKJr12)
+            self.afficher_image(6, 11, self.imgDKJr12)
         elif num == 13:
-            self.afficherImage(11, 7, self.imgDKJr13)
+            self.afficher_image(11, 7, self.imgDKJr13)
 
     # ------------------------------------------------------------------------
     # afficher les différentes parties de la cage
 
-    def afficherCage(self, num):
+    def afficher_cage(self, num):
         if num == 1:
-            self.afficherImage(2, 7, self.imgCage1)
+            self.afficher_image(2, 7, self.imgCage1)
         elif num == 2:
-            self.afficherImage(2, 9, self.imgCage2)
+            self.afficher_image(2, 9, self.imgCage2)
         elif num == 3:
-            self.afficherImage(4, 7, self.imgCage3)
+            self.afficher_image(4, 7, self.imgCage3)
         elif num == 4:
-            self.afficherImage(4, 9, self.imgCage4)
+            self.afficher_image(4, 9, self.imgCage4)
 
     # ------------------------------------------------------------------------
     # afficher le rire de Donkey Kong
 
-    def afficherRireDK(self):
-        self.afficherImage(3, 8, self.imgRireDK)
+    def afficher_rire_dk(self):
+        self.afficher_image(3, 8, self.imgRireDK)
 
     # ------------------------------------------------------------------------
     # afficher la tête de Donkey Kong Jr en cas d'échec
 
-    def afficherEchec(self, num):
-        self.afficherImage(7, 27 + num, self.imgDKJrEchec)
+    def afficher_echec(self, num):
+        self.afficher_image(7, 27 + num, self.imgDKJrEchec)
 
     # ------------------------------------------------------------------------
     # afficher le score
 
-    def afficherScore(self, score):
-        self.afficherChiffre(3, 26, int(score / 1000))
-        self.afficherChiffre(3, 27, int(score / 100) % 10)
-        self.afficherChiffre(3, 28, int(score / 10) % 10)
-        self.afficherChiffre(3, 29, score % 10)
+    def afficher_score(self, score):
+        self.afficher_chiffre(3, 26, int(score / 1000))
+        self.afficher_chiffre(3, 27, int(score / 100) % 10)
+        self.afficher_chiffre(3, 28, int(score / 10) % 10)
+        self.afficher_chiffre(3, 29, score % 10)
 
     # ------------------------------------------------------------------------
     # afficher les différents chiffres
 
-    def afficherChiffre(self, ligne, colonne, chiffre):
+    def afficher_chiffre(self, ligne, colonne, chiffre):
         if chiffre == 0:
-            self.afficherImage(ligne, colonne, self.imgChiffre0)
+            self.afficher_image(ligne, colonne, self.imgChiffre0)
         elif chiffre == 1:
-            self.afficherImage(ligne, colonne, self.imgChiffre1)
+            self.afficher_image(ligne, colonne, self.imgChiffre1)
         elif chiffre == 2:
-            self.afficherImage(ligne, colonne, self.imgChiffre2)
+            self.afficher_image(ligne, colonne, self.imgChiffre2)
         elif chiffre == 3:
-            self.afficherImage(ligne, colonne, self.imgChiffre3)
+            self.afficher_image(ligne, colonne, self.imgChiffre3)
         elif chiffre == 4:
-            self.afficherImage(ligne, colonne, self.imgChiffre4)
+            self.afficher_image(ligne, colonne, self.imgChiffre4)
         elif chiffre == 5:
-            self.afficherImage(ligne, colonne, self.imgChiffre5)
+            self.afficher_image(ligne, colonne, self.imgChiffre5)
         elif chiffre == 6:
-            self.afficherImage(ligne, colonne, self.imgChiffre6)
+            self.afficher_image(ligne, colonne, self.imgChiffre6)
         elif chiffre == 7:
-            self.afficherImage(ligne, colonne, self.imgChiffre7)
+            self.afficher_image(ligne, colonne, self.imgChiffre7)
         elif chiffre == 8:
-            self.afficherImage(ligne, colonne, self.imgChiffre8)
+            self.afficher_image(ligne, colonne, self.imgChiffre8)
         elif chiffre == 9:
-            self.afficherImage(ligne, colonne, self.imgChiffre9)
+            self.afficher_image(ligne, colonne, self.imgChiffre9)
 
     # ------------------------------------------------------------------------
     # afficher une image sur l'image de fond d'écran initiale
 
-    def afficherImage(self, ligne, colonne, image):
+    def afficher_image(self, ligne, colonne, image):
         rect = image.get_rect()
         rect.x = colonne * 40
         rect.y = ligne * 40
@@ -233,16 +235,16 @@ class Presentation:
     # ------------------------------------------------------------------------
     # restaurer l'image de fond d'écran initiale pour 1 ou plusieurs carrés
 
-    def effacerCarre(self, ligne, colonne, nbLignes=1, nbColonnes=1):
+    def effacer_carre(self, ligne, colonne, nb_lignes=1, nb_colonnes=1):
         self.ecran.blit(self.imgFondEcran,
-                        (colonne * 40, ligne * 40, nbColonnes * 40, nbLignes * 40),
-                        (colonne * 40, ligne * 40, nbColonnes * 40, nbLignes * 40))
+                        (colonne * 40, ligne * 40, nb_colonnes * 40, nb_lignes * 40),
+                        (colonne * 40, ligne * 40, nb_colonnes * 40, nb_lignes * 40))
         pygame.display.update()
 
     # ------------------------------------------------------------------------
     # jouer les différents sons dans le jeu
 
-    def jouerSon(self, num):
+    def jouer_son(self, num):
         if num == 0:
             pygame.mixer.Sound.play(self.sonDKJr)
         elif num == 1:
