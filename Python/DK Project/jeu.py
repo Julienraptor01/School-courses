@@ -62,9 +62,10 @@ class Jeu:
 
             time.sleep(0.1)
 
-        # play 10 times the bad sound
-        for i in range(10):
+        # TODO : add special score sounds like 13, 42, 69, 666, 999, 1000, 1337, 9001, 10000
+        # play 9999 - score times the bad sound
+        for i in range(9999 - self.score):
             self.presentation.jouer_son(1)
-            time.sleep(0.1)
+            time.sleep(0.00001)
 
         self.presentation.attendre_fermeture_fenetre()
