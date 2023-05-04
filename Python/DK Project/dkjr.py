@@ -1,4 +1,4 @@
-from presentation import *
+import pygame
 
 
 class DKJr:

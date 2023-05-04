@@ -1,7 +1,7 @@
-from dkjr import *
+import time
 
-
-# from cle import *
+from cle import Cle
+from dkjr import DKJr
 
 
 class Jeu:
@@ -9,7 +9,7 @@ class Jeu:
         self.presentation = presentation
 
         self.dkjr = DKJr(self.presentation)
-        #        self.cle = Cle(self.presentation)
+        self.cle = Cle(self.presentation)
         self.nbEchecs = 0  # nombre de vies perdues
         self.score = 0  # le score
         # ... attributs à ajouter ...
@@ -25,15 +25,8 @@ class Jeu:
 
             evenement = self.presentation.lire_evenement()
 
-            if evenement in [pygame.K_RIGHT, pygame.K_LEFT, pygame.K_UP, pygame.K_DOWN, -1]:
-                # changer l'état/la position de DK Jr selon l'événement du joueur
-
-                self.dkjr.changer_etat(evenement)
-
-            # ... suite à implémenter ...
-            #                if self.cle.delai <= 0:
-            #                    self.cle.changerEtat(
-
+            self.dkjr.changer_etat(evenement)
+            self.cle.changer_etat()
             # attendre 100 millisecondes (délai de référence)
 
             time.sleep(0.1)
