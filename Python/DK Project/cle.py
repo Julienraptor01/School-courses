@@ -3,8 +3,8 @@ class Cle:
         self.presentation = presentation
         self.delai = 7
         self.augmente = True
-        self.etat = 2
-        self.presentation.afficher_cle(2)
+        self.etat = 1
+        self.presentation.afficher_cle(1)
 
     def changer_etat(self):
         if self.delai > 0:
@@ -32,3 +32,7 @@ class Cle:
             self.presentation.effacer_carre(3, 13, 2, 2)
             self.presentation.afficher_cle(self.etat)
             self.delai = 7
+
+    def effacer_cle(self):
+        self.presentation.effacer_carre(3, 12, 2, 1)
+        self.delai = 0

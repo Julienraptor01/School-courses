@@ -15,14 +15,15 @@ class DKJr:
         self.delai = 0
         self.position = 1
         self.etat = DKJr.LIBRE_BAS
-        self.presentation.afficher_dk_jr(11, self.position * 2 + 7, 1)
+        self.presentation.afficher_dk_jr(11, 9, 1)
 
     def changer_etat(self, direction):
         if self.delai > 0:
             self.delai -= 1
 
         else:
-            if direction != -1 or self.etat == DKJr.SAUT_HAUT or self.etat == DKJr.SAUT_BAS:
+            if direction in [pygame.K_RIGHT, pygame.K_LEFT, pygame.K_UP,
+                             pygame.K_DOWN] or self.etat == DKJr.SAUT_HAUT or self.etat == DKJr.SAUT_BAS:
                 self.presentation.jouer_son(0)
 
             if self.etat == DKJr.LIBRE_BAS:
@@ -96,8 +97,10 @@ class DKJr:
                         self.presentation.afficher_dk_jr(7, self.position * 2 + 7,
                                                          ((-self.position + 7) - 1) % 4 + 1)
                     elif self.position == 3:
-                        # TODO : did he got the fucking key ?
-                        print("à implémenter...")
+                        self.presentation.effacer_carre(7, self.position * 2 + 7, 2, 2)
+                        self.position -= 1
+                        self.presentation.afficher_dk_jr(7, 12, 9)
+
                 elif direction == pygame.K_UP:
                     if self.position in [3, 4]:
                         self.presentation.effacer_carre(7, self.position * 2 + 7, 2, 2)
@@ -127,3 +130,27 @@ class DKJr:
                     self.presentation.afficher_dk_jr(7, self.position * 2 + 7,
                                                      ((-self.position + 7) - 1) % 4 + 1)
                     self.etat = DKJr.LIBRE_HAUT
+
+    def attrapage_cle(self, reussite):
+        self.presentation.effacer_carre(5, 12, 3, 2)
+        if reussite:
+            self.presentation.afficher_dk_jr(3, 11, 10)
+        else:
+            self.presentation.afficher_dk_jr(6, 11, 12)
+
+    def chute_apres_cle(self, reussite):
+        if reussite:
+            self.presentation.effacer_carre(3, 11, 3, 2)
+            self.presentation.afficher_dk_jr(6, 10, 11)
+        else:
+            self.presentation.effacer_carre(6, 11, 2, 2)
+            self.presentation.afficher_dk_jr(10, 7, 13)
+
+    def reinitialiser_etat(self, reussite):
+        self.position = 1
+        self.etat = DKJr.LIBRE_BAS
+        if reussite:
+            self.presentation.effacer_carre(6, 10, 2, 3)
+        else:
+            self.presentation.effacer_carre(10, 7, 3, 3)
+        self.presentation.afficher_dk_jr(11, 9, 1)

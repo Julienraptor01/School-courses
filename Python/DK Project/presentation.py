@@ -2,15 +2,6 @@ import pygame
 import time
 
 
-def attendre_fermeture_fenetre():
-    while True:
-        for evenement in pygame.event.get():
-            if evenement.type == pygame.QUIT:
-                pygame.quit()
-                exit()
-        time.sleep(0.2)
-
-
 class Presentation:
 
     def __init__(self):
@@ -83,6 +74,15 @@ class Presentation:
             elif evenement.type == pygame.KEYDOWN:
                 return evenement.key
         return -1
+
+    @staticmethod
+    def attendre_fermeture_fenetre():
+        while True:
+            for evenement in pygame.event.get():
+                if evenement.type == pygame.QUIT:
+                    pygame.quit()
+                    exit()
+            time.sleep(0.2)
 
     def afficher_cle(self, num):
         if num == 1:
