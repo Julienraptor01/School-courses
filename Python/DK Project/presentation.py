@@ -16,8 +16,6 @@ class Presentation:
     def __init__(self):
         pygame.init()
 
-        # charger toutes les images du jeu
-
         self.imgFondEcran = pygame.image.load("images/autres/fondEcran.png")
         self.imgCle1 = pygame.image.load("images/autres/cle1.png")
         self.imgCle2 = pygame.image.load("images/autres/cle2.png")
@@ -70,17 +68,11 @@ class Presentation:
         self.sonDKJrPoint = pygame.mixer.Sound("sons/dkjrPoint.mp3")
         self.sonTic = pygame.mixer.Sound("sons/cleTic.mp3")
 
-        # créer la fenêtre avec l'image du fond et le titre
-
         pygame.display.set_caption("Donkey Kong JR")
         pygame.display.set_icon(pygame.image.load("images/autres/iconeFenetre.png"))
         self.ecran = pygame.display.set_mode((1240, 640))
         self.ecran.blit(self.imgFondEcran, (0, 0))
         pygame.display.update()
-
-    # ------------------------------------------------------------------------
-    # retourner la touche sur laquelle a appuyé le joueur ou fermer la fenêtre
-    # si clic sur la croix
 
     @staticmethod
     def lire_evenement():
@@ -92,12 +84,6 @@ class Presentation:
                 return evenement.key
         return -1
 
-    # ------------------------------------------------------------------------
-    # Fermer la fenêtre si clic sur la croix
-
-    # ------------------------------------------------------------------------
-    # afficher les différentes images de la clé (num est le numéro de l'image)
-
     def afficher_cle(self, num):
         if num == 1:
             self.afficher_image(3, 12, self.imgCle1)
@@ -108,17 +94,11 @@ class Presentation:
         elif num == 4:
             self.afficher_image(3, 13, self.imgCle4)
 
-    # ------------------------------------------------------------------------
-    # afficher les différentes images d'un corbeau
-
     def afficher_corbeau(self, colonne, num):
         if num == 1:
             self.afficher_image(10, colonne, self.imgCorbeau1)
         elif num == 2:
             self.afficher_image(9, colonne, self.imgCorbeau2)
-
-    # ------------------------------------------------------------------------
-    # afficher les différentes images d'un croco
 
     def afficher_croco(self, colonne, num):
         if num == 1:
@@ -131,9 +111,6 @@ class Presentation:
             self.afficher_image(12, colonne, self.imgCroco4)
         elif num == 5:
             self.afficher_image(12, colonne, self.imgCroco5)
-
-    # ------------------------------------------------------------------------
-    # afficher les différentes images de Donkey Kong Jr
 
     def afficher_dk_jr(self, ligne, colonne, num):
         if num == 1:
@@ -163,9 +140,6 @@ class Presentation:
         elif num == 13:
             self.afficher_image(11, 7, self.imgDKJr13)
 
-    # ------------------------------------------------------------------------
-    # afficher les différentes parties de la cage
-
     def afficher_cage(self, num):
         if num == 1:
             self.afficher_image(2, 7, self.imgCage1)
@@ -176,29 +150,17 @@ class Presentation:
         elif num == 4:
             self.afficher_image(4, 9, self.imgCage4)
 
-    # ------------------------------------------------------------------------
-    # afficher le rire de Donkey Kong
-
     def afficher_rire_dk(self):
         self.afficher_image(3, 8, self.imgRireDK)
 
-    # ------------------------------------------------------------------------
-    # afficher la tête de Donkey Kong Jr en cas d'échec
-
     def afficher_echec(self, num):
         self.afficher_image(7, 27 + num, self.imgDKJrEchec)
-
-    # ------------------------------------------------------------------------
-    # afficher le score
 
     def afficher_score(self, score):
         self.afficher_chiffre(3, 26, int(score / 1000))
         self.afficher_chiffre(3, 27, int(score / 100) % 10)
         self.afficher_chiffre(3, 28, int(score / 10) % 10)
         self.afficher_chiffre(3, 29, score % 10)
-
-    # ------------------------------------------------------------------------
-    # afficher les différents chiffres
 
     def afficher_chiffre(self, ligne, colonne, chiffre):
         if chiffre == 0:
@@ -222,9 +184,6 @@ class Presentation:
         elif chiffre == 9:
             self.afficher_image(ligne, colonne, self.imgChiffre9)
 
-    # ------------------------------------------------------------------------
-    # afficher une image sur l'image de fond d'écran initiale
-
     def afficher_image(self, ligne, colonne, image):
         rect = image.get_rect()
         rect.x = colonne * 40
@@ -232,17 +191,11 @@ class Presentation:
         self.ecran.blit(image, rect)
         pygame.display.update()
 
-    # ------------------------------------------------------------------------
-    # restaurer l'image de fond d'écran initiale pour 1 ou plusieurs carrés
-
     def effacer_carre(self, ligne, colonne, nb_lignes=1, nb_colonnes=1):
         self.ecran.blit(self.imgFondEcran,
                         (colonne * 40, ligne * 40, nb_colonnes * 40, nb_lignes * 40),
                         (colonne * 40, ligne * 40, nb_colonnes * 40, nb_lignes * 40))
         pygame.display.update()
-
-    # ------------------------------------------------------------------------
-    # jouer les différents sons dans le jeu
 
     def jouer_son(self, num):
         if num == 0:

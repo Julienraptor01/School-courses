@@ -10,16 +10,12 @@ class DKJr:
     SAUT_HAUT = 6
     LIANE_HAUT = 7
 
-    # ---------------------------------------------------
-
     def __init__(self, presentation):
         self.presentation = presentation
         self.delai = 0
         self.position = 1
         self.etat = DKJr.LIBRE_BAS
         self.presentation.afficher_dk_jr(11, self.position * 2 + 7, 1)
-
-    # ---------------------------------------------------
 
     def changer_etat(self, direction):
         if self.delai > 0:
