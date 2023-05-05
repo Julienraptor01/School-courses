@@ -2,14 +2,15 @@ import time
 
 from cle import Cle
 from dkjr import DKJr
+from dk import DK
 
 
 class Jeu:
     def __init__(self, presentation):
         self.presentation = presentation
-
-        self.dkjr = DKJr(self.presentation)
         self.cle = Cle(self.presentation)
+        self.dkjr = DKJr(self.presentation)
+        self.dk = DK(self.presentation)
         self.nbEchecs = 0
         self.score = 0
 
@@ -30,19 +31,34 @@ class Jeu:
                     self.cle.effacer_cle()
                     # draw the monkey with the key
                     self.dkjr.attrapage_cle(True)
-                    # remove a part of the cage
-                    # play good sound
-                    self.presentation.jouer_son(3)
+                    # play good sound (10x)
+                    for i in range(10):
+                        self.presentation.jouer_son(2)
+                        time.sleep(0.01)
                     # add points
                     self.score += 10
                     # wait a bit
                     time.sleep(0.3)
+                    # remove a part of the cage
+                    self.dk.changer_etat()
+                    # if cage fully open
+                    if self.dk.etat == 0:
+                        # give him a smile
+                        self.dk.yay()
+                        # play good sound
+                        self.presentation.jouer_son(3)
+                        # add 10 bonus points
+                        self.score += 10
                     # start good falling animation
                     self.dkjr.chute_apres_cle(True)
                     # wait a bit
                     time.sleep(0.3)
                     # reset the monkey
                     self.dkjr.reinitialiser_etat(True)
+                    # if cage fully open
+                    if self.dk.etat == 0:
+                        # encage him back
+                        self.dk.reinitialiser_etat()
                 else:
                     # start bad falling animation
                     self.dkjr.attrapage_cle(False)
@@ -56,6 +72,8 @@ class Jeu:
                     self.nbEchecs += 1
                     # wait a bit
                     time.sleep(0.3)
+                    # draw the fail symbol
+                    self.presentation.afficher_echec(self.nbEchecs - 1)
                     # if the counter isn't 3, reset the monkey
                     if self.nbEchecs < 3:
                         self.dkjr.reinitialiser_etat(False)
