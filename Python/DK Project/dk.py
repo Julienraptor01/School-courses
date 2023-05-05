@@ -21,6 +21,6 @@ class DK:
 
     def reinitialiser_etat(self):
         self.presentation.effacer_carre(3, 8, 2, 2)
-        self.etat = 4
         for i in range(4):
             self.presentation.afficher_cage(i + 1)
+        self.etat = 4

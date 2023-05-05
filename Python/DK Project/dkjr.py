@@ -147,10 +147,10 @@ class DKJr:
             self.presentation.afficher_dk_jr(10, 7, 13)
 
     def reinitialiser_etat(self, reussite):
-        self.position = 1
-        self.etat = DKJr.LIBRE_BAS
         if reussite:
             self.presentation.effacer_carre(6, 10, 2, 3)
         else:
             self.presentation.effacer_carre(11, 7, 2, 2)
         self.presentation.afficher_dk_jr(11, 9, 1)
+        self.position = 1
+        self.etat = DKJr.LIBRE_BAS

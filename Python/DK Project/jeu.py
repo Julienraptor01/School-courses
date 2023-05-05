@@ -67,12 +67,12 @@ class Jeu:
                     self.dkjr.chute_apres_cle(False)
                     # play bad sound
                     self.presentation.jouer_son(1)
+                    # draw the fail symbol
+                    self.presentation.afficher_echec(self.nbEchecs)
                     # add a failure to the counter
                     self.nbEchecs += 1
                     # wait a bit
                     time.sleep(0.3)
-                    # draw the fail symbol
-                    self.presentation.afficher_echec(self.nbEchecs - 1)
                     # if the counter isn't 3, reset the monkey
                     if self.nbEchecs < 3:
                         self.dkjr.reinitialiser_etat(False)
