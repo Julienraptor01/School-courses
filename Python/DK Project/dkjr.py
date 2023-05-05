@@ -152,5 +152,5 @@ class DKJr:
         if reussite:
             self.presentation.effacer_carre(6, 10, 2, 3)
         else:
-            self.presentation.effacer_carre(10, 7, 3, 3)
+            self.presentation.effacer_carre(11, 7, 2, 2)
         self.presentation.afficher_dk_jr(11, 9, 1)

@@ -21,8 +21,7 @@ class Jeu:
             self.presentation.afficher_score(self.score)
             self.cle.changer_etat()
 
-            evenement = self.presentation.lire_evenement()
-            self.dkjr.changer_etat(evenement)
+            self.dkjr.changer_etat(self.presentation.lire_evenement())
 
             if self.dkjr.etat == DKJr.LIBRE_HAUT and self.dkjr.position == 2:
                 time.sleep(0.3)
