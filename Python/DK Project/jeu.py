@@ -1,8 +1,10 @@
 import time
 
 from cle import Cle
+from corbeau import Corbeau
 from dkjr import DKJr
 from dk import DK
+from ennemis import Ennemis
 
 
 class Jeu:
@@ -11,6 +13,8 @@ class Jeu:
         self.cle = Cle(self.presentation)
         self.dkjr = DKJr(self.presentation)
         self.dk = DK(self.presentation)
+        self.ennemis = Ennemis()
+        self.listeCorbeaux = []
         self.nbEchecs = 0
         self.score = 0
 
@@ -20,6 +24,14 @@ class Jeu:
 
             self.presentation.afficher_score(self.score)
             self.cle.changer_etat()
+
+            if (ennemi := self.ennemis.changer_etat()) == self.ennemis.CORBEAU:
+                self.listeCorbeaux.append(Corbeau(self.presentation))
+            elif ennemi == self.ennemis.CROCO:
+                # TODO : implement croco
+                print(self.ennemis.CROCO)
+            else:
+                print(self.ennemis.RIEN, end='')
 
             self.dkjr.changer_etat(self.presentation.lire_evenement())
 
