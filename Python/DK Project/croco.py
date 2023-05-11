@@ -10,13 +10,7 @@ class Croco:
         if self.delai > 0:
             self.delai -= 1
         else:
-            if self.position != 8:
-                if self.augmente:
-                    self.presentation.effacer_carre(8, self.position * 2 + 7, 1, 1)
-                else:
-                    self.presentation.effacer_carre(12, self.position * 2 + 8, 1, 1)
-            else:
-                self.presentation.effacer_carre(9, 23, 1, 1)
+            self.effacer_croco()
             if self.augmente:
                 self.position += 1
             else:
@@ -33,3 +27,12 @@ class Croco:
                     self.presentation.afficher_croco(self.position * 2 + 8, ((self.position - 1) % 2) + 4)
             self.delai = 7
             return 0
+
+    def effacer_croco(self):
+        if self.position != 8:
+            if self.augmente:
+                self.presentation.effacer_carre(8, self.position * 2 + 7, 1, 1)
+            else:
+                self.presentation.effacer_carre(12, self.position * 2 + 8, 1, 1)
+        else:
+            self.presentation.effacer_carre(9, 23, 1, 1)

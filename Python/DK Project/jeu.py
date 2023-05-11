@@ -25,28 +25,20 @@ class Jeu:
         while self.nbEchecs < 3:
 
             self.presentation.afficher_score(self.score)
+
             self.cle.changer_etat()
 
-            if (ennemi := self.ennemis.changer_etat()) == self.ennemis.CORBEAU:
-                self.listeCorbeaux.append(Corbeau(self.presentation))
-                print(self.ennemis.CORBEAU)
-            elif ennemi == self.ennemis.CROCO:
-                self.listeCrocos.append(Croco(self.presentation))
-                print(self.ennemis.CROCO)
-            else:
-                print(self.ennemis.RIEN, end='')
+            self.bouger_ennemis()
 
-            for corbeau in self.listeCorbeaux:
-                if corbeau.changer_etat() == 1:
-                    self.listeCorbeaux.remove(corbeau)
-
-            for croco in self.listeCrocos:
-                if croco.changer_etat() == 1:
-                    self.listeCrocos.remove(croco)
+            if self.effectuer_collision() and self.nbEchecs == 3:
+                break
 
             self.dkjr.changer_etat(self.presentation.lire_evenement())
 
-            if self.dkjr.etat == DKJr.LIBRE_HAUT and self.dkjr.position == 2:
+            if self.effectuer_collision():
+                pass
+
+            elif self.dkjr.etat == DKJr.LIBRE_HAUT and self.dkjr.position == 2:
                 time.sleep(0.3)
                 if self.cle.etat == 1:
                     # clear the key
@@ -75,6 +67,8 @@ class Jeu:
                     self.dkjr.chute_apres_cle(True)
                     # wait a bit
                     time.sleep(0.3)
+                    # clear the ennemies
+                    self.nettoyer_ennemis()
                     # reset the monkey
                     self.dkjr.reinitialiser_etat(True)
                     # if cage fully open
@@ -98,14 +92,80 @@ class Jeu:
                     time.sleep(0.3)
                     # if the counter isn't 3, reset the monkey
                     if self.nbEchecs < 3:
+                        # clear the ennemies
+                        self.nettoyer_ennemis()
+                        # reset the monkey
                         self.dkjr.reinitialiser_etat(False)
 
             time.sleep(0.1)
 
+        self.jouer_fin()
+
+        self.presentation.attendre_fermeture_fenetre()
+
+    def nettoyer_ennemis(self):
+        for corbeau in self.listeCorbeaux:
+            if corbeau.position in [0, 1, 2]:
+                corbeau.effacer_corbeau()
+                self.listeCorbeaux.remove(corbeau)
+        for croco in self.listeCrocos:
+            if croco.position in [1, 2, 3]:
+                croco.effacer_croco()
+                self.listeCrocos.remove(croco)
+
+    def bouger_ennemis(self):
+        if (ennemi := self.ennemis.changer_etat()) == self.ennemis.CORBEAU:
+            self.listeCorbeaux.append(Corbeau(self.presentation))
+            print(self.ennemis.CORBEAU)
+        elif ennemi == self.ennemis.CROCO:
+            self.listeCrocos.append(Croco(self.presentation))
+            print(self.ennemis.CROCO)
+        else:
+            print(self.ennemis.RIEN, end='')
+        for corbeau in self.listeCorbeaux:
+            if corbeau.changer_etat() == 1:
+                self.listeCorbeaux.remove(corbeau)
+        for croco in self.listeCrocos:
+            if croco.changer_etat() == 1:
+                self.listeCrocos.remove(croco)
+
+    def jouer_fin(self):
         # TODO : add special score sounds like 13, 42, 69, 666, 999, 1000, 1337, 9001, 10000
         # play 9999 - score times the bad sound
         for i in range(9999 - self.score):
             self.presentation.jouer_son(1)
             time.sleep(0.00001)
 
-        self.presentation.attendre_fermeture_fenetre()
+    def tester_collisions(self):
+        if self.dkjr.etat == DKJr.LIBRE_BAS:
+            for croco in self.listeCrocos:
+                if croco.position == self.dkjr.position and croco.augmente is False:
+                    croco.effacer_croco()
+                    self.listeCrocos.remove(croco)
+                    return True
+        elif self.dkjr.etat == DKJr.LIANE_BAS or self.dkjr.etat == DKJr.SAUT_BAS or self.dkjr.etat == DKJr.DOUBLE_LIANE_BAS:
+            for corbeau in self.listeCorbeaux:
+                if corbeau.position == self.dkjr.position:
+                    corbeau.effacer_corbeau()
+                    self.listeCorbeaux.remove(corbeau)
+                    return True
+        elif self.dkjr.etat == DKJr.LIBRE_HAUT and self.dkjr.position != 2:
+            for croco in self.listeCrocos:
+                if croco.position == self.dkjr.position and croco.augmente is True:
+                    croco.effacer_croco()
+                    self.listeCrocos.remove(croco)
+                    return True
+        return False
+
+    def effectuer_collision(self):
+        if self.tester_collisions():
+            self.presentation.jouer_son(1)
+            for i in range(3):
+                self.dkjr.effacer_dkjr()
+                time.sleep(0.05)
+                self.dkjr.afficher_dkjr()
+                time.sleep(0.05)
+            self.presentation.afficher_echec(self.nbEchecs)
+            self.nbEchecs += 1
+            return True
+        return False
