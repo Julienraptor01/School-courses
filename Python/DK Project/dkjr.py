@@ -29,97 +29,97 @@ class DKJr:
             if self.etat == DKJr.LIBRE_BAS:
                 if direction == pygame.K_RIGHT:
                     if self.position < 7:
-                        self.presentation.effacer_carre(11, self.position * 2 + 7, 2, 2)
+                        self.effacer_dkjr()
                         self.position += 1
-                        self.presentation.afficher_dk_jr(11, self.position * 2 + 7, ((self.position - 1) % 4) + 1)
+                        self.afficher_dkjr()
                 elif direction == pygame.K_LEFT:
                     if self.position > 1:
-                        self.presentation.effacer_carre(11, self.position * 2 + 7, 2, 2)
+                        self.effacer_dkjr()
                         self.position -= 1
-                        self.presentation.afficher_dk_jr(11, self.position * 2 + 7, ((self.position - 1) % 4) + 1)
+                        self.afficher_dkjr()
                 elif direction == pygame.K_UP:
                     if self.position in [2, 3, 4, 6]:
-                        self.presentation.effacer_carre(11, self.position * 2 + 7, 2, 2)
+                        self.effacer_dkjr()
                         self.etat = DKJr.SAUT_BAS
-                        self.presentation.afficher_dk_jr(10, self.position * 2 + 7, 8)
+                        self.afficher_dkjr()
                         self.delai = 15
                         return
                     elif self.position in [1, 5]:
-                        self.presentation.effacer_carre(11, self.position * 2 + 7, 2, 2)
+                        self.effacer_dkjr()
                         self.etat = DKJr.LIANE_BAS
-                        self.presentation.afficher_dk_jr(10, self.position * 2 + 7, 7)
+                        self.afficher_dkjr()
                     elif self.position == 7:
-                        self.presentation.effacer_carre(11, self.position * 2 + 7, 2, 2)
+                        self.effacer_dkjr()
                         self.etat = DKJr.DOUBLE_LIANE_BAS
-                        self.presentation.afficher_dk_jr(10, self.position * 2 + 7, 5)
+                        self.afficher_dkjr()
 
             elif self.etat == DKJr.SAUT_BAS:
-                self.presentation.effacer_carre(10, self.position * 2 + 7, 2, 2)
+                self.effacer_dkjr()
                 self.etat = DKJr.LIBRE_BAS
-                self.presentation.afficher_dk_jr(11, self.position * 2 + 7, ((self.position - 1) % 4) + 1)
+                self.afficher_dkjr()
 
             elif self.etat == DKJr.LIANE_BAS:
                 if direction == pygame.K_DOWN:
-                    self.presentation.effacer_carre(10, self.position * 2 + 7, 2, 2)
+                    self.effacer_dkjr()
                     self.etat = DKJr.LIBRE_BAS
-                    self.presentation.afficher_dk_jr(11, self.position * 2 + 7, ((self.position - 1) % 4) + 1)
+                    self.afficher_dkjr()
 
             elif self.etat == DKJr.DOUBLE_LIANE_BAS:
                 if direction == pygame.K_DOWN:
-                    self.presentation.effacer_carre(10, self.position * 2 + 7, 2, 2)
+                    self.effacer_dkjr()
                     self.etat = DKJr.LIBRE_BAS
-                    self.presentation.afficher_dk_jr(11, self.position * 2 + 7, ((self.position - 1) % 4) + 1)
+                    self.afficher_dkjr()
                 elif direction == pygame.K_UP:
-                    self.presentation.effacer_carre(10, self.position * 2 + 7, 2, 2)
+                    self.effacer_dkjr()
                     self.etat = DKJr.LIBRE_HAUT
-                    self.presentation.afficher_dk_jr(7, self.position * 2 + 7, 6)
+                    self.afficher_dkjr()
 
             elif self.etat == DKJr.LIBRE_HAUT:
                 if direction == pygame.K_RIGHT:
                     if self.position < 6:
-                        self.presentation.effacer_carre(7, self.position * 2 + 7, 2, 2)
+                        self.effacer_dkjr()
                         self.position += 1
-                        self.presentation.afficher_dk_jr(7, self.position * 2 + 7, ((-self.position + 7) - 1) % 4 + 1)
+                        self.afficher_dkjr()
                     elif self.position == 6:
-                        self.presentation.effacer_carre(7, self.position * 2 + 7, 2, 2)
+                        self.effacer_dkjr()
                         self.position += 1
-                        self.presentation.afficher_dk_jr(7, self.position * 2 + 7, 6)
+                        self.afficher_dkjr()
                 elif direction == pygame.K_LEFT:
                     if self.position > 3:
-                        self.presentation.effacer_carre(7, self.position * 2 + 7, 2, 2)
+                        self.effacer_dkjr()
                         self.position -= 1
-                        self.presentation.afficher_dk_jr(7, self.position * 2 + 7, ((-self.position + 7) - 1) % 4 + 1)
+                        self.afficher_dkjr()
                     elif self.position == 3:
-                        self.presentation.effacer_carre(7, self.position * 2 + 7, 2, 2)
+                        self.effacer_dkjr()
                         self.position -= 1
-                        self.presentation.afficher_dk_jr(7, 12, 9)
+                        self.afficher_dkjr()
                 elif direction == pygame.K_UP:
                     if self.position in [3, 4]:
-                        self.presentation.effacer_carre(7, self.position * 2 + 7, 2, 2)
+                        self.effacer_dkjr()
                         self.etat = DKJr.SAUT_HAUT
-                        self.presentation.afficher_dk_jr(6, self.position * 2 + 7, 8)
+                        self.afficher_dkjr()
                         self.delai = 15
                         return
                     elif self.position == 6:
-                        self.presentation.effacer_carre(7, self.position * 2 + 7, 2, 2)
+                        self.effacer_dkjr()
                         self.etat = DKJr.LIANE_HAUT
-                        self.presentation.afficher_dk_jr(6, self.position * 2 + 7, 7)
+                        self.afficher_dkjr()
                 elif direction == pygame.K_DOWN:
                     if self.position == 7:
-                        self.presentation.effacer_carre(7, self.position * 2 + 7, 2, 2)
+                        self.effacer_dkjr()
                         self.etat = DKJr.DOUBLE_LIANE_BAS
-                        self.presentation.afficher_dk_jr(10, self.position * 2 + 7, 5)
+                        self.afficher_dkjr()
 
             elif self.etat == DKJr.SAUT_HAUT:
-                self.presentation.effacer_carre(6, self.position * 2 + 7, 2, 2)
+                self.effacer_dkjr()
                 self.etat = DKJr.LIBRE_HAUT
-                self.presentation.afficher_dk_jr(7, self.position * 2 + 7, ((-self.position + 7) - 1) % 4 + 1)
+                self.afficher_dkjr()
 
             elif self.etat == DKJr.LIANE_HAUT:
                 if direction == pygame.K_DOWN:
-                    self.presentation.effacer_carre(6, self.position * 2 + 7, 2, 2)
+                    self.effacer_dkjr()
                     self.etat = DKJr.LIBRE_HAUT
-                    self.presentation.afficher_dk_jr(7, self.position * 2 + 7, ((-self.position + 7) - 1) % 4 + 1)
+                    self.afficher_dkjr()
 
     def attrapage_cle(self, reussite):
         self.presentation.effacer_carre(5, 12, 3, 2)
@@ -148,7 +148,7 @@ class DKJr:
     def effacer_dkjr(self):
         if self.etat == DKJr.LIBRE_BAS:
             self.presentation.effacer_carre(11, self.position * 2 + 7, 2, 2)
-        elif self.etat == DKJr.SAUT_BAS or self.etat == DKJr.LIBRE_BAS or self.etat == DKJr.DOUBLE_LIANE_BAS:
+        elif self.etat == DKJr.SAUT_BAS or self.etat == DKJr.LIANE_BAS or self.etat == DKJr.DOUBLE_LIANE_BAS:
             self.presentation.effacer_carre(10, self.position * 2 + 7, 2, 2)
         elif self.etat == DKJr.LIBRE_HAUT:
             self.presentation.effacer_carre(7, self.position * 2 + 7, 2, 2)

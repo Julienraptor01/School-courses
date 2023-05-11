@@ -19,12 +19,12 @@ class Jeu:
         self.listeCrocos = []
         self.nbEchecs = 0
         self.score = 0
+        self.nb200 = 0
 
     def demarrer(self):
+        self.presentation.afficher_score(self.score)
 
         while self.nbEchecs < 3:
-
-            self.presentation.afficher_score(self.score)
 
             self.cle.changer_etat()
 
@@ -49,8 +49,8 @@ class Jeu:
                     for i in range(10):
                         self.presentation.jouer_son(2)
                         time.sleep(0.01)
-                    # add points
-                    self.score += 10
+                    # add 10 points
+                    self.manipulation_score(10)
                     # wait a bit
                     time.sleep(0.3)
                     # remove a part of the cage
@@ -61,8 +61,8 @@ class Jeu:
                         self.dk.yay()
                         # play good sound
                         self.presentation.jouer_son(3)
-                        # add 10 bonus points
-                        self.score += 10
+                        # add 10 points
+                        self.manipulation_score(10)
                     # start good falling animation
                     self.dkjr.chute_apres_cle(True)
                     # wait a bit
@@ -169,3 +169,20 @@ class Jeu:
             self.nbEchecs += 1
             return True
         return False
+
+    def manipulation_score(self, valeur):
+        self.score += valeur
+        self.presentation.afficher_score(self.score)
+        if int(self.score / 200) - self.nb200 > 0:
+            self.nb200 += 1
+            for i in range(10):
+                self.presentation.jouer_son(3)
+                time.sleep(0.01)
+            if self.ennemis.incrementDifficulte > 2:
+                self.ennemis.incrementDifficulte = 2
+            if self.nbEchecs > 0:
+                self.nbEchecs -= 1
+                self.effacer_echec(self.nbEchecs)
+
+    def effacer_echec(self, num):
+        self.presentation.effacer_carre(7, 27 + num, 1, 1)
