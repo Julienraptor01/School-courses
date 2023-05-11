@@ -18,6 +18,7 @@ class Ennemis:
             self.delaiDifficulte = 150
             if self.incrementDifficulte < 5:
                 self.incrementDifficulte += 1
+
         if self.delaiEnnemis > 0:
             self.delaiEnnemis -= 1
             return self.RIEN

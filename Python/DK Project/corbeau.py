@@ -14,7 +14,6 @@ class Corbeau:
             if self.position == 8:
                 return 1
             else:
-                self.presentation.afficher_corbeau(self.position * 2 + 8,
-                                                   ((self.position - 1) % 2) + 1)
+                self.presentation.afficher_corbeau(self.position * 2 + 8, ((self.position - 1) % 2) + 1)
                 self.delai = 7
         return 0
