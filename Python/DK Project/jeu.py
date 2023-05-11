@@ -143,7 +143,7 @@ class Jeu:
                     croco.effacer_croco()
                     self.listeCrocos.remove(croco)
                     return True
-        elif self.dkjr.etat == DKJr.LIANE_BAS or self.dkjr.etat == DKJr.SAUT_BAS or self.dkjr.etat == DKJr.DOUBLE_LIANE_BAS:
+        elif self.dkjr.etat in [DKJr.LIANE_BAS, DKJr.SAUT_BAS, DKJr.DOUBLE_LIANE_BAS]:
             for corbeau in self.listeCorbeaux:
                 if corbeau.position == self.dkjr.position:
                     corbeau.effacer_corbeau()

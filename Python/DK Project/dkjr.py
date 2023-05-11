@@ -22,8 +22,8 @@ class DKJr:
             self.delai -= 1
 
         else:
-            if direction in [pygame.K_RIGHT, pygame.K_LEFT, pygame.K_UP,
-                             pygame.K_DOWN] or self.etat == DKJr.SAUT_HAUT or self.etat == DKJr.SAUT_BAS:
+            if direction in [pygame.K_RIGHT, pygame.K_LEFT, pygame.K_UP, pygame.K_DOWN] \
+                    or self.etat in [DKJr.SAUT_HAUT, DKJr.SAUT_BAS]:
                 self.presentation.jouer_son(0)
 
             if self.etat == DKJr.LIBRE_BAS:
@@ -148,7 +148,7 @@ class DKJr:
     def effacer_dkjr(self):
         if self.etat == DKJr.LIBRE_BAS:
             self.presentation.effacer_carre(11, self.position * 2 + 7, 2, 2)
-        elif self.etat == DKJr.SAUT_BAS or self.etat == DKJr.LIANE_BAS or self.etat == DKJr.DOUBLE_LIANE_BAS:
+        elif self.etat in [DKJr.SAUT_BAS, DKJr.LIANE_BAS, DKJr.DOUBLE_LIANE_BAS]:
             self.presentation.effacer_carre(10, self.position * 2 + 7, 2, 2)
         elif self.etat == DKJr.LIBRE_HAUT:
             self.presentation.effacer_carre(7, self.position * 2 + 7, 2, 2)
