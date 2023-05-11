@@ -1,4 +1,4 @@
-//ping pin setupLEFT_WHEEL_SERVO_OFFSET 
+//ping pin setup
 #define PING_PIN 7
 
 //sensor servo pin setup
@@ -60,39 +60,39 @@ void loop()
 	rotateRightOnMiddle(90);
 	delay(1000000);
 	*/
-	move(1, 1450, 1550);
+	move(1, 1450, 1550, false);
 	delay(1000000);
 }
 
 void rotateLeftOnLeft(int angle)
 {
-	move(angle * DISTANCE_BETWEEN_WHEELS * 2 * M_PI / 360, wheelRightForward, wheelLeftStationary);
+	move(angle * DISTANCE_BETWEEN_WHEELS * 2 * M_PI / 360, wheelRightForward, wheelLeftStationary, true);
 }
 
 void rotateLeftOnMiddle(int angle)
 {
-	move((angle / 2) * DISTANCE_BETWEEN_WHEELS * 2 * M_PI / 360, wheelRightForward, wheelLeftBackward);
+	move((angle / 2) * DISTANCE_BETWEEN_WHEELS * 2 * M_PI / 360, wheelRightForward, wheelLeftBackward, true);
 }
 
 void rotateRightOnMiddle(int angle)
 {
-	move((angle / 2) * DISTANCE_BETWEEN_WHEELS * 2 * M_PI / 360, wheelRightBackward, wheelLeftForward);
+	move((angle / 2) * DISTANCE_BETWEEN_WHEELS * 2 * M_PI / 360, wheelRightBackward, wheelLeftForward, true);
 }
 
 void rotateRightOnRight(int angle)
 {
-	move(angle * DISTANCE_BETWEEN_WHEELS * 2 * M_PI / 360, wheelRightStationary, wheelLeftForward);
+	move(angle * DISTANCE_BETWEEN_WHEELS * 2 * M_PI / 360, wheelRightStationary, wheelLeftForward, true);
 }
 
 void moveForward(int distance)
 {
-	move(distance, wheelRightForward, wheelLeftForward);
+	move(distance, wheelRightForward, wheelLeftForward, true);
 }
 
-void move(int distance, int wheelLeft, int wheelRight)
+void move(int value, int wheelLeft, int wheelRight, bool isDistance)
 {
 	wheelRightCounter = 0, wheelLeftCounter = 0;
-	int step = distance * 10 / 3.25;
+	int step = isDistance ? value * 10 / 3.25 : value;
 	while(wheelRightCounter < step && wheelLeftCounter < step)
 	{
 		pulseWheelServo(RIGHT_WHEEL_SERVO_PIN, wheelRight);
