@@ -184,6 +184,7 @@ class Jeu:
                 time.sleep(0.01)
             if self.ennemis.incrementDifficulte > 2:
                 self.ennemis.incrementDifficulte = 2
+                self.ennemis.delaiDifficulte = 150
             if self.nbEchecs > 0:
                 self.nbEchecs -= 1
                 self.effacer_echec(self.nbEchecs)
