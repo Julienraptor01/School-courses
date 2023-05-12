@@ -99,7 +99,11 @@ class Jeu:
 
             time.sleep(0.1)
 
-        self.jouer_fin()
+        # self.jouer_fin()
+        # 10 times sound 1
+        for i in range(10):
+            self.presentation.jouer_son(1)
+            time.sleep(0.1)
 
         self.presentation.attendre_fermeture_fenetre()
 
