@@ -43,6 +43,7 @@ class Jeu:
                 if self.cle.etat == 1:
                     # clear the key
                     self.cle.effacer_cle()
+                    self.cle.reinitialiser_delai()
                     # draw the monkey with the key
                     self.dkjr.attrapage_cle(True)
                     # play good sound (10x)

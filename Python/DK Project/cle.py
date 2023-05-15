@@ -10,30 +10,26 @@ class Cle:
         if self.delai > 0:
             self.delai -= 1
         else:
+            self.effacer_cle()
             if self.etat == 1:
-                self.etat = 2
                 self.augmente = True
-                self.presentation.effacer_carre(3, 12, 2, 1)
-            elif self.etat == 2:
-                if self.augmente:
-                    self.etat = 3
-                else:
-                    self.etat = 1
-                self.presentation.effacer_carre(3, 13, 2, 1)
-            elif self.etat == 3:
-                if self.augmente:
-                    self.etat = 4
-                else:
-                    self.etat = 2
-                self.presentation.effacer_carre(3, 13, 2, 2)
             elif self.etat == 4:
-                self.etat = 3
                 self.augmente = False
-                self.presentation.effacer_carre(3, 13, 2, 2)
+            if self.augmente:
+                self.etat += 1
+            else:
+                self.etat -= 1
             self.presentation.afficher_cle(self.etat)
             self.presentation.jouer_son(4)
             self.delai = 7
 
     def effacer_cle(self):
-        self.presentation.effacer_carre(3, 12, 2, 1)
+        if self.etat == 1:
+            self.presentation.effacer_carre(3, 12, 2, 1)
+        elif self.etat == 2:
+            self.presentation.effacer_carre(3, 13, 2, 1)
+        elif self.etat in [3, 4]:
+            self.presentation.effacer_carre(3, 13, 2, 2)
+
+    def reinitialiser_delai(self):
         self.delai = 0
