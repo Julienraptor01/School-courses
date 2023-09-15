@@ -1,3 +1,5 @@
+from sys import exit
+
 import pygame
 import time
 
@@ -70,7 +72,7 @@ class Presentation:
         for evenement in pygame.event.get():
             if evenement.type == pygame.QUIT:
                 pygame.quit()
-                exit()
+                 exit()
             elif evenement.type == pygame.KEYDOWN:
                 return evenement.key
         return -1
