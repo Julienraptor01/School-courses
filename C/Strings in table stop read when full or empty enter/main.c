@@ -14,17 +14,17 @@ int main()
 
 int read(char *table, int numberOfLines, int sizeOfLines)
 {
-    int counter = 0;
-    while (counter < numberOfLines)
-    {
-        printf("Enter a string : ");
-        fflush(stdin);
-        gets(table + counter * sizeOfLines);
-        if (strlen(table + counter * sizeOfLines) == 0)
-        {
-            return counter;
-        }
-        counter++;
-    }
-    return counter;
+	int counter = 0;
+	while (counter < numberOfLines)
+	{
+		printf("Enter a string : ");
+		fflush(stdin);
+		gets(table + counter * sizeOfLines);
+		if (strlen(table + counter * sizeOfLines) == 0)
+		{
+			return counter;
+		}
+		counter++;
+	}
+	return counter;
 }

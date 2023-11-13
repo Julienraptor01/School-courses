@@ -1,139 +1,127 @@
 /*
-drop table CS_FILMS cascade constraints;                       
-drop table CS_PAYS cascade constraints;                        
-drop table CS_INTERVENANTS cascade constraints;                
-drop table CS_FONCTIONS cascade constraints;                   
-drop table CS_TRAVAILLER cascade constraints;                  
-drop table CS_PRODUIRE cascade constraints;                    
-drop table CS_CATEGORIES cascade constraints;                  
-drop table CS_FC cascade constraints;                          
-drop table CS_SEANCES cascade constraints;                     
-drop table CS_SALLES cascade constraints;                      
-drop table CS_ADHERENTS cascade constraints;                   
+drop table CS_FILMS cascade constraints;
+drop table CS_PAYS cascade constraints;
+drop table CS_INTERVENANTS cascade constraints;
+drop table CS_FONCTIONS cascade constraints;
+drop table CS_TRAVAILLER cascade constraints;
+drop table CS_PRODUIRE cascade constraints;
+drop table CS_CATEGORIES cascade constraints;
+drop table CS_FC cascade constraints;
+drop table CS_SEANCES cascade constraints;
+drop table CS_SALLES cascade constraints;
+drop table CS_ADHERENTS cascade constraints;
 drop table CS_RESERVATIONS cascade constraints;
 */
 
-CREATE TABLE CS_FILMS
-(
-	numfilm number(4), 
-	titre varchar2(40) constraint films_titre not null enable,
-	annee number(4) constraint films_annee not null enable,
-	duree number(3) constraint films_duree not null enable,
-	constraint pk_films primary key(numfilm)
+CREATE TABLE CS_FILMS (
+	NUMFILM NUMBER(4),
+	TITRE VARCHAR2(40) CONSTRAINT FILMS_TITRE NOT NULL ENABLE,
+	ANNEE NUMBER(4) CONSTRAINT FILMS_ANNEE NOT NULL ENABLE,
+	DUREE NUMBER(3) CONSTRAINT FILMS_DUREE NOT NULL ENABLE,
+	CONSTRAINT PK_FILMS PRIMARY KEY(NUMFILM)
 );
 
-CREATE TABLE CS_PAYS
-(
-	codepays char(2), 
-	designation varchar2(20) constraint pays_designation not null enable,
-	constraint pk_pays primary key(codepays)
+CREATE TABLE CS_PAYS (
+	CODEPAYS CHAR(2),
+	DESIGNATION VARCHAR2(20) CONSTRAINT PAYS_DESIGNATION NOT NULL ENABLE,
+	CONSTRAINT PK_PAYS PRIMARY KEY(CODEPAYS)
 );
 
-CREATE TABLE CS_INTERVENANTS
-(
-	numintervenant number(4), 
-	nom varchar2(30) constraint intervenants_nom not null enable,
-	prenom varchar2(30), 
-	nationalite char(2),
-	sexe char(1),
-	constraint intervenants_sexe CHECK (upper(sexe) IN ('F','M')) enable,
-	constraint pk_intervenants primary key (numintervenant),
-	constraint fk_intervenantspays foreign key (nationalite) references CS_pays (codepays) enable
+CREATE TABLE CS_INTERVENANTS (
+	NUMINTERVENANT NUMBER(4),
+	NOM VARCHAR2(30) CONSTRAINT INTERVENANTS_NOM NOT NULL ENABLE,
+	PRENOM VARCHAR2(30),
+	NATIONALITE CHAR(2),
+	SEXE CHAR(1),
+	CONSTRAINT INTERVENANTS_SEXE CHECK (UPPER(SEXE) IN ('F', 'M')) ENABLE,
+	CONSTRAINT PK_INTERVENANTS PRIMARY KEY (NUMINTERVENANT),
+	CONSTRAINT FK_INTERVENANTSPAYS FOREIGN KEY (NATIONALITE) REFERENCES CS_PAYS (CODEPAYS) ENABLE
 );
 
-CREATE TABLE CS_FONCTIONS
-(
-	numfonction number(4), 
-	fonction varchar2(30) constraint fonctions_nom not null enable,
-	constraint pk_fonctions primary key(numfonction)
+CREATE TABLE CS_FONCTIONS (
+	NUMFONCTION NUMBER(4),
+	FONCTION VARCHAR2(30) CONSTRAINT FONCTIONS_NOM NOT NULL ENABLE,
+	CONSTRAINT PK_FONCTIONS PRIMARY KEY(NUMFONCTION)
 );
 
-CREATE TABLE CS_TRAVAILLER
-(
-  numfilm number(4), 
-	numfonction number(4),
-  numintervenant number(4),  
-	constraint pk_travailler primary key(numfilm,numfonction,numintervenant),
-  constraint fk_travaillerfilms foreign key(numfilm) references CS_films (numfilm) enable,
-  constraint fk_travaillerfonctions foreign key(numfonction) references CS_FONCTIONS (numfonction) enable,
-  constraint fk_travaillerintervenants foreign key(numintervenant) references CS_intervenants (numintervenant) enable
+CREATE TABLE CS_TRAVAILLER (
+	NUMFILM NUMBER(4),
+	NUMFONCTION NUMBER(4),
+	NUMINTERVENANT NUMBER(4),
+	CONSTRAINT PK_TRAVAILLER PRIMARY KEY(NUMFILM, NUMFONCTION, NUMINTERVENANT),
+	CONSTRAINT FK_TRAVAILLERFILMS FOREIGN KEY(NUMFILM) REFERENCES CS_FILMS (NUMFILM) ENABLE,
+	CONSTRAINT FK_TRAVAILLERFONCTIONS FOREIGN KEY(NUMFONCTION) REFERENCES CS_FONCTIONS (NUMFONCTION) ENABLE,
+	CONSTRAINT FK_TRAVAILLERINTERVENANTS FOREIGN KEY(NUMINTERVENANT) REFERENCES CS_INTERVENANTS (NUMINTERVENANT) ENABLE
 );
 
-CREATE TABLE CS_PRODUIRE
-(
-  numfilm number(4), 
-  codepays char(2), 
-  constraint pk_produire primary key(numfilm, codepays),
-  constraint fk_produirefilms foreign key(numfilm) references CS_films (numfilm) enable,
-  constraint fk_produirepays foreign key(codepays) references CS_pays (codepays) enable
+CREATE TABLE CS_PRODUIRE (
+	NUMFILM NUMBER(4),
+	CODEPAYS CHAR(2),
+	CONSTRAINT PK_PRODUIRE PRIMARY KEY(NUMFILM, CODEPAYS),
+	CONSTRAINT FK_PRODUIREFILMS FOREIGN KEY(NUMFILM) REFERENCES CS_FILMS (NUMFILM) ENABLE,
+	CONSTRAINT FK_PRODUIREPAYS FOREIGN KEY(CODEPAYS) REFERENCES CS_PAYS (CODEPAYS) ENABLE
 );
 
-CREATE TABLE CS_CATEGORIES 
-(
-  numcat number(2), 
-  libelle varchar2(20) constraint categories_libelle not null enable, 
-  constraint pk_cat primary key(numcat)
+CREATE TABLE CS_CATEGORIES (
+	NUMCAT NUMBER(2),
+	LIBELLE VARCHAR2(20) CONSTRAINT CATEGORIES_LIBELLE NOT NULL ENABLE,
+	CONSTRAINT PK_CAT PRIMARY KEY(NUMCAT)
 );
 
-CREATE TABLE CS_FC
-(
-  numfilm number(4), 
-  numcat number(2),  
-  constraint pk_fc primary key(numfilm, numcat),
-  constraint fk_fcfilms foreign key(numfilm) references CS_films (numfilm) enable,
-  constraint fk_fccategories foreign key(numcat) references CS_categories (numcat) enable
+CREATE TABLE CS_FC (
+	NUMFILM NUMBER(4),
+	NUMCAT NUMBER(2),
+	CONSTRAINT PK_FC PRIMARY KEY(NUMFILM, NUMCAT),
+	CONSTRAINT FK_FCFILMS FOREIGN KEY(NUMFILM) REFERENCES CS_FILMS (NUMFILM) ENABLE,
+	CONSTRAINT FK_FCCATEGORIES FOREIGN KEY(NUMCAT) REFERENCES CS_CATEGORIES (NUMCAT) ENABLE
 );
 
-CREATE TABLE CS_SALLES
-(
-  numsalle number(3),   
-  nomsalle varchar2(30) constraint salles_nomsalle not null enable,
-  adressesalle varchar2(50), 
-  villesalle varchar2(30) constraint salles_villesalle not null enable, 
-  telephone char(14),
-	constraint salles_telephone CHECK (telephone LIKE ('__ __ __ __ __')) enable,
-  constraint pk_salles primary key(numsalle)
+CREATE TABLE CS_SALLES (
+	NUMSALLE NUMBER(3),
+	NOMSALLE VARCHAR2(30) CONSTRAINT SALLES_NOMSALLE NOT NULL ENABLE,
+	ADRESSESALLE VARCHAR2(50),
+	VILLESALLE VARCHAR2(30) CONSTRAINT SALLES_VILLESALLE NOT NULL ENABLE,
+	TELEPHONE CHAR(14),
+	CONSTRAINT SALLES_TELEPHONE CHECK (TELEPHONE LIKE ('__ __ __ __ __')) ENABLE,
+	CONSTRAINT PK_SALLES PRIMARY KEY(NUMSALLE)
 );
 
-CREATE TABLE CS_SEANCES
-( 
-  numfilm number(4), 
-  numsalle number(3), 
-  jour char(8), 
-  heuredeb char(5),
-  constraint seances_heuredeb CHECK (heuredeb LIKE ('__h__')) enable,
-  constraint pk_seances primary key(numfilm,numsalle,jour,heuredeb),
-	constraint fk_seancesfilms foreign key(numfilm) references CS_films (numfilm) enable,
-	constraint fk_seancessalles foreign key(numsalle) references CS_salles (numsalle) enable
+CREATE TABLE CS_SEANCES (
+	NUMFILM NUMBER(4),
+	NUMSALLE NUMBER(3),
+	JOUR CHAR(8),
+	HEUREDEB CHAR(5),
+	CONSTRAINT SEANCES_HEUREDEB CHECK (HEUREDEB LIKE ('__h__')) ENABLE,
+	CONSTRAINT PK_SEANCES PRIMARY KEY(NUMFILM, NUMSALLE, JOUR, HEUREDEB),
+	CONSTRAINT FK_SEANCESFILMS FOREIGN KEY(NUMFILM) REFERENCES CS_FILMS (NUMFILM) ENABLE,
+	CONSTRAINT FK_SEANCESSALLES FOREIGN KEY(NUMSALLE) REFERENCES CS_SALLES (NUMSALLE) ENABLE
 );
 
-CREATE TABLE CS_ADHERENTS
-(
-  numadhe number(5), 
-  nomadhe varchar2(30) constraint adherents_nomadhe not null enable,
-  prenomadhe varchar2(30), 
-  adresse varchar2(50), 
-  code_postal char(5),
-  ville varchar2(30) constraint adherents_ville not null enable,
-  ordrecotisation char(1),
-	constraint adherents_codepostal CHECK (code_postal LIKE ('_____')) enable,
-  constraint pk_adhe primary key(numadhe)
+CREATE TABLE CS_ADHERENTS (
+	NUMADHE NUMBER(5),
+	NOMADHE VARCHAR2(30) CONSTRAINT ADHERENTS_NOMADHE NOT NULL ENABLE,
+	PRENOMADHE VARCHAR2(30),
+	ADRESSE VARCHAR2(50),
+	CODE_POSTAL CHAR(5),
+	VILLE VARCHAR2(30) CONSTRAINT ADHERENTS_VILLE NOT NULL ENABLE,
+	ORDRECOTISATION CHAR(1),
+	CONSTRAINT ADHERENTS_CODEPOSTAL CHECK (CODE_POSTAL LIKE ('_____')) ENABLE,
+	CONSTRAINT PK_ADHE PRIMARY KEY(NUMADHE)
 );
 
-CREATE TABLE CS_RESERVATIONS
-(
-  numfilm number(4),
-  numsalle number(3),
-  jour char(8), 
-  heuredeb char(5),
-  numadhe number(5),
-  nbplaces number(3) constraint reservations_nbplaces not null enable, 
-  paye char(1),
-  modepaiement char(2),
-  constraint reservations_paye CHECK (upper(paye) IN ('O','N')) enable,
-  constraint reservations_modepaiement CHECK (upper(modepaiement) IN ('ES','CH','CB')) enable,
-  constraint reservations_heuredeb CHECK (heuredeb LIKE ('__h__')) enable,
-  constraint pk_reserv primary key(numfilm,numsalle,jour,heuredeb,numadhe),
-  constraint fk_reservationsseances foreign key(numfilm,numsalle,jour,heuredeb) references CS_seances (numfilm,numsalle,jour,heuredeb) enable,
-  constraint fk_reservationsadherents foreign key(numadhe) references CS_adherents (numadhe) enable
+CREATE TABLE CS_RESERVATIONS (
+	NUMFILM NUMBER(4),
+	NUMSALLE NUMBER(3),
+	JOUR CHAR(8),
+	HEUREDEB CHAR(5),
+	NUMADHE NUMBER(5),
+	NBPLACES NUMBER(3) CONSTRAINT RESERVATIONS_NBPLACES NOT NULL ENABLE,
+	PAYE CHAR(1),
+	MODEPAIEMENT CHAR(2),
+	CONSTRAINT RESERVATIONS_PAYE CHECK (UPPER(PAYE) IN ('O', 'N')) ENABLE,
+	CONSTRAINT RESERVATIONS_MODEPAIEMENT CHECK (UPPER(MODEPAIEMENT) IN ('ES', 'CH', 'CB')) ENABLE,
+	CONSTRAINT RESERVATIONS_HEUREDEB CHECK (HEUREDEB LIKE ('__h__')) ENABLE,
+	CONSTRAINT PK_RESERV PRIMARY KEY(NUMFILM, NUMSALLE, JOUR, HEUREDEB, NUMADHE),
+	CONSTRAINT FK_RESERVATIONSSEANCES FOREIGN KEY(NUMFILM, NUMSALLE, JOUR, HEUREDEB) REFERENCES CS_SEANCES (NUMFILM, NUMSALLE, JOUR, HEUREDEB) ENABLE,
+	CONSTRAINT FK_RESERVATIONSADHERENTS FOREIGN KEY(NUMADHE) REFERENCES CS_ADHERENTS (NUMADHE) ENABLE
 );

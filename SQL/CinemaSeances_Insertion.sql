@@ -40,25 +40,25 @@ insert into CS_pays values('GR','Grèce');
 insert into CS_pays values('RU','Russe');
 
 -- INTERVENANTS --
-insert into CS_intervenants values(1,'Burton','Tim','US'  ,'M');
+insert into CS_intervenants values(1,'Burton','Tim','US' ,'M');
 insert into CS_intervenants values(2,'Depp','Johnny','US','M');
 insert into CS_intervenants values(3,'August','John','DK' ,'M');
-insert into CS_intervenants values(4,'Rousselot','Philippe','FR'   ,'M');
+insert into CS_intervenants values(4,'Rousselot','Philippe','FR' ,'M');
 insert into CS_intervenants values(5,'Elfman','Danny','US' ,'M');
 insert into CS_intervenants values(6,'Stone','Oliver','US' ,'M');
 insert into CS_intervenants values(7,'Jolie','Angelina','US' ,'F');
 insert into CS_intervenants values(8,'Kilmer','Val','US','M');
-insert into CS_intervenants values(9,'Kechiche','Abdelattif','FR'  ,'M');
+insert into CS_intervenants values(9,'Kechiche','Abdelattif','FR' ,'M');
 insert into CS_intervenants values(10,'Lacroix','Ghalya','FR' ,'F');
 insert into CS_intervenants values(11,'Forestier','Sara','BE' ,'F');
 insert into CS_intervenants values(12,'Vangelis',NULL,'GR' ,'M');
-insert into CS_intervenants values(13,'Scott','Ridley','GB'   ,'M');
+insert into CS_intervenants values(13,'Scott','Ridley','GB' ,'M');
 insert into CS_intervenants values(14,'Crowe','Russel','AU' ,'M');
 insert into CS_intervenants values(15,'Nielsen','Connie','US','F');
 insert into CS_intervenants values(16,'Mathieson','John','US','M');
 insert into CS_intervenants values(17,'Zimmer','Hans','DE','M');
 insert into CS_intervenants values(18,'Gerrard','Lisa','DE' ,'F');
-insert into CS_intervenants values(19,'Franzoni','David','US'  ,'M');
+insert into CS_intervenants values(19,'Franzoni','David','US' ,'M');
 insert into CS_intervenants values(20,'Spielberg','Steven','US' ,'M');
 insert into CS_intervenants values(21,'Cruise','Tom','US','M');
 insert into CS_intervenants values(22,'Kaminski','Janusz','US' ,'M');
@@ -67,7 +67,7 @@ insert into CS_intervenants values(24,'Neeson','Liam','GB' ,'M');
 insert into CS_intervenants values(25,'Kingsley','Ben','GB' ,'M');
 insert into CS_intervenants values(26,'Fiennes','Ralph','US','M');
 insert into CS_intervenants values(27,'Klapisch','Cédric','FR' ,'M');
-insert into CS_intervenants values(28,'Duris','Romain','FR'  ,'M');
+insert into CS_intervenants values(28,'Duris','Romain','FR' ,'M');
 insert into CS_intervenants values(29,'Tautou','Audrey','FR' ,'F');
 insert into CS_intervenants values(30,'de France','Cécile','BE' ,'F');
 insert into CS_intervenants values(31,'Zaillian','Steven','US','M');
@@ -109,13 +109,13 @@ insert into CS_intervenants values(66,'Khamatova','Chuplan','RU' ,'F');
 insert into CS_intervenants values(67,'Arcand','Denys','CA' ,'M');
 insert into CS_intervenants values(68,'Girard','Rémy','FR' ,'M');
 insert into CS_intervenants values(69,'Jugnot','Gérard','FR' ,'M');
-insert into CS_intervenants values(70,'Simon','Gérard','FR'  ,'M');
+insert into CS_intervenants values(70,'Simon','Gérard','FR' ,'M');
 insert into CS_intervenants values(71,'Garcia','Michèle','FR' ,'F');
-insert into CS_intervenants values(72,'Sitruk','Jules','FR'  ,'M');
+insert into CS_intervenants values(72,'Sitruk','Jules','FR' ,'M');
 insert into CS_intervenants values(73,'Plattner','Patricia','FR' ,'F');
 insert into CS_intervenants values(74,'Grinberg','Anouk','FR','F');
 insert into CS_intervenants values(75,'Laffont','Bernadette','FR' ,'M');
-insert into CS_intervenants values(76,'Polanski','Roman','US'  ,'M');
+insert into CS_intervenants values(76,'Polanski','Roman','US' ,'M');
 insert into CS_intervenants values(77,'Brody','Adrien','US' ,'M');
 insert into CS_intervenants values(78,'Kretschmann','Thomas','US','M');
 insert into CS_intervenants values(79,'Michael','Bay','US' ,'M');
@@ -129,7 +129,7 @@ insert into CS_fonctions values(5,'scenariste');
 insert into CS_fonctions values(6,'producteur');
 
 -- TRAVAILLER --
-  -- acteurs --
+ -- acteurs --
 insert into cs_travailler values(7,1,29);
 insert into cs_travailler values(7,1,30);
 insert into cs_travailler values(8,1,32);
@@ -163,7 +163,7 @@ insert into cs_travailler values(23,1,74);
 insert into cs_travailler values(23,1,75);
 insert into cs_travailler values(24,1,77);
 insert into cs_travailler values(24,1,78);
-  -- compositeurs --
+ -- compositeurs --
 insert into CS_travailler values(1,2,5);
 insert into CS_travailler values(4,2,17);
 insert into CS_travailler values(4,2,18);
@@ -174,7 +174,7 @@ insert into CS_travailler values(14,2,45);
 insert into CS_travailler values(15,2,23);
 insert into CS_travailler values(17,2,53);
 insert into CS_travailler values(20,2,45);
-  -- photographes --
+ -- photographes --
 insert into CS_travailler values(1,3,4);
 insert into CS_travailler values(4,3,16);
 insert into CS_travailler values(5,3,22);
@@ -182,7 +182,7 @@ insert into CS_travailler values(6,3,22);
 insert into CS_travailler values(15,3,22);
 insert into CS_travailler values(16,3,37);
 insert into CS_travailler values(22,3,70);
-  -- realisateurs --
+ -- realisateurs --
 insert into CS_travailler values(1,4,1);
 insert into CS_travailler values(2,4,6 );
 insert into CS_travailler values(3,4,9 );
@@ -208,7 +208,7 @@ insert into CS_travailler values(21,4,67);
 insert into CS_travailler values(22,4,69);
 insert into CS_travailler values(23,4,73);
 insert into CS_travailler values(24,4,76);
-  -- scenaristes --
+ -- scenaristes --
 insert into CS_travailler values(1,5,3);
 insert into CS_travailler values(2,5,6);
 insert into CS_travailler values(3,5,9);

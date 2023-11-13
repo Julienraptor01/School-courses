@@ -25,7 +25,7 @@ void setup()
 	attachInterrupt(digitalPinToInterrupt(RIGHT_SERVO_CODER), rightCounterIncrease, CHANGE);
 	attachInterrupt(digitalPinToInterrupt(LEFT_SERVO_CODER), leftCounterIncrease, CHANGE);
 }
-  
+
 void loop()
 {
 	rotateLeftOnLeft(90);

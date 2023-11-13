@@ -8,7 +8,7 @@
 #define BAUD 4800 // Baud Rate
 #define MYUBRR FOSC/16/BAUD-1 // UBRR Value
 
-#define BaseDelayMicroSeconds 125 //125µs
+#define BaseDelayMicroSeconds 125 //125ï¿½s
 #define ClockFrequency 8 //8MHz
 #define Prescalar 8 // 1/8
 
@@ -66,7 +66,7 @@ int main(void)
 				//tell the user to input
 				USART_SendString("Entrez le numero de broche (0 a 7)\r\n");
 				//get the input
-				// 
+				//
 				cPin = USART_ReceiveNumber();
 			}
 			while ((cPin < 0) || (cPin > 7));
@@ -196,10 +196,10 @@ int main(void)
 			USART_SendString(" a clignote\r\n");
 			break;
 		/*
-		//(C)lignoter : activation du clignotement de la LED sur la broche x (x est compris entre 0 et 7) grâce à le gestion d’une interruption sur un timer. De cette manière le LED clignote en continu et le programme continue à fonctionner pour les autres options. Une seule LED peut clignoter à un moment donné. Le changement de l'état de la LED se fait toutes les 0,5 secondes.
+		//(C)lignoter : activation du clignotement de la LED sur la broche x (x est compris entre 0 et 7) grï¿½ce ï¿½ le gestion dï¿½une interruption sur un timer. De cette maniï¿½re le LED clignote en continu et le programme continue ï¿½ fonctionner pour les autres options. Une seule LED peut clignoter ï¿½ un moment donnï¿½. Le changement de l'ï¿½tat de la LED se fait toutes les 0,5 secondes.
 		case 'C':
 			break;
-		//(S)topper : arrêt du clignotement de la LED.
+		//(S)topper : arrï¿½t du clignotement de la LED.
 		case 'S':
 			break;
 		*/

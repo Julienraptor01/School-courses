@@ -24,7 +24,7 @@ void loop() {
 	digitalWrite(PING_PIN, LOW);
 	delayMicroseconds(2);
 	digitalWrite(PING_PIN, HIGH);
-	delayMicroseconds(5); 
+	delayMicroseconds(5);
 	digitalWrite(PING_PIN, LOW);
 
 	//read the pulse
