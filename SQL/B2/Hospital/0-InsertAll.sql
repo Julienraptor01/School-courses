@@ -1,0 +1,16 @@
+start "Pays.sql";
+start "adresses.sql";
+start "mutuelles.sql";
+start "specialites.sql";
+start "medecins.sql";
+start "patients.sql";
+start "patientsmedecins.sql";
+start "hopitaux.sql";
+start "services.sql";
+start "hopitauxservices.sql";
+start "groupes.sql";
+start "fabricants.sql";
+start "medicaments.sql";
+start "substances.sql";
+start "allergies.sql";
+start "composition.sql";

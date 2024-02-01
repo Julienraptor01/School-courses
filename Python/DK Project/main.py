@@ -1,4 +1,5 @@
 from jeu import Jeu
 from presentation import Presentation
 
-Jeu(Presentation()).demarrer()
+if __name__ == "__main__":
+    Jeu(Presentation()).demarrer()

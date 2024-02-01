@@ -10,3 +10,5 @@ x86/
 *.user
 .vscode/
 *.dat
+build/
+__pycache__/
