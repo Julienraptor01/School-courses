@@ -3,7 +3,6 @@
 
 #define NUMBER_OF_THREADS 4
 #define FILE_TO_SEARCH "./assets/data.txt"
-#define wordSize 4
 
 #include <string>
 

@@ -45,12 +45,12 @@ void *searchWordInFile(void *arg)
 		pthread_exit(threadResults);
 	}
 	close(file);
-	//int wordSize = threadArguments->wordToSearch.size();
+	int wordSize = threadArguments->wordToSearch.size();
 	while (!eof)
 	{
 		file = open(threadArguments->fileToSearch.c_str(), O_RDONLY);
 		lseek(file, threadResults->position++ * (wordSize + 1), SEEK_SET);
-		char buffer[wordSize + 1];
+		char buffer[wordSize + 1] = {0};
 		int bytesRead = read(file, buffer, wordSize);
 		close(file);
 		string out = "";
@@ -59,20 +59,20 @@ void *searchWordInFile(void *arg)
 		out.append(to_string(threadArguments->threadNumber));
 		for (int i = 0; i < (NUMBER_OF_THREADS + 1) - threadArguments->threadNumber; i++)
 			out.append("\t");
-		switch (bytesRead)
+		if (bytesRead == -1)
 		{
-		case -1:
 			cout << out.append("Error reading the file\n") << flush;
 			eof = true;
 			threadResults->position--;
-			break;
-		case wordSize:
+		}
+		else if (bytesRead == wordSize)
+		{
 			cout << out.append(threadArguments->wordToSearch.compare(buffer) == 0 ? threadResults->count++, "\033[32m" : "\033[31m").append(buffer).append("\033[0m\n") << flush;
-			break;
-		default:
+		}
+		else
+		{
 			eof = true;
 			cout << out.append("\033[31m").append(buffer, bytesRead).append("\033[34mEOF\033[0m\n") << flush;
-			break;
 		}
 	}
 	pthread_exit(threadResults);
