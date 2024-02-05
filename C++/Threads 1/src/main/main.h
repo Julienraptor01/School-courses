@@ -1,7 +1,9 @@
 #ifndef MAIN_H
 #define MAIN_H
 
-#define NUMBER_OF_THREADS 1
+#define NUMBER_OF_THREADS 4
+#define FILE_TO_SEARCH "./assets/data.txt"
+#define wordSize 4
 
 #include <string>
 
@@ -11,16 +13,14 @@ typedef struct
 {
 	const string fileToSearch;
 	const string wordToSearch;
-	int position;
-	int count;
-	bool eof;
-} FileInformations;
+	int threadNumber;
+} ThreadArguments;
 
 typedef struct
 {
-	FileInformations *fileInformations;
-	int threadNumber;
-} ThreadArguments;
+	int position;
+	int count;
+} ThreadResults;
 
 int main();
 void *searchWordInFile(void *arg);
