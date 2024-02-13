@@ -1,0 +1,5 @@
+Quels sont les paramètres à entrer au niveau d’un pc pourqu’il recoive des adresses en DHCP ?
+	Le mettre en mode DHCP
+
+Quelle est la commande pour recevoir dynamiquement une adresse dhcp ?
+	ipconfig /renew

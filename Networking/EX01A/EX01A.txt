@@ -1,0 +1,8 @@
+Les pc0 pc1 pc2 ont en commun quels paramètres ?
+	Connection-specific DNS Suffix et IPv4 Address
+
+Pour tester si un pc est accessible on utilise quelle commande ?
+	ping <ipDestination>
+
+Pour connecter un pc à un hub , on utilise quel type de câble ?
+	Copper Straight-Through

@@ -1,0 +1,11 @@
+Pour tester si un pc est accessible on utilise quelle commande ?
+	ping <ipDestination>
+
+Comment afficher la valeur du paramêtre gateway d’un pc ?
+	ipconfig
+
+Quel est la valeur du paramêtre gateway pour les pcs 0 à 3 ?
+	200.42.1.254
+
+Quel est la valeur du paramêtre gateway pour les pcs 4 à 7 ?
+	200.42.2.254

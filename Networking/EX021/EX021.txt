@@ -1,0 +1,53 @@
+Ping de PC0
+200.42.0.1 OK
+200.42.0.2 OK
+200.42.0.3 OK
+200.42.0.4 OK
+
+Quels sont les pcs qui reçoivent le message ?
+	tous
+Quels sont les pcs qui traitent réellement le message ?
+	uniquement le pc avec la bonne IP
+
+Combien de couches du modèle sont mises en œuvre dans cet échange. Citez les ?
+	3
+	Network
+	Data Link
+	Physical
+
+Le niveau 3 utilise quelle adresse ?
+	200.42.0.4
+
+Le niveau 2 utilise quelle adresse ?
+	000DBD4857733
+
+Le niveau 1 utilise quelle adresse ?
+	FastEthernet0
+
+En vous servant des notes, Quels sont les noms OSI des couches 1,2,3 ?
+	1 : Physical
+	2 : Data Link
+	3 : Network
+
+Ethernet se situe à quels niveaux du modèle OSI ?
+	2
+
+En cliquant sur outbound PDU détails quelles structures sont utilisées ?
+	Frame
+	IP
+	ICMP
+
+En utilisant les notes calculez la taille d'une requête icmp de data 50 au niveau 3 & 2 ?
+	ICMP 8 + 50 = 58
+	IP 20 + 58 = 78
+	Ethernet WireShark 6 * 2 + 2 + 78 = 92
+	Ethernet 8 + 92 + 4 = 104
+
+Le hub travaille à quel niveau du modèle osi ?
+	1 : Physical
+
+Quelle Type d'adresse manipule le Hub ?
+	Aucune
+
+Quels sont les paramètres à rentrer au niveau du PC0 sachant que je veux accéder à un serveur dns
+	IP, Masque, DNS
