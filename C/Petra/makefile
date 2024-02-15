@@ -1,3 +1,8 @@
+# OS specific setup
+ID=$(shell . /etc/os-release ; echo $$ID)
+ifeq "$(ID)" "kali"
+DEBUG=true
+endif
 ### paths
 # sources sub directories
 MAIN=/main
@@ -22,7 +27,11 @@ OBJECTS=$(patsubst $(MAIN_SRC)/%.c,$(MAIN_OBJ)/%.o,$(wildcard $(MAIN_SRC)/*.c))
 # compiler
 CC=gcc
 # compile arguments
-CFLAGS=-Wall -Wextra -O3 -I$(MAIN_SRC)
+ifdef DEBUG
+CFLAGS=-Wall -Wextra -g -I$(MAIN_SRC) -DDEBUG
+else
+CFLAGS=-Wall -Wextra -O3 -I$(MAIN_SRC) -std=c99
+endif
 # link arguments
 LDFLAGS=
 

@@ -2,70 +2,56 @@
 
 #include <errno.h>
 #include <fcntl.h>
+#include <limits.h>
+#include <pthread.h>
 #include <stdarg.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
+
+actuateurs_t actuateurs = {0};
+capteurs_t capteurs = {0};
+pthread_t mainThread = 0;
 
 int main()
 {
-	main_thread = pthread_self();
-
-	actuateurs.packedByte = 0b00000000;
-	thread_printf("Actuateurs: "BINARY_BYTE"\n", actuateurs.packedByte);
-
-	actuateurs.unpackedByte.plungerVacuum = 1;
-	thread_printf("Actuateurs: "BINARY_BYTE"\n", actuateurs.packedByte);
+	mainThread = pthread_self();
 
 	int petra_actuateurs = open(PETRA_ACTUATEURS, O_WRONLY);
 
 	if (petra_actuateurs == -1)
 	{
-		thread_perror("Erreur ouverture \""PETRA_ACTUATEURS"\"");
+		threadPerror("Erreur ouverture \""PETRA_ACTUATEURS"\"");
 		return -1;
 	}
 	else
-		thread_printf("\""PETRA_ACTUATEURS"\" opened\n");
+		threadPrintf("\""PETRA_ACTUATEURS"\" opened\n");
 
 	int petra_capteurs = open(PETRA_CAPTEURS, O_RDONLY);
 	if (petra_capteurs == -1)
 	{
-		thread_perror("Erreur ouverture \""PETRA_CAPTEURS"\"");
+		threadPerror("Erreur ouverture \""PETRA_CAPTEURS"\"");
 		return -1;
 	}
 	else
-		thread_printf("\""PETRA_CAPTEURS"\" opened\n");
+		threadPrintf("\""PETRA_CAPTEURS"\" opened\n");
 
-	for (int i = 0; i < 10; sleep(1), i++)
+	printf("\e[?25l");
+	char *buffer = (char *)malloc(9);
+	if (buffer == NULL)
+	{
+		threadPerror("Error allocating memory for the buffer");
+		return -1;
+	}
+	for (unsigned int i = 0; i < USHRT_MAX + 1; nanosleep((const struct timespec[]){{0, 1000000L}}, NULL), i++)
 	{
 		read(petra_capteurs, &capteurs.word.unpackedByteLow, 1);
-		thread_printf("CAPTEURS = "BINARY_BYTE"\n", capteurs.word.unpackedByteLow);
+		sPrintBits(buffer, sizeof(capteurs.word.unpackedByteLow), &capteurs.word.unpackedByteLow);
+		printf("\e[2J\e[HMain: CAPTEURS = %s\n", buffer);
 	}
-
-	for (int i = 0; i < 10; sleep(1), i++)
-	{
-		thread_printf("ACTUATEURS ecriture d'un 1\n");
-		actuateurs.unpackedByte.plungerVacuum = 1;
-		int rc = write(petra_actuateurs, &actuateurs.packedByte, 1);
-		if (rc <= 0)
-		{
-			thread_printf("rc: %d\n", rc);
-			thread_perror("");
-		}
-
-		sleep(1);
-
-		thread_printf("ACTUATEURS ecriture d'un 0\n");
-		actuateurs.unpackedByte.plungerVacuum = 0;
-		rc = write(petra_actuateurs, &actuateurs.packedByte, 1);
-		if (rc <= 0)
-		{
-			thread_printf("rc: %d\n", rc);
-			thread_perror("");
-		}
-	}
-
-	actuateurs.packedByte = 0b00000000;
-	write(petra_actuateurs, &actuateurs.packedByte, 1);
+	free(buffer);
+	printf("\e[?25h");
 
 	close(petra_capteurs);
 	close(petra_actuateurs);
@@ -73,25 +59,71 @@ int main()
 	return 0;
 }
 
-void thread_printf(const char *format, ...)
+/**
+ * @brief Print a message to the console, with the thread id
+ * @param format The format string
+ * @param ... The arguments
+ * @return void
+ */
+void threadPrintf(const char *format, ...)
 {
-	if (pthread_equal(pthread_self(), main_thread))
-		printf("Main: ");
+	char *newFormat = (char *)malloc(strlen(format) + 30);
+	if (newFormat == NULL)
+	{
+		perror("Error allocating memory for the new format");
+		return;
+	}
+	if (pthread_equal(pthread_self(), mainThread))
+		sprintf(newFormat, "Main: %s", format);
 	else
-		printf("Thread %lu: ", (unsigned long)pthread_self());
-
+		sprintf(newFormat, "Thread %lu: %s", (unsigned long)pthread_self(), format);
 	va_list args;
 	va_start(args, format);
-	vprintf(format, args);
+	vprintf(newFormat, args);
 	va_end(args);
+	free(newFormat);
 }
 
-void thread_perror(const char *str)
+/**
+ * @brief Print the perror message to the console, with the thread id
+ * @param str The message
+ * @return void
+ */
+void threadPerror(const char *str)
 {
-	char buffer[256];
-	if (pthread_equal(pthread_self(), main_thread))
+	int length = strlen(str);
+	char *buffer = (char *)malloc(length + 30);
+	if (buffer == NULL)
+	{
+		perror("Error allocating memory for the buffer");
+		return;
+	}
+	strcpy(buffer, str);
+	if (pthread_equal(pthread_self(), mainThread))
 		sprintf(buffer, "Main: %s", str);
 	else
 		sprintf(buffer, "Thread %lu: %s", (unsigned long)pthread_self(), str);
 	perror(buffer);
+	free(buffer);
+}
+
+/**
+ * @brief Print the bits of a variable in a string due to the lack of support for %.8b by the Petra
+ * @param buffer The buffer to write to
+ * @param size The size of the variable
+ * @param ptr The pointer to the variable
+ * @return void
+ */
+void sPrintBits(char *buffer, size_t const size, void const *const ptr)
+{
+	unsigned char *b = (unsigned char *)ptr;
+	for (int i = size - 1; i >= 0; i--)
+	{
+		for (int j = 7; j >= 0; j--)
+		{
+			unsigned char byte = (b[i] >> j) & 1;
+			sprintf(buffer, "%u", byte);
+			buffer++;
+		}
+	}
 }

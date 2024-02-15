@@ -1,9 +1,7 @@
 #ifndef MAIN_H
 #define MAIN_H
 
-#include <pthread.h>
-
-#define DEBUG
+#include <stddef.h>
 
 #ifndef DEBUG
 #define PETRA_ACTUATEURS "/dev/actuateursPETRA"
@@ -15,7 +13,7 @@
 
 #define BINARY_BYTE "%.8b"
 
-union actuateurs
+typedef union actuateurs_t
 {
 	struct unpackedByte
 	{
@@ -28,9 +26,9 @@ union actuateurs
 		unsigned grapleActivate : 1;
 	} unpackedByte;
 	unsigned char packedByte;
-} actuateurs;
+} actuateurs_t;
 
-union capteurs
+typedef union capteurs_t
 {
 	struct unpackedWord
 	{
@@ -56,12 +54,11 @@ union capteurs
 		// unsigned char unpacked_byte_high;
 	} word;
 	// unsigned short packedWord;
-} capteurs;
-
-pthread_t main_thread;
+} capteurs_t;
 
 int main();
-void thread_printf(const char *format, ...);
-void thread_perror(const char *str);
+void threadPrintf(const char *format, ...);
+void threadPerror(const char *str);
+void sPrintBits(char* buffer, size_t const size, void const *const ptr);
 
 #endif
