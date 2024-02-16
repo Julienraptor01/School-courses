@@ -4,16 +4,16 @@
 #include <stddef.h>
 
 #ifndef DEBUG
-#define PETRA_ACTUATEURS "/dev/actuateursPETRA"
-#define PETRA_CAPTEURS "/dev/capteursPETRA"
+#define PETRA_SENSORS "/dev/capteursPETRA"
+#define PETRA_ACTUATORS "/dev/actuateursPETRA"
 #else
-#define PETRA_ACTUATEURS "./actuateursPETRA"
-#define PETRA_CAPTEURS "./capteursPETRA"
+#define PETRA_SENSORS "./capteursPETRA"
+#define PETRA_ACTUATORS "./actuateursPETRA"
 #endif
 
 #define BINARY_BYTE "%.8b"
 
-typedef union actuateurs_t
+typedef union actuators_t
 {
 	struct unpackedByte
 	{
@@ -26,9 +26,9 @@ typedef union actuateurs_t
 		unsigned grapleActivate : 1;
 	} unpackedByte;
 	unsigned char packedByte;
-} actuateurs_t;
+} actuators_t;
 
-typedef union capteurs_t
+typedef union sensors_t
 {
 	struct unpackedWord
 	{
@@ -54,11 +54,15 @@ typedef union capteurs_t
 		// unsigned char unpacked_byte_high;
 	} word;
 	// unsigned short packedWord;
-} capteurs_t;
+} sensors_t;
 
 int main();
+void *sensorThread(void *arg);
+int openSensors();
+int openActuators();
+int openPetra(const char *path, int flags);
 void threadPrintf(const char *format, ...);
-void threadPerror(const char *str);
+void threadPerror(const char *format, ...);
 void sPrintBits(char* buffer, size_t const size, void const *const ptr);
 
 #endif

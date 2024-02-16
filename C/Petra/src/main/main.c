@@ -5,58 +5,107 @@
 #include <limits.h>
 #include <pthread.h>
 #include <stdarg.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 
-actuateurs_t actuateurs = {0};
-capteurs_t capteurs = {0};
+actuators_t actuators = {0};
+sensors_t sensors = {0};
 pthread_t mainThread = 0;
+bool shouldStop = false;
 
 int main()
 {
 	mainThread = pthread_self();
 
-	int petra_actuateurs = open(PETRA_ACTUATEURS, O_WRONLY);
+	int petra_sensors = openSensors();
+	if (petra_sensors == -1)
+		return -1;
 
-	if (petra_actuateurs == -1)
+	close(petra_sensors);
+
+	int petra_actuators = openActuators();
+	if (petra_actuators == -1)
+		return -1;
+
+	close(petra_actuators);
+
+	pthread_t sensorThreadID;
+	if (pthread_create(&sensorThreadID, NULL, sensorThread, NULL) != 0)
 	{
-		threadPerror("Erreur ouverture \""PETRA_ACTUATEURS"\"");
+		threadPerror("Error creating the capteur thread");
 		return -1;
 	}
-	else
-		threadPrintf("\""PETRA_ACTUATEURS"\" opened\n");
 
-	int petra_capteurs = open(PETRA_CAPTEURS, O_RDONLY);
-	if (petra_capteurs == -1)
-	{
-		threadPerror("Erreur ouverture \""PETRA_CAPTEURS"\"");
-		return -1;
-	}
-	else
-		threadPrintf("\""PETRA_CAPTEURS"\" opened\n");
-
-	printf("\e[?25l");
 	char *buffer = (char *)malloc(9);
 	if (buffer == NULL)
 	{
 		threadPerror("Error allocating memory for the buffer");
 		return -1;
 	}
-	for (unsigned int i = 0; i < USHRT_MAX + 1; nanosleep((const struct timespec[]){{0, 1000000L}}, NULL), i++)
+	do
 	{
-		read(petra_capteurs, &capteurs.word.unpackedByteLow, 1);
-		sPrintBits(buffer, sizeof(capteurs.word.unpackedByteLow), &capteurs.word.unpackedByteLow);
-		printf("\e[2J\e[HMain: CAPTEURS = %s\n", buffer);
-	}
+		sPrintBits(buffer, sizeof(sensors.word.unpackedByteLow), &sensors.word.unpackedByteLow);
+		printf("\e[2J\e[HMain: SENSORS = %s\n", buffer);
+	} while (!shouldStop == true && nanosleep((const struct timespec[]){{0, 10000000L}}, NULL) == 0);
 	free(buffer);
-	printf("\e[?25h");
 
-	close(petra_capteurs);
-	close(petra_actuateurs);
+	pthread_join(sensorThreadID, NULL);
 
 	return 0;
+}
+
+/**
+ * @brief The thread function for the sensors
+ * @param arg TODO
+ * @return void
+ */
+void *sensorThread(void *arg)
+{
+	(void)arg;
+
+	int petra_sensors = openSensors();
+	if (petra_sensors == -1)
+		return NULL;
+
+	while (!shouldStop)
+		read(petra_sensors, &sensors.word.unpackedByteLow, 1);
+
+	close(petra_sensors);
+	return NULL;
+}
+
+/**
+ * @brief Open the Petra sensors
+ * @return The file descriptor or -1 on error
+ */
+int openSensors()
+{
+	return openPetra(PETRA_SENSORS, O_RDONLY);
+}
+
+/**
+ * @brief Open the Petra actuators
+ * @return The file descriptor or -1 on error
+ */
+int openActuators()
+{
+	return openPetra(PETRA_ACTUATORS, O_WRONLY);
+}
+
+/**
+ * @brief Open the Petra interface file with the given flags
+ * @param path The path of the IO file
+ * @param flags The flags to open the file with
+ * @return The file descriptor or -1 on error
+ */
+int openPetra(const char *path, int flags)
+{
+	int file = open(path, flags);
+	file == -1 ? threadPerror("Error opening \"%s\"", path) : threadPrintf("\"%s\" opened\n", path);
+	return file;
 }
 
 /**
@@ -86,23 +135,26 @@ void threadPrintf(const char *format, ...)
 
 /**
  * @brief Print the perror message to the console, with the thread id
- * @param str The message
+ * @param format The format string
+ * @param ... The arguments
  * @return void
  */
-void threadPerror(const char *str)
+void threadPerror(const char *format, ...)
 {
-	int length = strlen(str);
-	char *buffer = (char *)malloc(length + 30);
+	char *buffer = (char *)malloc(strlen(format) + 30);
 	if (buffer == NULL)
 	{
 		perror("Error allocating memory for the buffer");
 		return;
 	}
-	strcpy(buffer, str);
 	if (pthread_equal(pthread_self(), mainThread))
-		sprintf(buffer, "Main: %s", str);
+		sprintf(buffer, "Main: %s", format);
 	else
-		sprintf(buffer, "Thread %lu: %s", (unsigned long)pthread_self(), str);
+		sprintf(buffer, "Thread %lu: %s", (unsigned long)pthread_self(), format);
+	va_list args;
+	va_start(args, format);
+	vsprintf(buffer, format, args);
+	va_end(args);
 	perror(buffer);
 	free(buffer);
 }
