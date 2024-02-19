@@ -1,0 +1,35 @@
+Au niveau 4 quel protocole et quelle adresse sont-utilisés ?
+	UDP Src Port : 1026, Dst Port : 53
+
+Au niveau 3 quel protocole et quelle adresse sont utilisés ?
+	IPv4 Src Addr : 200.42.0.1, Dst Addr : 200.42.0.126
+
+Au niveau 2 quel protocole et quelle adresse sont utilisés ?
+	Ethernet II, Src MAC : 00:E0:8F:17:BE:96, Dst MAC : 00:D0:BC:B8:92:94
+
+Au niveau 1 quel protocole et quelle adresse sont utilisés ?
+	FastEthernet0
+
+En se servant des notes , quelles sont les noms osi des couches 1 à 4 ?
+	1 : Physical
+	2 : Data Link
+	3 : Network
+	4 : Transport
+
+Avec l'aide de l'onglet outbound PDU détails, donnez le nom des structures de données impliquées ?
+	1 : Bits
+	2 : Frame
+	3 : Packet
+	4 : Segment
+
+En se servant des notes,Si ma requête dns fait 40, quelle sont les tailles respectives au niveau 4,3,2 ?
+	UDP 8 + 40 = 48
+	IP 20 + 48 = 68
+	Ethernet WireShark 6 * 2 + 2 + 68 = 82
+	Ethernet 8 + 80 + 4 = 94
+
+Jusqu'à quel niveau travaille un switch ?
+	2
+
+Quelle type d'adresse manipule-t-il ?
+	MAC
