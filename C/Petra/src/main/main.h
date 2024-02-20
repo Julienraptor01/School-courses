@@ -1,7 +1,7 @@
 #ifndef MAIN_H
 #define MAIN_H
 
-#include <stddef.h>
+#include <pthread.h>
 
 #ifndef DEBUG
 #define PETRA_SENSORS "/dev/capteursPETRA"
@@ -56,13 +56,30 @@ typedef union sensors_t
 	// unsigned short packedWord;
 } sensors_t;
 
+typedef struct threads_t
+{
+	pthread_t main;
+	pthread_t sensors;
+	pthread_t actuators;
+	pthread_t console;
+} threads_t;
+
+typedef struct threadArgs_t
+{
+	int fd;
+} threadArgs_t;
+
 int main();
+void *consoleThread(void *arg);
 void *sensorThread(void *arg);
+void *actuatorThread(void *arg);
 int openSensors();
 int openActuators();
 int openPetra(const char *path, int flags);
 void threadPrintf(const char *format, ...);
+void sThreadPrintf(char *buffer, const char *format, ...);
 void threadPerror(const char *format, ...);
-void sPrintBits(char* buffer, size_t const size, void const *const ptr);
+void prefix(char * newFormat, const char * format);
+void sPrintBits(char *buffer, size_t const size, void const *const ptr);
 
 #endif

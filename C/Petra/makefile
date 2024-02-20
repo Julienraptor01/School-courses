@@ -28,9 +28,9 @@ OBJECTS=$(patsubst $(MAIN_SRC)/%.c,$(MAIN_OBJ)/%.o,$(wildcard $(MAIN_SRC)/*.c))
 CC=gcc
 # compile arguments
 ifdef DEBUG
-CFLAGS=-Wall -Wextra -g -I$(MAIN_SRC) -DDEBUG
+CFLAGS=-Wall -Wextra -g -Og -DDEBUG -I$(MAIN_SRC)
 else
-CFLAGS=-Wall -Wextra -O3 -I$(MAIN_SRC) -std=c99
+CFLAGS=-Wall -Wextra -O3 -std=c99 -I$(MAIN_SRC)
 endif
 # link arguments
 LDFLAGS=
