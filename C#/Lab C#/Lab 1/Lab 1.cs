@@ -4,7 +4,7 @@ namespace Lab_1
 {
 	internal class Program
 	{
-		static void Main(string[] args)
+		public static void Main(string[] args)
 		{
 			Coordonnee[] coordonnee = [new(1, 2), new(3, 4)];
 			Console.WriteLine("Coordinates:");
