@@ -11,8 +11,6 @@
 #define PETRA_ACTUATORS "./actuateursPETRA"
 #endif
 
-#define BINARY_BYTE "%.8b"
-
 typedef union actuators_t
 {
 	struct unpackedByte
