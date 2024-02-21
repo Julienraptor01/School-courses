@@ -1,0 +1,26 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "cppbuild",
+			"label": "build",
+			"command": "gcc",
+			"args": [
+				"-Wall",
+				"-Wextra",
+				"-g",
+				"-Og",
+				"-DDEBUG",
+				"-I${workspaceFolder}/src/main",
+				"${workspaceFolder}/src/main/main.c",
+				"-o",
+				"${workspaceFolder}/build/bin/main/main",
+				"-lncurses"
+			],
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"group": "build"
+		}
+	]
+}

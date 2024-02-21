@@ -33,7 +33,7 @@ else
 CFLAGS=-Wall -Wextra -O3 -std=c99 -I$(MAIN_SRC)
 endif
 # link arguments
-LDFLAGS=
+LDFLAGS=-lncurses
 
 #compilation
 MAIN_COMPILE=$(CC) $(CFLAGS) -c $< -o $@

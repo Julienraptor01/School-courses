@@ -1,0 +1,6 @@
+{
+	"workbench.editorAssociations": {
+		"actuateursPETRA": "hexEditor.hexedit",
+		"capteursPETRA": "hexEditor.hexedit"
+	}
+}
