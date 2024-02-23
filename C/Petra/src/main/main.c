@@ -75,8 +75,16 @@ void *consoleThread(void *arg)
 	mvwprintw(middle, 0, 0, "1 / 2 / 4 - Position of the carrier\n\tf - First conveyor toggle\n\ts - Second conveyor toggle\n\tv - Plunger vacuum toggle\n\tp - Plunger toggle\n\ta - Arm toggle\n\tg - Graple toggle\n\tq - Quit\n");
 	wrefresh(middle);
 
-	pthread_create(&threads.topWindow, NULL, topWindowThread, &(windowThreadArgs_t){top});
-	pthread_create(&threads.bottomWindow, NULL, bottomWindowThread, &(windowThreadArgs_t){bottom});
+	if (pthread_create(&threads.topWindow, NULL, topWindowThread, &(windowThreadArgs_t){top}) != 0)
+	{
+		threadPerror("Error creating the top window thread");
+		return NULL;
+	}
+	if (pthread_create(&threads.bottomWindow, NULL, bottomWindowThread, &(windowThreadArgs_t){bottom}) != 0)
+	{
+		threadPerror("Error creating the bottom window thread");
+		return NULL;
+	}
 
 	pthread_join(threads.bottomWindow, NULL);
 	pthread_cancel(threads.topWindow);
@@ -342,7 +350,7 @@ void prefix(char *newFormat, const char *format)
 	else if (pthread_equal(pthread_self(), threads.bottomWindow))
 		sprintf(newFormat, "Bottom Window: %s", format);
 	else
-		sprintf(newFormat, "Thread %lu: %s", pthread_self(), format);
+		sprintf(newFormat, "Thread %lu: %s", (unsigned long)pthread_self(), format);
 }
 
 /**
