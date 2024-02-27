@@ -1,0 +1,16 @@
+Consultez les notes et expliquez quels sont les différents modes utilisateurs d'IOS et comment passe-t-on d'un mode à une autre ?
+	enable
+
+Expliquez la différence entre running-config et startup config ?
+	running-config: configuration en cours
+	startup-config: configuration sauvegardée
+
+Par quelle commande puis je sauvegarder la running-config de manière définitive ?
+	copy running-config startup-config
+
+Quelles sont les commandes à rentrer respectivement sur le router0 et le router1 pour configurer la connexion hdlc sachant que la clock est située coté router0 ?
+	Router0:
+		encapsulation hdlc
+	Router1:
+		encapsulation hdlc
+		clock rate 64000

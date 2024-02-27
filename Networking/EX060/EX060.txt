@@ -1,0 +1,7 @@
+Quelle est la commande pour sauvegarder vers un serveur FTP ?
+	copy running-config tfpt
+	<ip>
+
+Quele est la commande pour récupérer un fichier d'un serveur FTP ?
+	copy tftp running-config
+	<ip>

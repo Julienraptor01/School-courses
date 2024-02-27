@@ -1,0 +1,2 @@
+Quelle est la syntaxe d’une route par défaut ?
+	ip route 0.0.0.0 0.0.0.0 <ip_gateway>

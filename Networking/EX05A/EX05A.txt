@@ -1,0 +1,13 @@
+IP Configuration pour le PC0 branché à BollyJulien0 ?
+	ip address 200.42.1.2
+	subnet mask 255.255.255.0
+
+Configuration de l'interface GigabitEthernet0/0/0 du routeur BollyJulien0 ?
+	ip address 200.42.1.1
+	subnet mask 255.255.255.0
+
+Quelles sont les routes à rajouter à BollyJulien0 et BollyJulien1 pour que le ping entre PC0 et PC1 soit possible ?
+	BollyJulien0:
+		ip route 200.42.2.0 255.255.255.0 200.42.0.2
+	BollyJulien1:
+		ip route 200.42.1.0 255.255.255.0 200.42.0.1
