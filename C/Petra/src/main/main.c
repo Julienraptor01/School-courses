@@ -164,11 +164,9 @@ void *bottomWindowThread(void *arg)
 			case '2':
 				actuators.unpackedByte.carrierPosition = 1;
 				break;
-			/*
 			case '3':
 				actuators.unpackedByte.carrierPosition = 2;
 				break;
-			*/
 			case '4':
 				actuators.unpackedByte.carrierPosition = 3;
 				break;
