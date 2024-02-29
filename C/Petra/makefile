@@ -71,7 +71,7 @@ graph: $(MAIN_SRC)/main.c $(HEADERS)
 	$(LOG) '\n\033[42mcreation of the control flow graph\033[49m\n'
 	$(RM) graph/*
 	mkdir -p graph
-	-$(CC) -O3 -DDEBUG -I$(MAIN_SRC) $(LDFLAGS) -fdump-tree-cfg-graph $(MAIN_SRC)/main.c
+	-$(CC) -O3 -I$(MAIN_SRC) $(LDFLAGS) -fdump-tree-cfg-graph $(MAIN_SRC)/main.c
 	dot a-main.c.015t.cfg.dot -Tsvg -o graph/main.svg
 	$(RM) a-main.c.015t.cf*
 	$(LOG) '\n\033[44mmake graph finished\033[49m\n\n'
