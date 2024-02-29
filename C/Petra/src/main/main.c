@@ -11,8 +11,8 @@
 actuators_t actuators = {0};
 sensors_t sensors = {0};
 threads_t threads = {0};
-bool actuatorsIsReady = false;
-bool sensorsIsReady = false;
+check_t actuatorsCheck = {false, PTHREAD_MUTEX_INITIALIZER, PTHREAD_COND_INITIALIZER};
+check_t sensorsCheck = {false, PTHREAD_MUTEX_INITIALIZER, PTHREAD_COND_INITIALIZER};
 
 int main()
 {
@@ -124,9 +124,10 @@ void *topWindowThread(void *arg)
 		pthread_exit(NULL);
 	}
 
-	sensors_t lastSensors = {0};
+	sensors_t lastSensors = {.word.unpackedByteLow = 0xFF};
 
-	while (!sensorsIsReady);
+	pthread_mutex_lock(&sensorsCheck.mutex);
+	!sensorsCheck.isReady ? pthread_cond_wait(&sensorsCheck.cond, &sensorsCheck.mutex) : pthread_mutex_unlock(&sensorsCheck.mutex);
 
 	while (true)
 	{
@@ -151,7 +152,8 @@ void *bottomWindowThread(void *arg)
 
 	char input[2];
 
-	while (!actuatorsIsReady);
+	pthread_mutex_lock(&actuatorsCheck.mutex);
+	!actuatorsCheck.isReady ? pthread_cond_wait(&actuatorsCheck.cond, &actuatorsCheck.mutex) : pthread_mutex_unlock(&actuatorsCheck.mutex);
 
 	while (true)
 	{
@@ -206,7 +208,10 @@ void *sensorThread(void *arg)
 {
 	int petra_sensors = ((petraThreadArgs_t *)arg)->fd;
 
-	sensorsIsReady = true;
+	pthread_mutex_lock(&sensorsCheck.mutex);
+	sensorsCheck.isReady = true;
+	pthread_cond_signal(&sensorsCheck.cond);
+	pthread_mutex_unlock(&sensorsCheck.mutex);
 
 #ifndef DEBUG
 	while (true)
@@ -229,9 +234,12 @@ void *actuatorThread(void *arg)
 {
 	int petra_actuators = ((petraThreadArgs_t *)arg)->fd;
 
-	actuators_t lastActuators = {0};
+	actuators_t lastActuators = {.packedByte = 0xFF};
 
-	actuatorsIsReady = true;
+	pthread_mutex_lock(&actuatorsCheck.mutex);
+	actuatorsCheck.isReady = true;
+	pthread_cond_signal(&actuatorsCheck.cond);
+	pthread_mutex_unlock(&actuatorsCheck.mutex);
 
 	while (true)
 		if (lastActuators.packedByte != actuators.packedByte)

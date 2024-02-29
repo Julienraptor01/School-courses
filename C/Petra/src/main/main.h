@@ -79,6 +79,13 @@ typedef struct windowThreadArgs_t
 	WINDOW *window;
 } windowThreadArgs_t;
 
+typedef struct check_t
+{
+	bool isReady;
+	pthread_mutex_t mutex;
+	pthread_cond_t cond;
+} check_t;
+
 int main();
 void *consoleThread(void *arg);
 void *topWindowThread(void *arg);
