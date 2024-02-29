@@ -8,9 +8,9 @@
 #include <string.h>
 #include <unistd.h>
 
-actuators_t actuators = {0};
-sensors_t sensors = {0};
-threads_t threads = {0};
+actuators_t actuators = {};
+sensors_t sensors = {};
+threads_t threads = {};
 check_t actuatorsCheck = {false, PTHREAD_MUTEX_INITIALIZER, PTHREAD_COND_INITIALIZER};
 check_t sensorsCheck = {false, PTHREAD_MUTEX_INITIALIZER, PTHREAD_COND_INITIALIZER};
 
