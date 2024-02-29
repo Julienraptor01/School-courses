@@ -67,14 +67,20 @@ build:
 	make $(MAIN_BIN)/main
 	$(LOG) '\n\033[44mmake build finished\033[49m\n\n'
 
+.ONESHELL:
+
 graph: $(MAIN_SRC)/main.c $(HEADERS)
 	$(LOG) '\n\033[42mcreation of the control flow graph\033[49m\n'
 	$(RM) graph/*
 	mkdir -p graph
-	-$(CC) -O3 -I$(MAIN_SRC) $(LDFLAGS) -fdump-tree-cfg-graph $(MAIN_SRC)/main.c
-	dot a-main.c.015t.cfg.dot -Tsvg -o graph/main.svg
+	cd $(MAIN_SRC)
+	-$(CC) -O3 $(LDFLAGS) -fdump-tree-cfg-lineno-graph main.c
+	dot a-main.c.015t.cfg.dot -Tsvg -o ./../../graph/main.svg
+	dot a-main.c.015t.cfg.dot -Tpng -o ./../../graph/main.png
 	$(RM) a-main.c.015t.cf*
 	$(LOG) '\n\033[44mmake graph finished\033[49m\n\n'
+
+.ONESHELL:
 
 setup:
 	$(LOG) '\n\033[42msetup of the directories\033[49m\n'
