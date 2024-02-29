@@ -78,12 +78,13 @@ void *consoleThread(void *arg)
 	if (pthread_create(&threads.topWindow, NULL, topWindowThread, &(windowThreadArgs_t){top}) != 0)
 	{
 		threadPerror("Error creating the top window thread");
-		return NULL;
+		pthread_exit(NULL);
 	}
 	if (pthread_create(&threads.bottomWindow, NULL, bottomWindowThread, &(windowThreadArgs_t){bottom}) != 0)
 	{
 		threadPerror("Error creating the bottom window thread");
-		return NULL;
+		pthread_cancel(threads.topWindow);
+		pthread_exit(NULL);
 	}
 
 	pthread_join(threads.bottomWindow, NULL);
