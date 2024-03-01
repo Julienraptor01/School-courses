@@ -68,9 +68,9 @@ void *consoleThread(void *arg)
 	WINDOW *middle = newwin(MIDDLE_CONSOLE_HEIGHT, COLS, TOP_CONSOLE_HEIGHT, 0);
 	WINDOW *bottom = newwin(BOTTOM_CONSOLE_HEIGHT, COLS, TOP_CONSOLE_HEIGHT + MIDDLE_CONSOLE_HEIGHT, 0);
 
-	keypad(top, FALSE);
-	keypad(middle, FALSE);
-	keypad(bottom, TRUE);
+	keypad(top, false);
+	keypad(middle, false);
+	keypad(bottom, true);
 
 	mvwprintw(middle, 0, 0, "  1 <-> 4 - Position of the carrier\n\tf - First conveyor toggle\n\ts - Second conveyor toggle\n\tv - Plunger vacuum toggle\n\tp - Plunger toggle\n\ta - Arm toggle\n\tg - Graple toggle\n\tq - Quit\n");
 	wrefresh(middle);
