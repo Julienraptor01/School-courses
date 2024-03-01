@@ -72,7 +72,7 @@ void *consoleThread(void *arg)
 	keypad(middle, FALSE);
 	keypad(bottom, TRUE);
 
-	mvwprintw(middle, 0, 0, "1 / 2 / 4 - Position of the carrier\n\tf - First conveyor toggle\n\ts - Second conveyor toggle\n\tv - Plunger vacuum toggle\n\tp - Plunger toggle\n\ta - Arm toggle\n\tg - Graple toggle\n\tq - Quit\n");
+	mvwprintw(middle, 0, 0, "  1 <-> 4 - Position of the carrier\n\tf - First conveyor toggle\n\ts - Second conveyor toggle\n\tv - Plunger vacuum toggle\n\tp - Plunger toggle\n\ta - Arm toggle\n\tg - Graple toggle\n\tq - Quit\n");
 	wrefresh(middle);
 
 	if (pthread_create(&threads.topWindow, NULL, topWindowThread, &(windowThreadArgs_t){top}) != 0)
