@@ -1,0 +1,8 @@
+Quelles sont les commandes à rajouter sur les Routeurs NomPrenom0 & NomPrenom1 pour que la connexion ppp fonctionne et puisse être testée par un ping à partir d'un des deux routeurs ?
+	encapsulation ppp
+
+Quelles sont les routes à rajouter sur router1 & routeur2 pour que chaque pc du réseau puisse pinger l'autre ?
+	router1 :
+		ip route 0.0.0.0 0.0.0.0 192.168.2.2
+	router2 :
+		ip route 0.0.0.0 0.0.0.0 192.168.2.1

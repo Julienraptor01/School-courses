@@ -1,0 +1,7 @@
+Pour avoir l'authentification chap que doit je rajouter sur le NomPrenom1 & NomPrenom2, sachant que la partie ppp est déjà opérationnelle ?
+	BollyJulien0 :
+		ppp authentication chap
+		username BollyJulien1 password cisco
+	BollyJulien1 :
+		ppp authentication chap
+		username BollyJulien0 password cisco
